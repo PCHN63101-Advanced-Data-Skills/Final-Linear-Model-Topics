@@ -1,0 +1,11 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: 0.intro
+chapters:
+- file: 1.follow-up
+- file: 2.unbalanced-ANOVA
+- file: 3.ANCOVA
+- file: 4.interactions
+- file: summary
