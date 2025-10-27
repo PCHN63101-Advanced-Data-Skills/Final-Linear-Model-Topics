@@ -370,7 +370,10 @@
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#continuous-times-continuous-interactions">Continuous <span class="math notranslate nohighlight">\(\times\)</span> Continuous Interactions</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#categorical-times-continuous-interactions">Categorical <span class="math notranslate nohighlight">\(\times\)</span> Continuous Interactions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#categorical-times-continuous-interactions">Categorical <span class="math notranslate nohighlight">\(\times\)</span> Continuous Interactions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpreting-group-means-in-the-presence-of-an-interaction">Interpreting Group Means in the Presence of an Interaction</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -390,6 +393,11 @@
 </section>
 <section id="categorical-times-continuous-interactions">
 <h2>Categorical <span class="math notranslate nohighlight">\(\times\)</span> Continuous Interactions<a class="headerlink" href="#categorical-times-continuous-interactions" title="Link to this heading">#</a></h2>
+<section id="interpreting-group-means-in-the-presence-of-an-interaction">
+<h3>Interpreting Group Means in the Presence of an Interaction<a class="headerlink" href="#interpreting-group-means-in-the-presence-of-an-interaction" title="Link to this heading">#</a></h3>
+<p>… The problem is that when the slopes are <em>different</em>, the mean difference between the group depends upon the value of the covariate. The most extreme example is when the slopes <em>cross</em>, because the group difference would <em>reverse</em> depending upon the value of the covariate we select. In fact, the group difference would be <em>zero</em> if we selected the covariate value precisely at the point where the slopes crossed.</p>
+<p>… In general, unless we have a particularly meaningful value of the covariate to select for the group comparison, these effects must be <em>ignored</em>. Instead, we can only interpret the difference between the slopes. This shifts the nature of a traditional ANCOVA model. If your aim is to “control” for some other variable (despite the issues with this interpretation), including an interaction shifts the focus on to that other variable. The continuous predictor is no longer a nuisance term of no interest, rather, it becomes the focus.</p>
+</section>
 </section>
 </section>
 
@@ -459,7 +467,10 @@
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#continuous-times-continuous-interactions">Continuous <span class="math notranslate nohighlight">\(\times\)</span> Continuous Interactions</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#categorical-times-continuous-interactions">Categorical <span class="math notranslate nohighlight">\(\times\)</span> Continuous Interactions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#categorical-times-continuous-interactions">Categorical <span class="math notranslate nohighlight">\(\times\)</span> Continuous Interactions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpreting-group-means-in-the-presence-of-an-interaction">Interpreting Group Means in the Presence of an Interaction</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 
