@@ -344,7 +344,9 @@
 <button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
 </button>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -360,6 +362,16 @@
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-i-sums-of-squares">Type I Sums-of-squares</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-ii-sums-of-squares">Type II Sums-of-squares</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-iii-sums-of-squares">Type III Sums-of-squares</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -376,6 +388,14 @@
 </figure>
 <p>… Indeed, whole textbooks were written about unbalanced data (as can be seen on the <em>right</em>). So this is a topic that deserves some attention, even if it is largely <em>ignored</em> by modern teaching in Psychology. There is something of an assumption that the issues of balance have been <em>solved</em> and thus do not need considering anymore. However, this is not really true. The “solution” implemented by SAS and SPSS is the Type III sums-of-squares, which researchers continue to use because it is the default<a class="footnote-reference brackets" href="#default-foot" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. However, as discussed briefly last week, this approach is highly flawed.</p>
 <p>In this part of the lesson, we will dig deeper into the Type I/II/III debate so that you understand what each type of sums-of-squares means, when they are most appropriate to use and what the various arguments are for/against them. In general, we will be recommending Type II for 95% of all use-cases. However, it is important not to just take our word for it. Instead, it is important that you <em>understand</em> the difference and can make your own informed judgement.</p>
+<section id="type-i-sums-of-squares">
+<h2>Type I Sums-of-squares<a class="headerlink" href="#type-i-sums-of-squares" title="Link to this heading">#</a></h2>
+</section>
+<section id="type-ii-sums-of-squares">
+<h2>Type II Sums-of-squares<a class="headerlink" href="#type-ii-sums-of-squares" title="Link to this heading">#</a></h2>
+</section>
+<section id="type-iii-sums-of-squares">
+<h2>Type III Sums-of-squares<a class="headerlink" href="#type-iii-sums-of-squares" title="Link to this heading">#</a></h2>
 <hr class="footnotes docutils" />
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="default-foot" role="note">
@@ -383,6 +403,7 @@
 <p>Always be wary of defaults. If there is one way of getting an entire scientific field to adhere to a particular way of doing something without the need for any critical evaluation, simply make it the default in software. Defaults do not automatically hold some higher-level of credibility simply because they were the value that the developer picked. Many times these are well-considered, but this is not a <em>guarantee</em>. We can easily be led astray by default choices because we do not have to justify using them. This does not have an official name, but we could perhaps call it <em>the default authority effect</em>. It is effectively a reversal of the burden of proof: deviating from defaults requires defence, whereas using defaults is treated as neutral. Yet this presupposes that the defaults are normatively sound, which is rarely demonstrated or even documented.</p>
 </aside>
 </aside>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -439,6 +460,24 @@
             </div>
             
             
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-i-sums-of-squares">Type I Sums-of-squares</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-ii-sums-of-squares">Type II Sums-of-squares</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-iii-sums-of-squares">Type III Sums-of-squares</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
