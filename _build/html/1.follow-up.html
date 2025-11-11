@@ -495,7 +495,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 <a class="reference internal image-reference" href="_images/9571c9a1478a467d65dfee9a6a00147d0072884c2cf91a4dca94455a531a48c1.png"><img alt="_images/9571c9a1478a467d65dfee9a6a00147d0072884c2cf91a4dca94455a531a48c1.png" src="_images/9571c9a1478a467d65dfee9a6a00147d0072884c2cf91a4dca94455a531a48c1.png" style="width: 420px; height: 420px;" /></a>
 </div>
 </div>
-<p>Based on this output, what can we conclude? Looking at the ANOVA table, we can see a significant omnibus interaction effect (<span class="math notranslate nohighlight">\(F_{2,26} = 5.27, p &lt; 0.05\)</span>), meaning we need to ignore the main effects and just work on understanding the interaction. Conceptually, we can think of this effect as indicating that the difference in MPG between <code class="docutils literal notranslate"><span class="pre">Straight</span></code> and <code class="docutils literal notranslate"><span class="pre">V-Shaped</span></code> depends upon the country of origin. Alternatively, we can think of this effect as indicating that the differences in MPG between the countries of origin depending upon whether the engine is <code class="docutils literal notranslate"><span class="pre">Straight</span></code> or <code class="docutils literal notranslate"><span class="pre">V-Shaped</span></code>. In most problems, there is usually one way of conceptualising the interaction that is more intuitive or useful than the other.</p>
+<p>Based on this output, what can we conclude? Looking at the ANOVA table, we can see a significant omnibus interaction effect (<span class="math notranslate nohighlight">\(F_{2,26} = 5.27, p &lt; 0.05\)</span>), meaning we need to ignore the main effects and just work on understanding the interaction. Conceptually, we can think of this effect as indicating that the difference in MPG between <code class="docutils literal notranslate"><span class="pre">Straight</span></code> and <code class="docutils literal notranslate"><span class="pre">V-Shaped</span></code> depends upon the country of origin. Alternatively, we can think of this effect as indicating that the differences in MPG between the countries of origin depending upon whether the engine is <code class="docutils literal notranslate"><span class="pre">Straight</span></code> or <code class="docutils literal notranslate"><span class="pre">V-Shaped</span></code>. In most problems, there is usually one way of conceptualising the interaction that is more intuitive or useful than the other. For the sake of this example, we will focus on differences in shape across different countries<a class="footnote-reference brackets" href="#context-foot" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
 <p>So, we are now at the same point that we ended on last week. However, it seems we still have some unanswered questions. Because the interaction is an <em>omnibus</em> test, it does not tell us <em>which</em> differences are driving the interaction effect. We can conclude that the country of origin appears to change how MPG differs between the two engine shapes, but surely we want to know <em>how</em> this change actually occurs? Which countries show the largest difference between engine shapes? Are there any countries where the engine shape makes little difference to MPG? Is this effect driven only by one country or are there multiple countries?</p>
 <p>We could get some of the way towards answering these questions by simply <em>plotting</em> the effects. Let us have a look at the interaction using an effects plot</p>
 <div class="cell docutils container">
@@ -536,6 +536,13 @@ See ?effectsTheme for details.
 </section>
 <section id="visualising-anova-effects">
 <h2>Visualising ANOVA Effects<a class="headerlink" href="#visualising-anova-effects" title="Link to this heading">#</a></h2>
+<hr class="footnotes docutils" />
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="context-foot" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>If you want more context, imagine you are working for a car manufacturer who is interested in reducing the efficiency gap between straight and V-shaped engines. You have gathered data on these efficiency gaps from various different cars and want to understand how engineering and manufacturing differences across countries contribute.</p>
+</aside>
+</aside>
 </section>
 </section>
 
