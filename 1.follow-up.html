@@ -16,20 +16,22 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-  
-  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
-
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b76e3c8a" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -37,10 +39,11 @@
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="_static/test.css?v=90b7ad94" />
   
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
@@ -67,6 +70,7 @@
     <link rel="prev" title="Introduction" href="0.intro.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -82,19 +86,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="search.html"
       method="get">
@@ -102,7 +95,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search this book..."
          aria-label="Search this book..."
          autocomplete="off"
@@ -110,8 +102,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -127,7 +119,8 @@
       
       
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -157,21 +150,17 @@
     
     
     <img src="_static/logo.png" class="logo__image only-light" alt="Linear Models V: Final Topics - Home"/>
-    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Linear Models V: Final Topics - Home"/>`);</script>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="Linear Models V: Final Topics - Home"/>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
@@ -196,9 +185,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -342,24 +336,16 @@
 
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-  </button>
-`);
-</script>
+</button>
 <button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
@@ -391,13 +377,15 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-comparisons-correction">Multiple Comparisons Correction</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#planned-vs-post-hoc-tests">Planned vs Post-hoc Tests</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#corrections-in-emmeans">Corrections in <code class="docutils literal notranslate"><span class="pre">emmeans</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#planned-comparisons-vs-post-hoc-tests">Planned Comparisons vs Post-hoc Tests</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualising-anova-effects">Visualising ANOVA Effects</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction-bar-plots">Interaction Bar Plots</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-complete-analysis">The Complete Analysis</a></li>
 </ul>
             </nav>
         </div>
@@ -421,8 +409,29 @@ document.write(`
 <li><p>If appropriate, call <code class="docutils literal notranslate"><span class="pre">Anova()</span></code> on the model and interpret the output</p></li>
 </ol>
 <p>As an example, we will use the same full-factorial model of <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> from last week. However, we will increase the complexity by including the <code class="docutils literal notranslate"><span class="pre">origin</span></code> variable with <em>three</em> levels (<code class="docutils literal notranslate"><span class="pre">Japan</span></code>, <code class="docutils literal notranslate"><span class="pre">USA</span></code> and <code class="docutils literal notranslate"><span class="pre">Europe</span></code>). So, we now have a <span class="math notranslate nohighlight">\(2 \times 3\)</span> ANOVA model and our means table is</p>
-<p>(INSERT TABLE HERE)</p>
-<p>To make this example more useful, we will also engineer a fake interaction again by increasing the value of MPG for the <code class="docutils literal notranslate"><span class="pre">(Japan,</span> <span class="pre">V-Shaped)</span></code> cell alone. The code is in the drop-down below, if you are interested.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p></p></th>
+<th class="head"><p>Origin: Europe</p></th>
+<th class="head"><p>Origin: Japan</p></th>
+<th class="head"><p>Origin: USA</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Shape: Straight</strong></p></td>
+<td><p>Europe, Straight</p></td>
+<td><p>Japan, Straight</p></td>
+<td><p>USA, Straight</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Shape: V-shaped</strong></p></td>
+<td><p>Europe, V-shaped</p></td>
+<td><p>Japan, V-shaped</p></td>
+<td><p>USA, V-shaped</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>To make this example more useful, we will again engineer a fake interaction by increasing the value of MPG for the <code class="docutils literal notranslate"><span class="pre">(Japan,</span> <span class="pre">V-Shaped)</span></code> cell alone. The code for wrangling these data and creating this fake effect is given in the drop-down below.</p>
 <div class="cell tag_hide-input docutils container">
 <details class="hide above-input">
 <summary aria-label="Toggle hidden content">
@@ -431,7 +440,6 @@ document.write(`
 </summary>
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">data</span><span class="p">(</span><span class="n">mtcars</span><span class="p">)</span>
-<span class="nf">suppressMessages</span><span class="p">(</span><span class="nf">library</span><span class="p">(</span><span class="n">car</span><span class="p">))</span>
 
 <span class="c1"># Origin factor</span>
 <span class="n">mtcars</span><span class="o">$</span><span class="n">origin</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&#39;Japan&#39;</span><span class="p">,</span><span class="s">&#39;Japan&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span>
@@ -456,7 +464,7 @@ document.write(`
 </div>
 </details>
 </div>
-<p>The modelling steps are illustrated below. Although somewhat simplified, the overall structure of any analysis will fit this template. So, despite everything we have covered on this unit, this type of analysis largely boils-down to 4 lines of code.</p>
+<p>The final modelling steps are as follows.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Fit full factorial model</span>
@@ -508,29 +516,33 @@ Residuals 447.70 26
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="_images/998d8df758698a21a1de62bf46660711b4df6a1f4b9f51ba1bfe5d9a18e93875.png"><img alt="_images/998d8df758698a21a1de62bf46660711b4df6a1f4b9f51ba1bfe5d9a18e93875.png" src="_images/998d8df758698a21a1de62bf46660711b4df6a1f4b9f51ba1bfe5d9a18e93875.png" style="width: 420px; height: 420px;" /></a>
+<a class="reference internal image-reference" href="_images/9571c9a1478a467d65dfee9a6a00147d0072884c2cf91a4dca94455a531a48c1.png"><img alt="_images/9571c9a1478a467d65dfee9a6a00147d0072884c2cf91a4dca94455a531a48c1.png" src="_images/9571c9a1478a467d65dfee9a6a00147d0072884c2cf91a4dca94455a531a48c1.png" style="width: 420px; height: 420px;" /></a>
 </div>
 </div>
+<p>Although somewhat simplified, the overall structure of any analysis will fit this template. So, despite all the detail we have covered on this unit, this analysis boils-down to only 4 lines of code.</p>
 <p>Based on this output, what can we conclude? Looking at the ANOVA table, we can see a significant omnibus interaction effect (<span class="math notranslate nohighlight">\(F_{2,26} = 5.27, p &lt; 0.05\)</span>), meaning we need to ignore the main effects and just work on understanding the interaction. Conceptually, we can think of this effect as indicating that the difference in MPG between <code class="docutils literal notranslate"><span class="pre">Straight</span></code> and <code class="docutils literal notranslate"><span class="pre">V-Shaped</span></code> depends upon whether the car came from <code class="docutils literal notranslate"><span class="pre">Japan</span></code>, <code class="docutils literal notranslate"><span class="pre">USA</span></code> or <code class="docutils literal notranslate"><span class="pre">Europe</span></code>. Alternatively, we can think of this effect as indicating that the differences in MPG betwee <code class="docutils literal notranslate"><span class="pre">Japan</span></code>, <code class="docutils literal notranslate"><span class="pre">USA</span></code> and <code class="docutils literal notranslate"><span class="pre">Europe</span></code> depends upon whether the engine is <code class="docutils literal notranslate"><span class="pre">Straight</span></code> or <code class="docutils literal notranslate"><span class="pre">V-Shaped</span></code>. For most problems, there is usually one way of conceptualising the interaction that is more intuitive or useful than the other. For this example, we will focus on differences in <em>shape</em> across the different countries<a class="footnote-reference brackets" href="#context-foot" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
 <p>So, we are now at the same point that we ended on last week. However, it seems we still have some unanswered questions. Because the interaction is an <em>omnibus</em> test, it does not tell us <em>which</em> differences are driving the effect. We can conclude that the country of origin appears to change how MPG differs between the two engine shapes, but surely we want to know <em>how</em> this change actually occurs? Which countries show the largest difference between engine shapes? Are there any countries where the engine shape makes little difference to MPG? Is this effect driven only by one country or are there multiple countries?</p>
 <p>We could get some of the way towards answering these questions by simply <em>plotting</em> the effects. Let us have a look at the interaction using an effects plot</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">suppressMessages</span><span class="p">(</span><span class="nf">library</span><span class="p">(</span><span class="n">effects</span><span class="p">))</span>
-<span class="nf">plot</span><span class="p">(</span><span class="nf">allEffects</span><span class="p">(</span><span class="n">mod</span><span class="p">))</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot</span><span class="p">(</span><span class="nf">effect</span><span class="p">(</span><span class="s">&quot;origin:vs&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">mod</span><span class="o">=</span><span class="n">mod</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="_images/987aab3f28f28e9e89eb573a375e5b405ebe61e3e5bc9dd84cfc328d48de2d13.png"><img alt="_images/987aab3f28f28e9e89eb573a375e5b405ebe61e3e5bc9dd84cfc328d48de2d13.png" src="_images/987aab3f28f28e9e89eb573a375e5b405ebe61e3e5bc9dd84cfc328d48de2d13.png" style="width: 420px; height: 420px;" /></a>
+<a class="reference internal image-reference" href="_images/227b53db316ad0d72c6b94b2329d7456c689703948c37c0d35d79b64e064fa65.png"><img alt="_images/227b53db316ad0d72c6b94b2329d7456c689703948c37c0d35d79b64e064fa65.png" src="_images/227b53db316ad0d72c6b94b2329d7456c689703948c37c0d35d79b64e064fa65.png" style="width: 420px; height: 420px;" /></a>
 </div>
 </div>
 <p>So, we can clearly see that there is a much larger difference between <code class="docutils literal notranslate"><span class="pre">Straight</span></code> and <code class="docutils literal notranslate"><span class="pre">V-Shaped</span></code> for <code class="docutils literal notranslate"><span class="pre">Japan</span></code> compared to either <code class="docutils literal notranslate"><span class="pre">Europe</span></code> or <code class="docutils literal notranslate"><span class="pre">USA</span></code>. However, we cannot tell whether the differences for either <code class="docutils literal notranslate"><span class="pre">Europe</span></code> or <code class="docutils literal notranslate"><span class="pre">USA</span></code> are significant (by whatever metric you choose), or whether these differences could actually be 0 in the population. This is important because it implies that there is something about Japanese manufacturing and engineering that makes V-shaped engines more efficient<a class="footnote-reference brackets" href="#fake-foot" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>. However, we cannot tell whether V-shaped engines in <code class="docutils literal notranslate"><span class="pre">Europe</span></code> and <code class="docutils literal notranslate"><span class="pre">USA</span></code> are actually <em>less efficient</em>, or have the <em>same</em> efficiency as straight engines. So, the plot is useful, but might not give use everything we need. Because of this, we need to dig into the differences we are interested in using <em>follow-up tests</em>.</p>
+<div class="tip admonition">
+<p class="admonition-title">Follow-up tests, post-hoc tests and planned comparisons</p>
+<p>As with many elements of statistics, comparisons that we run after the omnibus ANOVA tests have some different names with some subtle interpretational differences. In general, any single degree of freedom test (i.e. a comparisons between only 2 means) is regarded as a <em>follow-up test</em>, because it follows the main ANOVA analysis. The aim is always to unpack the omnibus tests. This is clearly unnecessary if the omnibus test only involves 2 means, so these tests are really for <em>main effects</em> of factors with <span class="math notranslate nohighlight">\(k &gt; 2\)</span> levels and for interactions. The core distinction is between <em>post-hoc tests</em> and <em>planned comparisons</em>. Post-hoc tests are those where we have found a significant effect and then wish to break it down to find out what is driving it. Planned comparisons are those tests that we decided on <em>before</em> running the analysis. For instance, if we had a clinical trial then the only differences we might care about are those between the patients and controls. There are arguments around error control and the type of follow-up test we are using, but we will discuss those further below. For now, the main practical difference is that planned comparisons can make the omnibus tests <em>redundant</em>. So, if you only have a small number of comparisons you want to make, you can probably skip the omnibus tests entirely and just go straight to them.</p>
+</div>
 </section>
 <section id="using-the-regression-tests">
 <h2>Using the Regression Tests<a class="headerlink" href="#using-the-regression-tests" title="Link to this heading">#</a></h2>
-<p>One of the most obvious ways we could try to break-down an omnibus ANOVA effect is by returning to the tests of the parameter estimates from the regression model. In simple cases, this is a perfectly fine thing to do. For instance, in a one-way ANOVA, these tests cover all the differences we are interested in (potentially after a few rounds of re-leveling the factor). However, in more complex models, we have already seen how the model parameters do not necessarily correspond to effects we are interested in.</p>
-<p>Let us return to <span class="math notranslate nohighlight">\(2 \times 3\)</span> model above and examine how the factors are coded.</p>
+<p>One of the most obvious ways we could try to break-down an omnibus ANOVA effect is by returning to the tests of the parameter estimates from the regression model. In simple cases, this is a perfectly fine thing to do. For instance, in a one-way ANOVA, these tests cover all the differences we are interested in (potentially after a few rounds of re-leveling the factor). In the case of <em>planned comparisons</em>, if we can engineer the dummy variables to represent all the comparisons we care about, then we do not even need the ANOVA table. For example, setting the control group as the <em>reference level</em> could achieve this. In these cases, we can simply work with the results of <code class="docutils literal notranslate"><span class="pre">summary()</span></code> and our job is done.</p>
+<p>The problems arrive in more complex models, as the model parameters do not necessarily correspond to effects we are interested in. To see this, let us return to <span class="math notranslate nohighlight">\(2 \times 3\)</span> model above and examine how the factors are coded.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="nf">contrasts</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">origin</span><span class="p">))</span>
@@ -558,15 +570,15 @@ V-shaped        1
 <span class="expanded">Hide code cell source</span>
 </summary>
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">X</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span>
-<span class="w">              </span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">,</span>
-<span class="w">              </span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span>
-<span class="w">              </span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">,</span>
-<span class="w">              </span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">,</span>
-<span class="w">              </span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">),</span><span class="w"> </span><span class="n">nrow</span><span class="o">=</span><span class="m">6</span><span class="p">,</span><span class="w"> </span><span class="n">byrow</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">X</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span>
+<span class="w">              </span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">,</span>
+<span class="w">              </span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span>
+<span class="w">              </span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">,</span>
+<span class="w">              </span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">,</span>
+<span class="w">              </span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">),</span><span class="w"> </span><span class="n">nrow</span><span class="o">=</span><span class="m">6</span><span class="p">,</span><span class="w"> </span><span class="n">byrow</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
 
-<span class="n">interact.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">X</span><span class="p">[,</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">X</span><span class="p">[,</span><span class="m">3</span><span class="p">]</span>
-<span class="n">interact.2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">X</span><span class="p">[,</span><span class="m">2</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">X</span><span class="p">[,</span><span class="m">3</span><span class="p">]</span>
+<span class="n">interact.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">X</span><span class="p">[,</span><span class="m">2</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">X</span><span class="p">[,</span><span class="m">4</span><span class="p">]</span>
+<span class="n">interact.2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">X</span><span class="p">[,</span><span class="m">3</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">X</span><span class="p">[,</span><span class="m">4</span><span class="p">]</span>
 
 <span class="n">X</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">cbind</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">interact.1</span><span class="p">,</span><span class="n">interact.2</span><span class="p">)</span>
 
@@ -574,25 +586,111 @@ V-shaped        1
 <span class="w">                  </span><span class="s">&quot;Japan Straight&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Japan V-Shaped&quot;</span><span class="p">,</span>
 <span class="w">                  </span><span class="s">&quot;USA Straight&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;USA V-Shaped&quot;</span><span class="p">)</span>
 
-<span class="nf">colnames</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;Japan&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;USA&quot;</span><span class="p">,</span><span class="s">&quot;V-Shaped&quot;</span><span class="p">,</span><span class="s">&quot;Japan:V-Shaped&quot;</span><span class="p">,</span><span class="s">&quot;USA:V-Shaped&quot;</span><span class="p">)</span>
+<span class="nf">colnames</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;beta.0&quot;</span><span class="p">,</span><span class="s">&quot;beta.1&quot;</span><span class="p">,</span><span class="s">&quot;beta.2&quot;</span><span class="p">,</span><span class="s">&quot;beta.3&quot;</span><span class="p">,</span><span class="s">&quot;beta.4&quot;</span><span class="p">,</span><span class="s">&quot;beta.5&quot;</span><span class="p">)</span>
+<span class="c1"># colnames(X) &lt;- c(&quot;(Intercept)&quot;,&quot;originJapan&quot;,&quot;originUSA&quot;,&quot;vsV-shaped&quot;,&quot;originJapan:vsV-shaped&quot;,&quot;originUSA:vsV-shaped&quot;) # names from lm(), if you prefer</span>
 <span class="nf">print</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </details>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                Japan USA V-Shaped Japan:V-Shaped USA:V-Shaped
-Europe Straight     0   0        0              0            0
-Europe V-Shaped     0   0        1              0            0
-Japan Straight      1   0        0              0            0
-Japan V-Shaped      1   0        1              1            0
-USA Straight        0   1        0              0            0
-USA V-Shaped        0   1        1              0            1
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                beta.0 beta.1 beta.2 beta.3 beta.4 beta.5
+Europe Straight      1      0      0      0      0      0
+Europe V-Shaped      1      0      0      1      0      0
+Japan Straight       1      1      0      0      0      0
+Japan V-Shaped       1      1      0      1      1      0
+USA Straight         1      0      1      0      0      0
+USA V-Shaped         1      0      1      1      0      1
 </pre></div>
 </div>
 </div>
 </div>
 <p>Where the final two interaction columns comes from multiplying the columns for <code class="docutils literal notranslate"><span class="pre">origin</span></code> and the columns for <code class="docutils literal notranslate"><span class="pre">vs</span></code>. From here, we can now work out what each parameter in the model means numerically and can decide whether any of these numbers actually answer our questions. If they do, we can use the associated <span class="math notranslate nohighlight">\(t\)</span>-tests. If they do not, we need to find another approach.</p>
+<p>The interpretations of the parameters associated with the constant and main effects are simple to derive and are given in the table below</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\beta_{0}\)</span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(Europe,Straight)</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\beta_{1}\)</span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(Japan,Straight)</span> <span class="pre">-</span> <span class="pre">(Europe,Straight)</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\beta_{2}\)</span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(USA,Straight)</span> <span class="pre">-</span> <span class="pre">(Europe,Straight)</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\beta_{3}\)</span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(Europe,V-shaped)</span> <span class="pre">-</span> <span class="pre">(Europe,Straight)</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The interaction parameters are trickier and need more explanation. Remember, the main reason for going into this detail is to indicate why we do not typically use the regression parameters for follow-up tests, because their interpretation is hard and does not necessarily agree with what we are interested in. So let us follow the logic to interpret these and then see an easier approach further below.</p>
+<p>In terms of the first interaction parameter <span class="math notranslate nohighlight">\((\beta_{4})\)</span>, we can see from the dummy variables table that this only appears in the definition of the <code class="docutils literal notranslate"><span class="pre">Japan</span> <span class="pre">V-Shaped</span></code> cell, as follows</p>
+<div class="math notranslate nohighlight">
+\[
+\mu_{(\text{Japan},\text{V-shaped})} = \beta_{0} + \beta_{1} + \beta_{3} + \beta_{4}
+\]</div>
+<p>So, we can solve for <span class="math notranslate nohighlight">\(\beta_{4}\)</span> and try and interpret what it means</p>
+<div class="math notranslate nohighlight">
+\[
+\beta_{4} = \mu_{(\text{Japan},\text{V-shaped})} - (\beta_{0} + \beta_{1} + \beta_{3})
+\]</div>
+<p>Here we can see that this value is some sort of <em>difference</em> between the true cell mean and the value produced by <span class="math notranslate nohighlight">\(\beta_{0} + \beta_{1} + \beta_{3}\)</span>. Thinking back to our discussion of an <em>additive</em> model last week, we can interpret this as our reference cell mean (<span class="math notranslate nohighlight">\(\beta_{0}\)</span>) plus a constant <em>column effect</em> (<span class="math notranslate nohighlight">\(\beta_{1}\)</span>) plus a constant <em>row effect</em> (<span class="math notranslate nohighlight">\(\beta_{3}\)</span>). If there is no interaction, this combination will equal the cell mean for <code class="docutils literal notranslate"><span class="pre">Japan</span> <span class="pre">V-Shaped</span></code>. If there is an interaction, we need to add an additional <em>offset</em> to make this value the true cell mean. This offset is therefore given by <span class="math notranslate nohighlight">\(\beta_{4}\)</span>. So, we can interpret this parameter as the <em>extra</em> amount needed to make the constant row and column effects equal the cell mean. If the additive model holds, this will be close to 0. If it does not, and there is an interaction, this value will be much larger than 0.</p>
+<p>The exact same logic holds for <span class="math notranslate nohighlight">\(\beta_{5}\)</span>, which can be interpreted as</p>
+<div class="math notranslate nohighlight">
+\[
+\beta_{5} = \mu_{(\text{USA},\text{V-shaped})} - (\beta_{0} + \beta_{2} + \beta_{3})
+\]</div>
+<p>and the only difference is that the <em>column effect</em> (<span class="math notranslate nohighlight">\(\beta_{2}\)</span>) represents the difference between the reference cell and the USA, rather than the difference between the reference cell and Japan.</p>
+<p>We can bring all this together in some <code class="docutils literal notranslate"><span class="pre">R</span></code> code, to check our interpretation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate all 6 cell means from the data</span>
+<span class="n">EUR.Str</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg.fake</span><span class="p">[</span><span class="n">mtcars</span><span class="o">$</span><span class="n">origin</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;Europe&quot;</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">vs</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;Straight&quot;</span><span class="p">])</span>
+<span class="n">EUR.V</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg.fake</span><span class="p">[</span><span class="n">mtcars</span><span class="o">$</span><span class="n">origin</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;Europe&quot;</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">vs</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;V-shaped&quot;</span><span class="p">])</span>
+<span class="n">JAP.Str</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg.fake</span><span class="p">[</span><span class="n">mtcars</span><span class="o">$</span><span class="n">origin</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;Japan&quot;</span><span class="w">  </span><span class="o">&amp;</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">vs</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;Straight&quot;</span><span class="p">])</span>
+<span class="n">JAP.V</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg.fake</span><span class="p">[</span><span class="n">mtcars</span><span class="o">$</span><span class="n">origin</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;Japan&quot;</span><span class="w">  </span><span class="o">&amp;</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">vs</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;V-shaped&quot;</span><span class="p">])</span>
+<span class="n">USA.Str</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg.fake</span><span class="p">[</span><span class="n">mtcars</span><span class="o">$</span><span class="n">origin</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;USA&quot;</span><span class="w">    </span><span class="o">&amp;</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">vs</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;Straight&quot;</span><span class="p">])</span>
+<span class="n">USA.V</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg.fake</span><span class="p">[</span><span class="n">mtcars</span><span class="o">$</span><span class="n">origin</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;USA&quot;</span><span class="w">    </span><span class="o">&amp;</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">vs</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;V-shaped&quot;</span><span class="p">])</span>
+
+<span class="c1"># Manual parameter definitions</span>
+<span class="n">beta.0</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">EUR.Str</span>
+<span class="n">beta.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">JAP.Str</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">EUR.Str</span>
+<span class="n">beta.2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">USA.Str</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">EUR.Str</span>
+<span class="n">beta.3</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">EUR.V</span><span class="w">   </span><span class="o">-</span><span class="w"> </span><span class="n">EUR.Str</span>
+<span class="n">beta.4</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">JAP.V</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="n">beta.0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta.1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta.3</span><span class="p">)</span><span class="w"> </span>
+<span class="n">beta.5</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">USA.V</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="n">beta.0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta.2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta.3</span><span class="p">)</span><span class="w"> </span>
+
+<span class="c1"># print comparison</span>
+<span class="n">manual</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="n">beta.0</span><span class="p">,</span><span class="n">beta.1</span><span class="p">,</span><span class="n">beta.2</span><span class="p">,</span><span class="n">beta.3</span><span class="p">,</span><span class="n">beta.4</span><span class="p">,</span><span class="n">beta.5</span><span class="p">)</span>
+<span class="n">beta</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">coef</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="nf">data.frame</span><span class="p">(</span><span class="s">&quot;manual&quot;</span><span class="o">=</span><span class="n">manual</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;lm&quot;</span><span class="o">=</span><span class="n">beta</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                           manual         lm
+(Intercept)            24.4625000 24.4625000
+originJapan             4.1375000  4.1375000
+originUSA              -3.6958333 -3.6958333
+vsV-shaped             -6.1958333 -6.1958333
+originJapan:vsV-shaped 13.5958333 13.5958333
+originUSA:vsV-shaped    0.1791667  0.1791667
+</pre></div>
+</div>
+</div>
+</div>
+<p>So we can see that our interpretation is <em>correct</em> and we now know what each parameter means. Unfortuantely, none of these values are really quantities we are interested in, in terms of following up the significant interaction effect. So while it has taken some effort to get here, we are not actually any closer to answering our questions about the differences between <code class="docutils literal notranslate"><span class="pre">straight</span></code> and <code class="docutils literal notranslate"><span class="pre">v-shaped</span></code> engines, within each country.</p>
+<div class="warning admonition">
+<p class="admonition-title">Main point</p>
+<p>The main point of this demonstration was not to suggest that you should always spend time trying to interpret what the parameter estimates mean in complex ANOVA models. You can, if you want. However, this interpretation always depends on the precise form of dummy coding used, as well as the cell that is coded as the reference. As such, this is a slightly <em>arbitrary</em> element of the model. Indeed, what this demonstrates is that you probably should <em>not</em> worry about the precise meaning of the parameter estimates, unless the model is very simple. Because of this, you should also not worry about the meaning of the tests of the parameters, because these may not actually correspond to something useful. It would be tempting to look at the test for the coefficient <code class="docutils literal notranslate"><span class="pre">vsV-shaped</span></code> and think this indicates the main effect of <code class="docutils literal notranslate"><span class="pre">vs</span></code>. But it does not. It indicates the effect of <code class="docutils literal notranslate"><span class="pre">vs</span></code> <em>for European cars only</em>. This is why we rely on the omnibus tests, but also why we need to find some other method of generating follow-up tests that actually test the comparisons we want, rather than the arbitrary comparisons that fall out of the dummy coding.</p>
+</div>
 </section>
 <section id="using-linear-contrasts">
 <h2>Using Linear Contrasts<a class="headerlink" href="#using-linear-contrasts" title="Link to this heading">#</a></h2>
@@ -601,12 +699,94 @@ USA V-Shaped        0   1        1              0            1
 </section>
 <section id="the-emmeans-package">
 <h3>The <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> Package<a class="headerlink" href="#the-emmeans-package" title="Link to this heading">#</a></h3>
+<p>Thankfully, all the hassle demonstrated above is unnecessary, because we can produce all the comparisons we want using the <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> package.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">suppressMessages</span><span class="p">(</span><span class="nf">library</span><span class="p">(</span><span class="n">emmeans</span><span class="p">))</span>
+<span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">vs</span><span class="o">|</span><span class="n">origin</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">emm</span><span class="o">$</span><span class="n">contrasts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>origin = Europe:
+ contrast              estimate   SE df t.ratio p.value
+ Straight - (V-shaped)     6.20 2.24 26   2.765  0.0103
+
+origin = Japan:
+ contrast              estimate   SE df t.ratio p.value
+ Straight - (V-shaped)    -7.40 3.79 26  -1.954  0.0616
+
+origin = USA:
+ contrast              estimate   SE df t.ratio p.value
+ Straight - (V-shaped)     6.02 2.73 26   2.203  0.0367
+</pre></div>
+</div>
+</div>
+</div>
+<p>So, we can actually see that despite our intuition from the earlier plot, the effect of <code class="docutils literal notranslate"><span class="pre">vs</span></code> for <code class="docutils literal notranslate"><span class="pre">Japan</span></code> is actually <em>non-significant</em>, whereas the effects for both <code class="docutils literal notranslate"><span class="pre">Europe</span></code> and <code class="docutils literal notranslate"><span class="pre">USA</span></code> <em>are</em> significant.</p>
+<p>The object returned by the <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> command also contains an <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> field that returns all the marginal means involved in the comparisons, along with their standard errors and confidence intervals. This is particularly useful for plotting using a library like <code class="docutils literal notranslate"><span class="pre">ggplot2</span></code>. For example</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="n">emm</span><span class="o">$</span><span class="n">emmeans</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>origin = Europe:
+ vs       emmean   SE df lower.CL upper.CL
+ Straight   24.5 1.47 26     21.4     27.5
+ V-shaped   18.3 1.69 26     14.8     21.7
+
+origin = Japan:
+ vs       emmean   SE df lower.CL upper.CL
+ Straight   28.6 2.40 26     23.7     33.5
+ V-shaped   36.0 2.93 26     30.0     42.0
+
+origin = USA:
+ vs       emmean   SE df lower.CL upper.CL
+ Straight   20.8 2.40 26     15.8     25.7
+ V-shaped   14.8 1.31 26     12.1     17.4
+
+Confidence level used: 0.95 
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 </section>
 <section id="multiple-comparisons-correction">
 <h2>Multiple Comparisons Correction<a class="headerlink" href="#multiple-comparisons-correction" title="Link to this heading">#</a></h2>
-<section id="planned-vs-post-hoc-tests">
-<h3>Planned vs Post-hoc Tests<a class="headerlink" href="#planned-vs-post-hoc-tests" title="Link to this heading">#</a></h3>
+<section id="corrections-in-emmeans">
+<h3>Corrections in <code class="docutils literal notranslate"><span class="pre">emmeans</span></code><a class="headerlink" href="#corrections-in-emmeans" title="Link to this heading">#</a></h3>
+<p>… Each level of the second factor is taken to define a family of tests, independent from other levels. We can see this if we swap the tests defined earlier to look at the effects of <code class="docutils literal notranslate"><span class="pre">origin</span></code> at each level of <code class="docutils literal notranslate"><span class="pre">vs</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="o">|</span><span class="n">vs</span><span class="p">,</span><span class="w"> </span><span class="n">adjust</span><span class="o">=</span><span class="s">&quot;none&quot;</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">emm</span><span class="o">$</span><span class="n">contrasts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>vs = Straight:
+ contrast       estimate   SE df t.ratio p.value
+ Europe - Japan    -4.14 2.81 26  -1.473  0.1528
+ Europe - USA       3.70 2.81 26   1.316  0.1998
+ Japan - USA        7.83 3.39 26   2.312  0.0290
+
+vs = V-shaped:
+ contrast       estimate   SE df t.ratio p.value
+ Europe - Japan   -17.73 3.39 26  -5.234  &lt;.0001
+ Europe - USA       3.52 2.14 26   1.641  0.1128
+ Japan - USA       21.25 3.21 26   6.611  &lt;.0001
+</pre></div>
+</div>
+</div>
+</div>
+<p>So, <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> takes this as two families, each containing 3 tests. Corrections to the <span class="math notranslate nohighlight">\(p\)</span>-values are then applied <em>within</em> families.</p>
+</section>
+<section id="planned-comparisons-vs-post-hoc-tests">
+<h3>Planned Comparisons vs Post-hoc Tests<a class="headerlink" href="#planned-comparisons-vs-post-hoc-tests" title="Link to this heading">#</a></h3>
 <p>… Beware of this reasoning. Although planned tests are more <em>credible</em> in the sense that you are not <span class="math notranslate nohighlight">\(p\)</span>-hacking, this does not change anything about the error rate. The error does not magically know what your intentions were and then change itself. The error rate is a fact of multiple testing that does not change with intent. As such, even if you have pre-specified tests, you still need to control for multiple comparisons.</p>
 </section>
 </section>
@@ -615,6 +795,116 @@ USA V-Shaped        0   1        1              0            1
 <section id="interaction-bar-plots">
 <h3>Interaction Bar Plots<a class="headerlink" href="#interaction-bar-plots" title="Link to this heading">#</a></h3>
 <p>… If we were interested in the interaction the other way, we could simply swap which factor was displayed on the <span class="math notranslate nohighlight">\(x\)</span>-axis. For instance … Visually, this makes the differences of interest more apparent in terms of the bars that are grouped together.</p>
+</section>
+</section>
+<section id="the-complete-analysis">
+<h2>The Complete Analysis<a class="headerlink" href="#the-complete-analysis" title="Link to this heading">#</a></h2>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">print.title</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">title</span><span class="p">){</span>
+<span class="w">    </span><span class="n">w</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">getOption</span><span class="p">(</span><span class="s">&quot;width&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="n">s</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">strrep</span><span class="p">(</span><span class="s">&quot;=&quot;</span><span class="p">,</span><span class="n">w</span><span class="p">)</span>
+<span class="w">    </span><span class="n">l</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">nchar</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+<span class="w">    </span><span class="n">p</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">round</span><span class="p">((</span><span class="n">w</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">l</span><span class="p">)</span><span class="o">/</span><span class="m">2</span><span class="p">)</span>
+<span class="w">    </span><span class="nf">cat</span><span class="p">(</span><span class="s">&quot;\n&quot;</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="s">&quot;\n&quot;</span><span class="p">,</span><span class="nf">strrep</span><span class="p">(</span><span class="s">&quot; &quot;</span><span class="p">,</span><span class="n">p</span><span class="p">),</span><span class="n">title</span><span class="p">,</span><span class="nf">strrep</span><span class="p">(</span><span class="s">&quot; &quot;</span><span class="p">,</span><span class="n">p</span><span class="p">),</span><span class="s">&quot;\n&quot;</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="s">&quot;\n&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Fit full factorial model</span>
+<span class="n">mod</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg.fake</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vs</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">origin</span><span class="o">:</span><span class="n">vs</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
+
+<span class="c1"># 2. Check assumptions</span>
+<span class="nf">par</span><span class="p">(</span><span class="n">mfrow</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">2</span><span class="p">,</span><span class="m">2</span><span class="p">))</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
+
+<span class="c1"># 3. Call summary() on the final model</span>
+<span class="nf">print.title</span><span class="p">(</span><span class="s">&quot;MODEL SUMMARY&quot;</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">summary</span><span class="p">(</span><span class="n">mod</span><span class="p">))</span>
+
+<span class="c1"># 4. Generate ANOVA table</span>
+<span class="nf">print.title</span><span class="p">(</span><span class="s">&quot;ANOVA TABLE&quot;</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">Anova</span><span class="p">(</span><span class="n">mod</span><span class="p">))</span>
+
+<span class="c1"># 5. Run follow-up comaprisons</span>
+<span class="nf">print.title</span><span class="p">(</span><span class="s">&quot;FOLLOW-UP TESTS&quot;</span><span class="p">)</span>
+<span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">vs</span><span class="o">|</span><span class="n">origin</span><span class="p">,</span><span class="w"> </span><span class="n">adjust</span><span class="o">=</span><span class="s">&quot;holm&quot;</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">emm</span><span class="o">$</span><span class="n">contrasts</span><span class="p">)</span>
+
+<span class="c1"># 6. Visualise interaction</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> ================================================================================ 
+                                    MODEL SUMMARY                                    
+ ================================================================================ 
+
+Call:
+lm(formula = mpg.fake ~ origin + vs + origin:vs, data = mtcars)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-7.100 -2.766 -0.025  1.858  7.938 
+
+Coefficients:
+                       Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)             24.4625     1.4671  16.674 2.11e-15 ***
+originJapan              4.1375     2.8093   1.473  0.15281    
+originUSA               -3.6958     2.8093  -1.316  0.19980    
+vsV-shaped              -6.1958     2.2411  -2.765  0.01034 *  
+originJapan:vsV-shaped  13.5958     4.4013   3.089  0.00474 ** 
+originUSA:vsV-shaped     0.1792     3.5333   0.051  0.95995    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 4.15 on 26 degrees of freedom
+Multiple R-squared:  0.7206,	Adjusted R-squared:  0.6669 
+F-statistic: 13.41 on 5 and 26 DF,  p-value: 1.629e-06
+
+
+ ================================================================================ 
+                                    ANOVA TABLE                                    
+ ================================================================================ 
+Anova Table (Type II tests)
+
+Response: mpg.fake
+          Sum Sq Df F value    Pr(&gt;F)    
+origin    663.27  2 19.2594 7.391e-06 ***
+vs         99.32  1  5.7681   0.02376 *  
+origin:vs 181.55  2  5.2715   0.01197 *  
+Residuals 447.70 26                      
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+ ================================================================================ 
+                                  FOLLOW-UP TESTS                                  
+ ================================================================================ 
+origin = Europe:
+ contrast              estimate   SE df t.ratio p.value
+ Straight - (V-shaped)     6.20 2.24 26   2.765  0.0103
+
+origin = Japan:
+ contrast              estimate   SE df t.ratio p.value
+ Straight - (V-shaped)    -7.40 3.79 26  -1.954  0.0616
+
+origin = USA:
+ contrast              estimate   SE df t.ratio p.value
+ Straight - (V-shaped)     6.02 2.73 26   2.203  0.0367
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/9571c9a1478a467d65dfee9a6a00147d0072884c2cf91a4dca94455a531a48c1.png"><img alt="_images/9571c9a1478a467d65dfee9a6a00147d0072884c2cf91a4dca94455a531a48c1.png" src="_images/9571c9a1478a467d65dfee9a6a00147d0072884c2cf91a4dca94455a531a48c1.png" style="width: 420px; height: 420px;" /></a>
+</div>
+</div>
 <hr class="footnotes docutils" />
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="context-foot" role="note">
@@ -626,7 +916,6 @@ USA V-Shaped        0   1        1              0            1
 <p>Remember, these data are <em>entirely</em> fabricated. There is not something magical about Japanese cars that makes V-shaped engines super efficient in terms of MPG.</p>
 </aside>
 </aside>
-</section>
 </section>
 </section>
 
@@ -685,7 +974,8 @@ USA V-Shaped        0   1        1              0            1
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -702,13 +992,15 @@ USA V-Shaped        0   1        1              0            1
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-comparisons-correction">Multiple Comparisons Correction</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#planned-vs-post-hoc-tests">Planned vs Post-hoc Tests</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#corrections-in-emmeans">Corrections in <code class="docutils literal notranslate"><span class="pre">emmeans</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#planned-comparisons-vs-post-hoc-tests">Planned Comparisons vs Post-hoc Tests</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualising-anova-effects">Visualising ANOVA Effects</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction-bar-plots">Interaction Bar Plots</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-complete-analysis">The Complete Analysis</a></li>
 </ul>
   </nav></div>
 
@@ -757,8 +1049,8 @@ By Dr Martyn McFarquhar & Dr George Farmer
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
   </footer>
