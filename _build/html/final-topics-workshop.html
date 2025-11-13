@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Unbalanced ANOVA Models &#8212; Linear Models V: Final Topics</title>
+    <title>Follow-up Tests &#8212; Linear Models V: Final Topics</title>
   
   
   
@@ -61,11 +61,11 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '2.unbalanced-ANOVA';</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'final-topics-workshop';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Analysis of Covariance (ANCOVA)" href="3.ANCOVA.html" />
-    <link rel="prev" title="Follow-up Tests" href="1.follow-up.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -116,6 +116,8 @@
     <div class="bd-container__inner bd-page-width">
       
       
+      
+        
       
       <dialog id="pst-primary-sidebar-modal"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
@@ -169,9 +171,9 @@
                 </a>
             </li>
         </ul>
-        <ul class="current nav bd-sidenav">
+        <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="1.follow-up.html">Follow-up Tests</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Unbalanced ANOVA Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2.unbalanced-ANOVA.html">Unbalanced ANOVA Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3.ANCOVA.html">Analysis of Covariance (ANCOVA)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="4.interactions.html">Interactions with Continuous Variables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
@@ -251,7 +253,7 @@
       
       
       
-      <li><a href="https://github.com/PCHN63101-Advanced-Data-Skills/Final-Linear-Model-Topics/issues/new?title=Issue%20on%20page%20%2F2.unbalanced-ANOVA.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/PCHN63101-Advanced-Data-Skills/Final-Linear-Model-Topics/issues/new?title=Issue%20on%20page%20%2Ffinal-topics-workshop.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -281,7 +283,7 @@
       
       
       
-      <li><a href="_sources/2.unbalanced-ANOVA.ipynb" target="_blank"
+      <li><a href="_sources/final-topics-workshop.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -357,7 +359,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Unbalanced ANOVA Models</h1>
+    <h1>Follow-up Tests</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -367,10 +369,17 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-i-sums-of-squares">Type I Sums-of-squares</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-ii-sums-of-squares">Type II Sums-of-squares</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-iii-sums-of-squares">Type III Sums-of-squares</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Follow-up Tests</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction-containing-multiple-tests">Interaction containing multiple tests</a></li>
 </ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#means-from-emmeans">Means from <code class="docutils literal notranslate"><span class="pre">emmeans()</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#visualising-anova-effects">Visualising ANOVA Effects</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction-bar-plots">Interaction Bar Plots</a></li>
+</ul>
+</li>
+</ul>
+
             </nav>
         </div>
     </div>
@@ -381,28 +390,148 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="unbalanced-anova-models">
-<h1>Unbalanced ANOVA Models<a class="headerlink" href="#unbalanced-anova-models" title="Link to this heading">#</a></h1>
-<figure class="align-right">
-<a class="reference internal image-reference" href="_images/unbalanced-text.webp"><img alt="_images/unbalanced-text.webp" src="_images/unbalanced-text.webp" style="width: 240.0px; height: 360.8px;" /></a>
-</figure>
-<p>… Indeed, whole textbooks were written about unbalanced data (as can be seen on the <em>right</em>). So this is a topic that deserves some attention, even if it is largely <em>ignored</em> by modern teaching in Psychology. There is something of an assumption that the issues of balance have been <em>solved</em> and thus do not need considering anymore. However, this is not really true. The “solution” implemented by SAS and SPSS is the Type III sums-of-squares, which researchers continue to use because it is the default<a class="footnote-reference brackets" href="#default-foot" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. However, as discussed briefly last week, this approach is highly flawed.</p>
-<p>In this part of the lesson, we will dig deeper into the Type I/II/III debate so that you understand what each type of sums-of-squares means, when they are most appropriate to use and what the various arguments are for/against them. In general, we will be recommending Type II for 95% of all use-cases. However, it is important not to just take our word for it. Instead, it is important that you <em>understand</em> the difference and can make your own informed judgement.</p>
-<section id="type-i-sums-of-squares">
-<h2>Type I Sums-of-squares<a class="headerlink" href="#type-i-sums-of-squares" title="Link to this heading">#</a></h2>
+  <section id="follow-up-tests">
+<h1>Follow-up Tests<a class="headerlink" href="#follow-up-tests" title="Link to this heading">#</a></h1>
+<section id="interaction-containing-multiple-tests">
+<h2>Interaction containing multiple tests<a class="headerlink" href="#interaction-containing-multiple-tests" title="Link to this heading">#</a></h2>
+<p>… If we were interested in the interaction the other way around, things become a bit more complicated as we have 3 tests for each level of <code class="docutils literal notranslate"><span class="pre">vs</span></code>:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Origin</span> <span class="pre">(&#64;</span> <span class="pre">Straight)</span></code></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">(Europe,Straight)</span> <span class="pre">-</span> <span class="pre">(Japan,Straight)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">(Europe,Straight)</span> <span class="pre">-</span> <span class="pre">(USA,Straight)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">(USA,Straight)</span> <span class="pre">-</span> <span class="pre">(Japan,Straight)</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Origin</span> <span class="pre">(&#64;</span> <span class="pre">V-shaped)</span></code></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">(Europe,V-shaped)</span> <span class="pre">-</span> <span class="pre">(Japan,V-shaped)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">(Europe,V-shaped)</span> <span class="pre">-</span> <span class="pre">(USA,V-shaped)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">(USA,V-shaped)</span> <span class="pre">-</span> <span class="pre">(Japan,V-shaped)</span></code></p></li>
+</ul>
+</li>
+</ol>
+<p>There are two ways we can deal with this. Either we perform another omnibus test for each level of <code class="docutils literal notranslate"><span class="pre">vs</span></code>, or we just jump straight to the individual comparisons.</p>
+<p>If we want to use confidence intervals rather than <span class="math notranslate nohighlight">\(p\)</span>-values, we can convert the object returned by <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> into one that returns intervals.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="n">emm.CI</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">confint</span><span class="p">(</span><span class="n">emm</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">emm.CI</span><span class="o">$</span><span class="n">contrasts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>origin = Europe:
+ contrast              estimate   SE df lower.CL upper.CL
+ Straight - (V-shaped)     6.20 2.24 26    1.589   10.802
+
+origin = Japan:
+ contrast              estimate   SE df lower.CL upper.CL
+ Straight - (V-shaped)    -7.40 3.79 26  -15.186    0.386
+
+origin = USA:
+ contrast              estimate   SE df lower.CL upper.CL
+ Straight - (V-shaped)     6.02 2.73 26    0.402   11.632
+
+Confidence level used: 0.95 
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can also convert the estimates given by the contrasts to <em>effect sizes</em> using Cohen’s <span class="math notranslate nohighlight">\(d\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="nf">eff_size</span><span class="p">(</span><span class="n">emm</span><span class="p">,</span><span class="w"> </span><span class="n">sigma</span><span class="o">=</span><span class="nf">sigma</span><span class="p">(</span><span class="n">mod</span><span class="p">),</span><span class="w"> </span><span class="n">edf</span><span class="o">=</span><span class="nf">df.residual</span><span class="p">(</span><span class="n">mod</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Since &#39;object&#39; is a list, we are using the contrasts already present.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>origin = Europe:
+ contrast                effect.size    SE df lower.CL upper.CL
+ (Straight - (V-shaped))        1.49 0.578 26   0.3042    2.682
+
+origin = Japan:
+ contrast                effect.size    SE df lower.CL upper.CL
+ (Straight - (V-shaped))       -1.78 0.946 26  -3.7274    0.161
+
+origin = USA:
+ contrast                effect.size    SE df lower.CL upper.CL
+ (Straight - (V-shaped))        1.45 0.688 26   0.0351    2.865
+
+sigma used for effect sizes: 4.15 
+Confidence level used: 0.95 
+</pre></div>
+</div>
+</div>
+</div>
+<p>By Cohen’s heuristics[^cohen-foot], all these effect sizes are <em>large</em>. This may seem confusing because the effect for <code class="docutils literal notranslate"><span class="pre">Japan</span></code> was non-significant. However, the effect size and the <span class="math notranslate nohighlight">\(p\)</span>-value mean two different things. An effect size is a <em>description</em> of what we have estimated. It is not a measure of the amount of evidence we have for that value being true. So, we can think of this effect as being <em>large</em> but <em>imprecisely estimated</em>. Hence the wide confidence interval.</p>
 </section>
-<section id="type-ii-sums-of-squares">
-<h2>Type II Sums-of-squares<a class="headerlink" href="#type-ii-sums-of-squares" title="Link to this heading">#</a></h2>
 </section>
-<section id="type-iii-sums-of-squares">
-<h2>Type III Sums-of-squares<a class="headerlink" href="#type-iii-sums-of-squares" title="Link to this heading">#</a></h2>
-<hr class="footnotes docutils" />
-<aside class="footnote-list brackets">
-<aside class="footnote brackets" id="default-foot" role="note">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
-<p>Always be wary of defaults. If there is one way of getting an entire scientific field to adhere to a particular way of doing something without the need for any critical evaluation, simply make it the default in software. Defaults do not automatically hold some higher-level of credibility simply because they were the value that the developer picked. Many times these are well-considered, but this is not a <em>guarantee</em>. We can easily be led astray by default choices because we do not have to justify using them. This does not have an official name, but we could perhaps call it <em>the default authority effect</em>. It is effectively a reversal of the burden of proof: deviating from defaults requires defence, whereas using defaults is treated as neutral. Yet this presupposes that the defaults are normatively sound, which is rarely demonstrated or even documented.</p>
-</aside>
-</aside>
+<section id="means-from-emmeans">
+<h1>Means from <code class="docutils literal notranslate"><span class="pre">emmeans()</span></code><a class="headerlink" href="#means-from-emmeans" title="Link to this heading">#</a></h1>
+<p>The object returned by the <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> command also contains an <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> field that returns all the marginal means involved in the comparisons, along with their standard errors and confidence intervals. This is particularly useful for plotting using a library like <code class="docutils literal notranslate"><span class="pre">ggplot2</span></code>. For example</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="n">emm</span><span class="o">$</span><span class="n">emmeans</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>origin = Europe:
+ vs       emmean   SE df lower.CL upper.CL
+ Straight   24.5 1.47 26     21.4     27.5
+ V-shaped   18.3 1.69 26     14.8     21.7
+
+origin = Japan:
+ vs       emmean   SE df lower.CL upper.CL
+ Straight   28.6 2.40 26     23.7     33.5
+ V-shaped   36.0 2.93 26     30.0     42.0
+
+origin = USA:
+ vs       emmean   SE df lower.CL upper.CL
+ Straight   20.8 2.40 26     15.8     25.7
+ V-shaped   14.8 1.31 26     12.1     17.4
+
+Confidence level used: 0.95 
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can also do something similar with the object returned by <code class="docutils literal notranslate"><span class="pre">linfct()</span></code>. Where, it should be no surprise, that the weights needed to produce  each cell mean correspond to the dummy variables we derived earlier.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="n">con.weights</span><span class="o">$</span><span class="n">emmeans</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     (Intercept) originJapan originUSA vsV-shaped originJapan:vsV-shaped
+[1,]           1           0         0          0                      0
+[2,]           1           0         0          1                      0
+[3,]           1           1         0          0                      0
+[4,]           1           1         0          1                      1
+[5,]           1           0         1          0                      0
+[6,]           1           0         1          1                      0
+     originUSA:vsV-shaped
+[1,]                    0
+[2,]                    0
+[3,]                    0
+[4,]                    0
+[5,]                    0
+[6,]                    1
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="visualising-anova-effects">
+<h1>Visualising ANOVA Effects<a class="headerlink" href="#visualising-anova-effects" title="Link to this heading">#</a></h1>
+<section id="interaction-bar-plots">
+<h2>Interaction Bar Plots<a class="headerlink" href="#interaction-bar-plots" title="Link to this heading">#</a></h2>
+<p>… If we were interested in the interaction the other way, we could simply swap which factor was displayed on the <span class="math notranslate nohighlight">\(x\)</span>-axis. For instance … Visually, this makes the differences of interest more apparent in terms of the bars that are grouped together.</p>
 </section>
 </section>
 
@@ -436,24 +565,6 @@
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="1.follow-up.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Follow-up Tests</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="3.ANCOVA.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Analysis of Covariance (ANCOVA)</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div>
                 </footer>
               
@@ -471,10 +582,17 @@
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-i-sums-of-squares">Type I Sums-of-squares</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-ii-sums-of-squares">Type II Sums-of-squares</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-iii-sums-of-squares">Type III Sums-of-squares</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Follow-up Tests</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction-containing-multiple-tests">Interaction containing multiple tests</a></li>
 </ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#means-from-emmeans">Means from <code class="docutils literal notranslate"><span class="pre">emmeans()</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#visualising-anova-effects">Visualising ANOVA Effects</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction-bar-plots">Interaction Bar Plots</a></li>
+</ul>
+</li>
+</ul>
+
   </nav></div>
 
 </div></div>
