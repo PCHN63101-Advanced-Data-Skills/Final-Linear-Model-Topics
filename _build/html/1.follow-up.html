@@ -381,7 +381,6 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#planned-comparisons-vs-post-hoc-tests">Planned Comparisons vs Post-hoc Tests</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-complete-analysis">The Complete Analysis</a></li>
 </ul>
             </nav>
         </div>
@@ -837,7 +836,7 @@ origin = USA:
 </div>
 </div>
 </div>
-<p>where we can see that the <em>second</em> row corresponds to the weights we derived for <code class="docutils literal notranslate"><span class="pre">(Japan,Straight)</span> <span class="pre">-</span> <span class="pre">(Japan,V-shaped)</span></code>. The <em>first</em> row just returns the parameter associated with <code class="docutils literal notranslate"><span class="pre">vsV-shaped</span></code>, as expected<a class="footnote-reference brackets" href="#neg-foot" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a>. The final row gives the weights for <code class="docutils literal notranslate"><span class="pre">(USA,Straight)</span> <span class="pre">-</span> <span class="pre">(USA,V-shaped)</span></code>, which we can always check using the manual method we have above. As such, we can see that <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> is doing <em>exactly</em> what we demonstrated manually above, just in an easier and more automated fashion.</p>
+<p>where we can see that the <em>second</em> row corresponds to the weights we derived for <code class="docutils literal notranslate"><span class="pre">(Japan,Straight)</span> <span class="pre">-</span> <span class="pre">(Japan,V-shaped)</span></code>, the <em>first</em> row just returns the parameter associated with <code class="docutils literal notranslate"><span class="pre">vsV-shaped</span></code><a class="footnote-reference brackets" href="#neg-foot" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a> and the final row gives the weights for <code class="docutils literal notranslate"><span class="pre">(USA,Straight)</span> <span class="pre">-</span> <span class="pre">(USA,V-shaped)</span></code>. As such, we can see that <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> is doing <em>exactly</em> what we demonstrated manually above, just in an easier and more automated fashion.</p>
 </section>
 </section>
 <section id="multiple-comparisons-correction">
@@ -873,116 +872,6 @@ vs = V-shaped:
 <section id="planned-comparisons-vs-post-hoc-tests">
 <h3>Planned Comparisons vs Post-hoc Tests<a class="headerlink" href="#planned-comparisons-vs-post-hoc-tests" title="Link to this heading">#</a></h3>
 <p>… Beware of this reasoning. Although planned tests are more <em>credible</em> in the sense that you are not <span class="math notranslate nohighlight">\(p\)</span>-hacking, this does not change anything about the error rate. The error does not magically know what your intentions were and then change itself. The error rate is a fact of multiple testing that does not change with intent. As such, even if you have pre-specified tests, you still need to control for multiple comparisons.</p>
-</section>
-</section>
-<section id="the-complete-analysis">
-<h2>The Complete Analysis<a class="headerlink" href="#the-complete-analysis" title="Link to this heading">#</a></h2>
-<div class="cell tag_hide-input docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">print.title</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">title</span><span class="p">){</span>
-<span class="w">    </span><span class="n">w</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">getOption</span><span class="p">(</span><span class="s">&quot;width&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="n">s</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">strrep</span><span class="p">(</span><span class="s">&quot;=&quot;</span><span class="p">,</span><span class="n">w</span><span class="p">)</span>
-<span class="w">    </span><span class="n">l</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">nchar</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
-<span class="w">    </span><span class="n">p</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">round</span><span class="p">((</span><span class="n">w</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">l</span><span class="p">)</span><span class="o">/</span><span class="m">2</span><span class="p">)</span>
-<span class="w">    </span><span class="nf">cat</span><span class="p">(</span><span class="s">&quot;\n&quot;</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="s">&quot;\n&quot;</span><span class="p">,</span><span class="nf">strrep</span><span class="p">(</span><span class="s">&quot; &quot;</span><span class="p">,</span><span class="n">p</span><span class="p">),</span><span class="n">title</span><span class="p">,</span><span class="nf">strrep</span><span class="p">(</span><span class="s">&quot; &quot;</span><span class="p">,</span><span class="n">p</span><span class="p">),</span><span class="s">&quot;\n&quot;</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="s">&quot;\n&quot;</span><span class="p">)</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</div>
-</details>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Fit full factorial model</span>
-<span class="n">mod</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg.fake</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vs</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">origin</span><span class="o">:</span><span class="n">vs</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
-
-<span class="c1"># 2. Check assumptions</span>
-<span class="nf">par</span><span class="p">(</span><span class="n">mfrow</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">2</span><span class="p">,</span><span class="m">2</span><span class="p">))</span>
-<span class="nf">plot</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
-
-<span class="c1"># 3. Call summary() on the final model</span>
-<span class="nf">print.title</span><span class="p">(</span><span class="s">&quot;MODEL SUMMARY&quot;</span><span class="p">)</span>
-<span class="nf">print</span><span class="p">(</span><span class="nf">summary</span><span class="p">(</span><span class="n">mod</span><span class="p">))</span>
-
-<span class="c1"># 4. Generate ANOVA table</span>
-<span class="nf">print.title</span><span class="p">(</span><span class="s">&quot;ANOVA TABLE&quot;</span><span class="p">)</span>
-<span class="nf">print</span><span class="p">(</span><span class="nf">Anova</span><span class="p">(</span><span class="n">mod</span><span class="p">))</span>
-
-<span class="c1"># 5. Run follow-up comaprisons</span>
-<span class="nf">print.title</span><span class="p">(</span><span class="s">&quot;FOLLOW-UP TESTS&quot;</span><span class="p">)</span>
-<span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">vs</span><span class="o">|</span><span class="n">origin</span><span class="p">,</span><span class="w"> </span><span class="n">adjust</span><span class="o">=</span><span class="s">&quot;holm&quot;</span><span class="p">)</span>
-<span class="nf">print</span><span class="p">(</span><span class="n">emm</span><span class="o">$</span><span class="n">contrasts</span><span class="p">)</span>
-
-<span class="c1"># 6. Visualise interaction</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> ================================================================================ 
-                                    MODEL SUMMARY                                    
- ================================================================================ 
-
-Call:
-lm(formula = mpg.fake ~ origin + vs + origin:vs, data = mtcars)
-
-Residuals:
-   Min     1Q Median     3Q    Max 
--7.100 -2.766 -0.025  1.858  7.938 
-
-Coefficients:
-                       Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)             24.4625     1.4671  16.674 2.11e-15 ***
-originJapan              4.1375     2.8093   1.473  0.15281    
-originUSA               -3.6958     2.8093  -1.316  0.19980    
-vsV-shaped              -6.1958     2.2411  -2.765  0.01034 *  
-originJapan:vsV-shaped  13.5958     4.4013   3.089  0.00474 ** 
-originUSA:vsV-shaped     0.1792     3.5333   0.051  0.95995    
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-
-Residual standard error: 4.15 on 26 degrees of freedom
-Multiple R-squared:  0.7206,	Adjusted R-squared:  0.6669 
-F-statistic: 13.41 on 5 and 26 DF,  p-value: 1.629e-06
-
-
- ================================================================================ 
-                                    ANOVA TABLE                                    
- ================================================================================ 
-Anova Table (Type II tests)
-
-Response: mpg.fake
-          Sum Sq Df F value    Pr(&gt;F)    
-origin    663.27  2 19.2594 7.391e-06 ***
-vs         99.32  1  5.7681   0.02376 *  
-origin:vs 181.55  2  5.2715   0.01197 *  
-Residuals 447.70 26                      
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-
- ================================================================================ 
-                                  FOLLOW-UP TESTS                                  
- ================================================================================ 
-origin = Europe:
- contrast              estimate   SE df t.ratio p.value
- Straight - (V-shaped)     6.20 2.24 26   2.765  0.0103
-
-origin = Japan:
- contrast              estimate   SE df t.ratio p.value
- Straight - (V-shaped)    -7.40 3.79 26  -1.954  0.0616
-
-origin = USA:
- contrast              estimate   SE df t.ratio p.value
- Straight - (V-shaped)     6.02 2.73 26   2.203  0.0367
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="_images/9571c9a1478a467d65dfee9a6a00147d0072884c2cf91a4dca94455a531a48c1.png"><img alt="_images/9571c9a1478a467d65dfee9a6a00147d0072884c2cf91a4dca94455a531a48c1.png" src="_images/9571c9a1478a467d65dfee9a6a00147d0072884c2cf91a4dca94455a531a48c1.png" style="width: 420px; height: 420px;" /></a>
-</div>
-</div>
 <hr class="footnotes docutils" />
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="fake-foot" role="note">
@@ -1002,6 +891,7 @@ origin = USA:
 <p>The fact that this is <code class="docutils literal notranslate"><span class="pre">-1</span></code> rather than <code class="docutils literal notranslate"><span class="pre">1</span></code> makes no differences. It just reverses the direction of the comparison.</p>
 </aside>
 </aside>
+</section>
 </section>
 </section>
 
@@ -1082,7 +972,6 @@ origin = USA:
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#planned-comparisons-vs-post-hoc-tests">Planned Comparisons vs Post-hoc Tests</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-complete-analysis">The Complete Analysis</a></li>
 </ul>
   </nav></div>
 
