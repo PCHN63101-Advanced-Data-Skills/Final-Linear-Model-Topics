@@ -373,10 +373,14 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-regression-tests">Using the Regression Tests</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-linear-contrasts">Using Linear Contrasts</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-main-effects">Simple Main Effects</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-emmeans-package">The <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> Package</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-emmeans-package">The <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> Package</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#confidence-intervals-and-effect-sizes-from-emmeans">Confidence Intervals and Effect Sizes from <code class="docutils literal notranslate"><span class="pre">emmeans</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-comparisons-correction">Multiple Comparisons Correction</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#corrections-in-r">Corrections in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#corrections-in-emmeans">Corrections in <code class="docutils literal notranslate"><span class="pre">emmeans</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#planned-comparisons-vs-post-hoc-tests">Planned Comparisons vs Post-hoc Tests</a></li>
 </ul>
@@ -837,16 +841,53 @@ origin = USA:
 </div>
 </div>
 <p>where we can see that the <em>second</em> row corresponds to the weights we derived for <code class="docutils literal notranslate"><span class="pre">(Japan,Straight)</span> <span class="pre">-</span> <span class="pre">(Japan,V-shaped)</span></code>, the <em>first</em> row just returns the parameter associated with <code class="docutils literal notranslate"><span class="pre">vsV-shaped</span></code><a class="footnote-reference brackets" href="#neg-foot" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a> and the final row gives the weights for <code class="docutils literal notranslate"><span class="pre">(USA,Straight)</span> <span class="pre">-</span> <span class="pre">(USA,V-shaped)</span></code>. As such, we can see that <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> is doing <em>exactly</em> what we demonstrated manually above, just in an easier and more automated fashion.</p>
+<section id="confidence-intervals-and-effect-sizes-from-emmeans">
+<h4>Confidence Intervals and Effect Sizes from <code class="docutils literal notranslate"><span class="pre">emmeans</span></code><a class="headerlink" href="#confidence-intervals-and-effect-sizes-from-emmeans" title="Link to this heading">#</a></h4>
+</section>
 </section>
 </section>
 <section id="multiple-comparisons-correction">
 <h2>Multiple Comparisons Correction<a class="headerlink" href="#multiple-comparisons-correction" title="Link to this heading">#</a></h2>
+<section id="corrections-in-r">
+<h3>Corrections in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#corrections-in-r" title="Link to this heading">#</a></h3>
+<p>General access to <span class="math notranslate nohighlight">\(p\)</span>-values corrections is available in base <code class="docutils literal notranslate"><span class="pre">R</span></code> using the <code class="docutils literal notranslate"><span class="pre">p.adjust()</span></code> function. We simply supply a list of <span class="math notranslate nohighlight">\(p\)</span>-values and the name of the method we want to use and <code class="docutils literal notranslate"><span class="pre">R</span></code> will return the adjusted values. For instance</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">p.raw</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0.002</span><span class="p">,</span><span class="w"> </span><span class="m">0.765</span><span class="p">,</span><span class="w"> </span><span class="m">0.05</span><span class="p">,</span><span class="w"> </span><span class="m">0.123</span><span class="p">)</span>
+<span class="n">p.adj</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">p.adjust</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">p.raw</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="o">=</span><span class="s">&quot;bonferroni&quot;</span><span class="p">)</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="n">p.adj</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 0.008 1.000 0.200 0.492
+</pre></div>
+</div>
+</div>
+</div>
+<p>In terms of the methods advailable, <code class="docutils literal notranslate"><span class="pre">R</span></code> has 6 built-in possibilities that can be listed by calling <code class="docutils literal notranslate"><span class="pre">p.adjust.methods</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="n">p.adjust.methods</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] &quot;holm&quot;       &quot;hochberg&quot;   &quot;hommel&quot;     &quot;bonferroni&quot; &quot;BH&quot;        
+[6] &quot;BY&quot;         &quot;fdr&quot;        &quot;none&quot;      
+</pre></div>
+</div>
+</div>
+</div>
+<p>noting that <code class="docutils literal notranslate"><span class="pre">fdr</span></code> is an alias for <code class="docutils literal notranslate"><span class="pre">BH</span></code>, and <code class="docutils literal notranslate"><span class="pre">none</span></code> is just a pass-through option that does nothing. It is somewhat beyond this lesson to go into the details of all of these. So, a very general heuristic is to use the <code class="docutils literal notranslate"><span class="pre">holm</span></code> method as the most general-purpose approach. This is more powerful than <code class="docutils literal notranslate"><span class="pre">bonferroni</span></code><a class="footnote-reference brackets" href="#bonf-foot" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></a>, but has no additional assumptions. If the <span class="math notranslate nohighlight">\(p\)</span>-values are <em>correlated</em> (e.g. from repeated measurements), then <code class="docutils literal notranslate"><span class="pre">hochberg</span></code> is a better choice because it relaxes the assumption of independance yet retains good power.</p>
+</section>
 <section id="corrections-in-emmeans">
 <h3>Corrections in <code class="docutils literal notranslate"><span class="pre">emmeans</span></code><a class="headerlink" href="#corrections-in-emmeans" title="Link to this heading">#</a></h3>
 <p>… Each level of the second factor is taken to define a family of tests, independent from other levels. We can see this if we swap the tests defined earlier to look at the effects of <code class="docutils literal notranslate"><span class="pre">origin</span></code> at each level of <code class="docutils literal notranslate"><span class="pre">vs</span></code></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="o">|</span><span class="n">vs</span><span class="p">,</span><span class="w"> </span><span class="n">adjust</span><span class="o">=</span><span class="s">&quot;none&quot;</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="o">|</span><span class="n">vs</span><span class="p">,</span><span class="w"> </span><span class="n">adjust</span><span class="o">=</span><span class="s">&quot;holm&quot;</span><span class="p">)</span>
 <span class="nf">print</span><span class="p">(</span><span class="n">emm</span><span class="o">$</span><span class="n">contrasts</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -854,15 +895,17 @@ origin = USA:
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>vs = Straight:
  contrast       estimate   SE df t.ratio p.value
- Europe - Japan    -4.14 2.81 26  -1.473  0.1528
- Europe - USA       3.70 2.81 26   1.316  0.1998
- Japan - USA        7.83 3.39 26   2.312  0.0290
+ Europe - Japan    -4.14 2.81 26  -1.473  0.3056
+ Europe - USA       3.70 2.81 26   1.316  0.3056
+ Japan - USA        7.83 3.39 26   2.312  0.0869
 
 vs = V-shaped:
  contrast       estimate   SE df t.ratio p.value
  Europe - Japan   -17.73 3.39 26  -5.234  &lt;.0001
  Europe - USA       3.52 2.14 26   1.641  0.1128
  Japan - USA       21.25 3.21 26   6.611  &lt;.0001
+
+P value adjustment: holm method for 3 tests 
 </pre></div>
 </div>
 </div>
@@ -889,6 +932,10 @@ vs = V-shaped:
 <aside class="footnote brackets" id="neg-foot" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">4</a><span class="fn-bracket">]</span></span>
 <p>The fact that this is <code class="docutils literal notranslate"><span class="pre">-1</span></code> rather than <code class="docutils literal notranslate"><span class="pre">1</span></code> makes no differences. It just reverses the direction of the comparison.</p>
+</aside>
+<aside class="footnote brackets" id="bonf-foot" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id5">5</a><span class="fn-bracket">]</span></span>
+<p>Bonferroni is a very common correction where each <span class="math notranslate nohighlight">\(p\)</span>-value is multiplied by the number of tests.</p>
 </aside>
 </aside>
 </section>
@@ -964,10 +1011,14 @@ vs = V-shaped:
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-regression-tests">Using the Regression Tests</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-linear-contrasts">Using Linear Contrasts</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-main-effects">Simple Main Effects</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-emmeans-package">The <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> Package</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-emmeans-package">The <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> Package</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#confidence-intervals-and-effect-sizes-from-emmeans">Confidence Intervals and Effect Sizes from <code class="docutils literal notranslate"><span class="pre">emmeans</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-comparisons-correction">Multiple Comparisons Correction</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#corrections-in-r">Corrections in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#corrections-in-emmeans">Corrections in <code class="docutils literal notranslate"><span class="pre">emmeans</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#planned-comparisons-vs-post-hoc-tests">Planned Comparisons vs Post-hoc Tests</a></li>
 </ul>
