@@ -470,10 +470,11 @@
 <span class="n">mod</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg.fake</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vs</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">origin</span><span class="o">:</span><span class="n">vs</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
 
 <span class="c1"># 2. Check assumptions</span>
-<span class="nf">par</span><span class="p">(</span><span class="n">mfrow</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">2</span><span class="p">,</span><span class="m">2</span><span class="p">));</span><span class="w"> </span><span class="nf">plot</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
+<span class="c1">#par(mfrow=c(2,2)) </span>
+<span class="c1">#plot(mod)</span>
 
 <span class="c1"># 3. Call summary() on the final model</span>
-<span class="nf">print</span><span class="p">(</span><span class="nf">summary</span><span class="p">(</span><span class="n">mod</span><span class="p">))</span>
+<span class="c1">#print(summary(mod))</span>
 
 <span class="c1"># 4. Generate ANOVA table</span>
 <span class="nf">print</span><span class="p">(</span><span class="nf">Anova</span><span class="p">(</span><span class="n">mod</span><span class="p">))</span>
@@ -481,29 +482,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Call:
-lm(formula = mpg.fake ~ origin + vs + origin:vs, data = mtcars)
-
-Residuals:
-   Min     1Q Median     3Q    Max 
--7.100 -2.766 -0.025  1.858  7.938 
-
-Coefficients:
-                       Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)             24.4625     1.4671  16.674 2.11e-15 ***
-originJapan              4.1375     2.8093   1.473  0.15281    
-originUSA               -3.6958     2.8093  -1.316  0.19980    
-vsV-shaped              -6.1958     2.2411  -2.765  0.01034 *  
-originJapan:vsV-shaped  13.5958     4.4013   3.089  0.00474 ** 
-originUSA:vsV-shaped     0.1792     3.5333   0.051  0.95995    
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-
-Residual standard error: 4.15 on 26 degrees of freedom
-Multiple R-squared:  0.7206,	Adjusted R-squared:  0.6669 
-F-statistic: 13.41 on 5 and 26 DF,  p-value: 1.629e-06
-
-Anova Table (Type II tests)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Anova Table (Type II tests)
 
 Response: mpg.fake
           Sum Sq Df F value    Pr(&gt;F)    
@@ -515,10 +494,9 @@ Residuals 447.70 26
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="_images/9571c9a1478a467d65dfee9a6a00147d0072884c2cf91a4dca94455a531a48c1.png"><img alt="_images/9571c9a1478a467d65dfee9a6a00147d0072884c2cf91a4dca94455a531a48c1.png" src="_images/9571c9a1478a467d65dfee9a6a00147d0072884c2cf91a4dca94455a531a48c1.png" style="width: 420px; height: 420px;" /></a>
 </div>
 </div>
-<p>For the sake of simplicity, we will skip any rounds of transformation or further assumptions checking. So, just based on this output, what can be conclude?</p>
+<p>For the sake of brevity, we have skipped the diagnostic plots and printing the regression output. So, just based on the ANOVA table, what can ee conclude?</p>
 <p>Looking at the ANOVA table, and sticking with NHST for ease, we can see a significant omnibus interaction effect (<span class="math notranslate nohighlight">\(F_{2,26} = 5.27, p &lt; 0.05\)</span>). As these are Type II tests, we need to ignore the main effects and just work on understanding the interaction. Conceptually, we can think of this effect as indicating that the difference in MPG between <code class="docutils literal notranslate"><span class="pre">Straight</span></code> and <code class="docutils literal notranslate"><span class="pre">V-Shaped</span></code> depends upon whether the car came from <code class="docutils literal notranslate"><span class="pre">Japan</span></code>, <code class="docutils literal notranslate"><span class="pre">USA</span></code> or <code class="docutils literal notranslate"><span class="pre">Europe</span></code><a class="footnote-reference brackets" href="#interact-foot" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
 <p>So, we are now at the point that we ended on last week. However, it seems we still have some unanswered questions. Because the interaction is an <em>omnibus</em> test, it does not tell us <em>which</em> differences are driving the effect. We can conclude that the country of origin appears to change how MPG differs between the two engine shapes, but surely we want to know <em>how</em> this actually occurs? Which countries show the largest difference? Are there any countries where the engine shape makes little difference to MPG? Is this effect driven only by one country or are there multiple countries?</p>
 <p>We could get some of the way towards answering these questions by simply <em>plotting</em> the effects. In general, this should always be a first priority after finding any significant effects. So let us have a look at the interaction using an effects plot</p>
