@@ -919,10 +919,132 @@ origin = USA:
 <h4>Type II Follow-up Effects<a class="headerlink" href="#type-ii-follow-up-effects" title="Link to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">sum.mod</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg.fake</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vs</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">origin</span><span class="o">:</span><span class="n">vs</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">,</span><span class="w"> </span>
+<span class="w">              </span><span class="n">contrasts</span><span class="o">=</span><span class="nf">list</span><span class="p">(</span><span class="n">origin</span><span class="o">=</span><span class="n">contr.sum</span><span class="p">,</span><span class="w"> </span><span class="n">vs</span><span class="o">=</span><span class="n">contr.sum</span><span class="p">))</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">Anova</span><span class="p">(</span><span class="n">sum.mod</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&quot;III&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Anova Table (Type III tests)
+
+Response: mpg.fake
+             Sum Sq Df  F value    Pr(&gt;F)    
+(Intercept) 13094.1  1 760.4268 &lt; 2.2e-16 ***
+origin        680.8  2  19.7672 6.033e-06 ***
+vs             14.9  1   0.8631   0.36142    
+origin:vs     181.5  2   5.2715   0.01197 *  
+Residuals     447.7 26                       
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">effects</span><span class="p">)</span>
+
+<span class="n">effs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">allEffects</span><span class="p">(</span><span class="n">sum.mod</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">allEffects</span><span class="p">(</span><span class="n">sum.mod</span><span class="p">))</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="nf">mean</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">24.46250</span><span class="p">,</span><span class="m">28.60000</span><span class="p">,</span><span class="m">20.76667</span><span class="p">)))</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">mean</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">18.26667</span><span class="p">,</span><span class="m">36.00000</span><span class="p">,</span><span class="m">14.75000</span><span class="p">)))</span>
+
+<span class="n">effs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">effect</span><span class="p">(</span><span class="s">&quot;vs&quot;</span><span class="p">,</span><span class="n">mod</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">effs</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">effs</span><span class="o">$</span><span class="n">model.matrix</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> model: mpg.fake ~ origin + vs + origin:vs
+
+ origin*vs effect
+        vs
+origin   Straight V-shaped
+  Europe 24.46250 18.26667
+  Japan  28.60000 36.00000
+  USA    20.76667 14.75000
+[1] 24.60972
+[1] 23.00556
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NOTE: vs is not a high-order term in the model
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> vs effect
+vs
+Straight V-shaped 
+23.60755 19.60885 
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  (Intercept) originJapan originUSA vsV-shaped originJapan:vsV-shaped
+1           1     0.15625   0.40625          0                0.00000
+2           1     0.15625   0.40625          1                0.15625
+  originUSA:vsV-shaped
+1              0.00000
+2              0.40625
+attr(,&quot;assign&quot;)
+[1] 0 1 1 2 3 3
+attr(,&quot;contrasts&quot;)
+attr(,&quot;contrasts&quot;)$origin
+[1] &quot;contr.treatment&quot;
+
+attr(,&quot;contrasts&quot;)$vs
+[1] &quot;contr.treatment&quot;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">vs</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">emm</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">linfct</span><span class="p">(</span><span class="n">emm</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NOTE: Results may be misleading due to involvement in interactions
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>$emmeans
+ vs       emmean   SE df lower.CL upper.CL
+ Straight   24.6 1.23 26     22.1     27.1
+ V-shaped   23.0 1.21 26     20.5     25.5
+
+Results are averaged over the levels of: origin 
+Confidence level used: 0.95 
+
+$contrasts
+ contrast              estimate   SE df t.ratio p.value
+ Straight - (V-shaped)      1.6 1.73 26   0.929  0.3614
+
+Results are averaged over the levels of: origin 
+
+$emmeans
+     (Intercept) originJapan originUSA vsV-shaped originJapan:vsV-shaped
+[1,]           1   0.3333333 0.3333333          0              0.0000000
+[2,]           1   0.3333333 0.3333333          1              0.3333333
+     originUSA:vsV-shaped
+[1,]            0.0000000
+[2,]            0.3333333
+
+$contrasts
+     (Intercept) originJapan originUSA vsV-shaped originJapan:vsV-shaped
+[1,]           0           0         0         -1             -0.3333333
+     originUSA:vsV-shaped
+[1,]           -0.3333333
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="nf">Anova</span><span class="p">(</span><span class="n">mod</span><span class="p">))</span>
 <span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">vs</span><span class="p">,</span><span class="w"> </span><span class="n">submodel</span><span class="o">=</span><span class="s">&quot;type2&quot;</span><span class="p">)</span>
 <span class="nf">print</span><span class="p">(</span><span class="n">emm</span><span class="o">$</span><span class="n">contrasts</span><span class="p">)</span>
-<span class="nf">print</span><span class="p">(</span><span class="n">emm</span><span class="o">$</span><span class="n">emmeans</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -946,13 +1068,6 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
  Straight - (V-shaped)     3.78 1.58 26   2.402  0.0238
 
 Results are averaged over the levels of: origin 
- vs       emmean   SE df lower.CL upper.CL
- Straight   0.00 0.00 26     0.00    0.000
- V-shaped  -3.78 1.58 26    -7.02   -0.545
-
-Results are averaged over the levels of: origin 
-submodel: ~ vs 
-Confidence level used: 0.95 
 </pre></div>
 </div>
 </div>
