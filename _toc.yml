@@ -4,8 +4,8 @@
 format: jb-book
 root: 0.intro
 chapters:
-- file: 1.follow-up
-- file: 2.unbalanced-ANOVA
+- file: 1.unbalanced-ANOVA
+- file: 2.follow-up
+- file: 3.multiple-comparisons
 - file: 3.ANCOVA
-- file: 4.interactions
 - file: summary
