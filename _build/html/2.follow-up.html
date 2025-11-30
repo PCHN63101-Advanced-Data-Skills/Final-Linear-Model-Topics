@@ -471,7 +471,7 @@
 <span class="c1">#plot(mod)</span>
 
 <span class="c1"># 3. Call summary() on the final model</span>
-<span class="c1">#print(summary(mod))</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">summary</span><span class="p">(</span><span class="n">mod</span><span class="p">))</span>
 
 <span class="c1"># 4. Generate ANOVA table</span>
 <span class="nf">print</span><span class="p">(</span><span class="nf">Anova</span><span class="p">(</span><span class="n">mod</span><span class="p">))</span>
@@ -479,7 +479,29 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Anova Table (Type II tests)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Call:
+lm(formula = mpg.fake ~ origin + vs + origin:vs, data = mtcars)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-7.100 -2.766 -0.025  1.858  7.938 
+
+Coefficients:
+                       Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)             24.4625     1.4671  16.674 2.11e-15 ***
+originJapan              4.1375     2.8093   1.473  0.15281    
+originUSA               -3.6958     2.8093  -1.316  0.19980    
+vsV-shaped              -6.1958     2.2411  -2.765  0.01034 *  
+originJapan:vsV-shaped  13.5958     4.4013   3.089  0.00474 ** 
+originUSA:vsV-shaped     0.1792     3.5333   0.051  0.95995    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 4.15 on 26 degrees of freedom
+Multiple R-squared:  0.7206,	Adjusted R-squared:  0.6669 
+F-statistic: 13.41 on 5 and 26 DF,  p-value: 1.629e-06
+
+Anova Table (Type II tests)
 
 Response: mpg.fake
           Sum Sq Df F value    Pr(&gt;F)    
@@ -590,7 +612,7 @@ USA V-Shaped              1     0   1        1              0            1
 \end{alignat*}
 \end{split}\]</div>
 <p>This matrix of weights is therefore the <em>key</em> that unlocks the meaning of the parameter estimates and thus the meaning of the automatic tests. Remember, there is no sense in which the model has to be <em>meaningful</em> here. All that is necessary is that a unique solution to the model parameters can be found. So, based on this, we can work out what each parameter in the model means and can decide whether any of these numbers actually answer our questions. If they do, we can use the associated <span class="math notranslate nohighlight">\(t\)</span>-tests. If they do not, we need to find another approach.</p>
-<p>The interpretations of the parameters associated with the constant and main effects can be derive by looking at the weights above and seeing which cells are coded either by the intercept alone, or the intercept <em>plus</em> one other parameter. This leads to</p>
+<p>In the interests of brevity, we will not run through the process of working out what each parameter means. Essentially, the matrix of weights given above tells us the sum of parameters that equals each cell mean. Once we have that, we can simply rearrange each sum to solve for the parameter of interest. This results in the following</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Parameter</p></th>
@@ -615,27 +637,18 @@ USA V-Shaped              1     0   1        1              0            1
 <td><p><code class="docutils literal notranslate"><span class="pre">vsV-shaped</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">(Europe,V-shaped)</span> <span class="pre">-</span> <span class="pre">(Europe,Straight)</span></code></p></td>
 </tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\beta_{4}\)</span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">originJapan:vsV-shaped</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(Japan,V-shaped)</span></code> - <span class="math notranslate nohighlight">\((\beta_{0} + \beta_{1} + \beta_{3})\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\beta_{4}\)</span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">originUSA:vsV-shaped</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(USA,V-shaped)</span></code> - <span class="math notranslate nohighlight">\((\beta_{0} + \beta_{2} + \beta_{3})\)</span></p></td>
+</tr>
 </tbody>
 </table>
 </div>
-<p>The interaction parameters are trickier and need more explanation. Remember, the main reason for going into this detail is to indicate why we do not typically use the regression parameters for follow-up tests. The intention is <em>not</em> that you would go through this process of working out what the parameters mean for every single model. Indeed, this is often difficult and usually unnecessary. For this demonstration, we will follow the logic only to demonstrate why the regression tests are often uninteresting. We will see a much easier approach a little later.</p>
-<p>In terms of the first interaction parameter <span class="math notranslate nohighlight">\((\beta_{4})\)</span>, we can see from the dummy variables table that this only appears in the definition of the <code class="docutils literal notranslate"><span class="pre">(Japan,</span> <span class="pre">V-Shaped)</span></code> cell, as follows</p>
-<div class="math notranslate nohighlight">
-\[
-\mu_{(\text{JAP,V})} = \beta_{0} + \beta_{1} + \beta_{3} + \beta_{4}
-\]</div>
-<p>So, we can solve for <span class="math notranslate nohighlight">\(\beta_{4}\)</span> and try and interpret what it means</p>
-<div class="math notranslate nohighlight">
-\[
-\beta_{4} = \mu_{(\text{JAP,V})} - (\beta_{0} + \beta_{1} + \beta_{3})
-\]</div>
-<p>Here we can see that this value is some sort of <em>difference</em> between the true cell mean and the value produced by <span class="math notranslate nohighlight">\(\beta_{0} + \beta_{1} + \beta_{3}\)</span>. Thinking back to our discussion of an <em>additive</em> model last week, we can interpret this as our reference cell mean (<span class="math notranslate nohighlight">\(\beta_{0}\)</span>) plus a constant <em>column effect</em> (<span class="math notranslate nohighlight">\(\beta_{1}\)</span>) plus a constant <em>row effect</em> (<span class="math notranslate nohighlight">\(\beta_{3}\)</span>). If there is no interaction, this combination will equal the cell mean for <code class="docutils literal notranslate"><span class="pre">(Japan,</span> <span class="pre">V-Shaped)</span></code>. If there is an interaction, we need to add an additional <em>offset</em> to make this value equivalent to the true cell mean. This offset is given by <span class="math notranslate nohighlight">\(\beta_{4}\)</span>. So, we can interpret this parameter as the <em>extra</em> needed to make the constant row and column effects equal the cell mean. If the additive model holds, this will be close to 0. If it does not, this value will be much larger than 0.</p>
-<p>The exact same logic holds for <span class="math notranslate nohighlight">\(\beta_{5}\)</span>, which can be interpreted as</p>
-<div class="math notranslate nohighlight">
-\[
-\beta_{5} = \mu_{(\text{USA,V})} - (\beta_{0} + \beta_{2} + \beta_{3})
-\]</div>
-<p>and the only difference is that the <em>column effect</em> (<span class="math notranslate nohighlight">\(\beta_{2}\)</span>) represents the difference between the reference cell and the USA, rather than the difference between the reference cell and Japan. We can bring all this together in some <code class="docutils literal notranslate"><span class="pre">R</span></code> code, to check our interpretation.</p>
+<p>This may seem an odd selection of numbers, so it is useful to write some <code class="docutils literal notranslate"><span class="pre">R</span></code> code to check the interpretation and make sure we have not made any mistakes</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate all 6 cell means from the data</span>
@@ -674,6 +687,7 @@ originUSA:vsV-shaped    0.1791667  0.1791667
 </div>
 </div>
 </div>
+<p>So, we now know that the interpretation in the table above is correct. <em>However</em>, the question is whether any of these comparisons are actually <em>useful</em> for us in terms of follow-up tests?</p>
 <p>So we can see that our interpretation is <em>correct</em> and we now know what each parameter means.</p>
 <p>Is it time to celebrate? Well, not really. This took a lot of effort and, unfortuantely, most of these values are not quantities we are interested in. The only one that is close is the estimate for <code class="docutils literal notranslate"><span class="pre">vsV-shaped</span></code>, because this is a test of the effect of <code class="docutils literal notranslate"><span class="pre">vs</span></code> for <code class="docutils literal notranslate"><span class="pre">Europe</span></code> only. However, we also want to know the effects of <code class="docutils literal notranslate"><span class="pre">vs</span></code> for <code class="docutils literal notranslate"><span class="pre">Japan</span></code> and the effect of <code class="docutils literal notranslate"><span class="pre">vs</span></code> for <code class="docutils literal notranslate"><span class="pre">USA</span></code>, both of which are absent. So while we have worked hard to get here, we are not actually any closer to answering our questions about the differences between <code class="docutils literal notranslate"><span class="pre">straight</span></code> and <code class="docutils literal notranslate"><span class="pre">v-shaped</span></code> engines within each country.</p>
 <div class="warning admonition">
