@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Effects Sizes and Multiple Comparisons Correction &#8212; Linear Models V: Advanced ANOVA Topics</title>
+    <title>Advanced Uses of emmeans &#8212; Linear Models V: Advanced ANOVA Topics</title>
   
   
   
@@ -63,10 +63,10 @@
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '3.multiple-comparisons';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '3.advanced-emmeans';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Analysis of Covariance (ANCOVA)" href="3.ANCOVA.html" />
+    <link rel="next" title="Analysis of Covariance (ANCOVA)" href="4.ANCOVA.html" />
     <link rel="prev" title="Follow-up Tests" href="2.follow-up.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -174,8 +174,8 @@
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="1.unbalanced-ANOVA.html">Unbalanced ANOVA Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2.follow-up.html">Follow-up Tests</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Effects Sizes and Multiple Comparisons Correction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="3.ANCOVA.html">Analysis of Covariance (ANCOVA)</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Advanced Uses of <code class="docutils literal notranslate"><span class="pre">emmeans</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="4.ANCOVA.html">Analysis of Covariance (ANCOVA)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
 </ul>
 
@@ -253,7 +253,7 @@
       
       
       
-      <li><a href="https://github.com/PCHN63101-Advanced-Data-Skills/Final-Linear-Model-Topics/issues/new?title=Issue%20on%20page%20%2F3.multiple-comparisons.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/PCHN63101-Advanced-Data-Skills/Final-Linear-Model-Topics/issues/new?title=Issue%20on%20page%20%2F3.advanced-emmeans.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -283,7 +283,7 @@
       
       
       
-      <li><a href="_sources/3.multiple-comparisons.ipynb" target="_blank"
+      <li><a href="_sources/3.advanced-emmeans.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -359,7 +359,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Effects Sizes and Multiple Comparisons Correction</h1>
+    <h1>Advanced Uses of emmeans</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -369,9 +369,14 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#corrections-in-r">Corrections in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#corrections-and-families-of-tests-in-emmeans">Corrections and Families of Tests in <code class="docutils literal notranslate"><span class="pre">emmeans</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#planned-comparisons-vs-post-hoc-tests">Planned Comparisons vs Post-hoc Tests</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-comparison-correction">Multiple Comparison Correction</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#corrections-and-families-of-tests-in-emmeans">Corrections and Families of Tests in <code class="docutils literal notranslate"><span class="pre">emmeans</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#planned-comparisons-vs-post-hoc-tests">Planned Comparisons vs Post-hoc Tests</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#effect-sizes-and-confidence-intervals">Effect Sizes and Confidence Intervals</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-ii-follow-up-tests">Type II Follow-up Tests</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#higher-order-interactions">Higher-order Interactions</a></li>
 </ul>
             </nav>
         </div>
@@ -383,11 +388,10 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="effects-sizes-and-multiple-comparisons-correction">
-<h1>Effects Sizes and Multiple Comparisons Correction<a class="headerlink" href="#effects-sizes-and-multiple-comparisons-correction" title="Link to this heading">#</a></h1>
-<p>As the final section in this part of the lesson, we need to take a moment to consider the topic of follow-up tests and multiple comparisons. In the previous lesson, we justified the use of omnibus tests as a guard against the multiple testing problem. Even though this guard exists at a higher-level, when we use the omnibus tests to guide the follow-up tests we still run the risk of false positives. As such, it is customary to apply some degree of correction to the follow-up tests.</p>
-<section id="corrections-in-r">
-<h2>Corrections in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#corrections-in-r" title="Link to this heading">#</a></h2>
+  <section class="tex2jax_ignore mathjax_ignore" id="advanced-uses-of-emmeans">
+<h1>Advanced Uses of <code class="docutils literal notranslate"><span class="pre">emmeans</span></code><a class="headerlink" href="#advanced-uses-of-emmeans" title="Link to this heading">#</a></h1>
+<section id="multiple-comparison-correction">
+<h2>Multiple Comparison Correction<a class="headerlink" href="#multiple-comparison-correction" title="Link to this heading">#</a></h2>
 <p>General access to <span class="math notranslate nohighlight">\(p\)</span>-values corrections is available in base <code class="docutils literal notranslate"><span class="pre">R</span></code> using the <code class="docutils literal notranslate"><span class="pre">p.adjust()</span></code> function. We simply supply a list of <span class="math notranslate nohighlight">\(p\)</span>-values and the name of the method we want to use and <code class="docutils literal notranslate"><span class="pre">R</span></code> will return the adjusted values. For instance</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -443,9 +447,8 @@
 </div>
 </div>
 <p>noting that <code class="docutils literal notranslate"><span class="pre">fdr</span></code> is an alias for <code class="docutils literal notranslate"><span class="pre">BH</span></code>, and <code class="docutils literal notranslate"><span class="pre">none</span></code> is just a pass-through option that does nothing. It is somewhat beyond this lesson to go into the details of all of these. So, a very general heuristic is to use the <code class="docutils literal notranslate"><span class="pre">holm</span></code> method as the most general-purpose approach. This is more powerful than <code class="docutils literal notranslate"><span class="pre">bonferroni</span></code><a class="footnote-reference brackets" href="#bonf-foot" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, but has no additional assumptions. If the <span class="math notranslate nohighlight">\(p\)</span>-values are <em>correlated</em> (e.g. from repeated measurements), then <code class="docutils literal notranslate"><span class="pre">hochberg</span></code> is a better choice because it relaxes the assumption of independance yet retains good power.</p>
-</section>
 <section id="corrections-and-families-of-tests-in-emmeans">
-<h2>Corrections and Families of Tests in <code class="docutils literal notranslate"><span class="pre">emmeans</span></code><a class="headerlink" href="#corrections-and-families-of-tests-in-emmeans" title="Link to this heading">#</a></h2>
+<h3>Corrections and Families of Tests in <code class="docutils literal notranslate"><span class="pre">emmeans</span></code><a class="headerlink" href="#corrections-and-families-of-tests-in-emmeans" title="Link to this heading">#</a></h3>
 <p>In terms of using these corrections within <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>, it is a simple as using the <code class="docutils literal notranslate"><span class="pre">adjust</span></code> argument to name the correction that we want applied. As an example, using the <code class="docutils literal notranslate"><span class="pre">holm</span></code> method with the follow-up tests of the <code class="docutils literal notranslate"><span class="pre">vs:origin</span></code> interaction gives.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -501,8 +504,194 @@ P value adjustment: holm method for 3 tests
 <p>So, <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> takes this as two families, each containing 3 tests. Corrections to the <span class="math notranslate nohighlight">\(p\)</span>-values are then applied <em>within</em> families.</p>
 </section>
 <section id="planned-comparisons-vs-post-hoc-tests">
-<h2>Planned Comparisons vs Post-hoc Tests<a class="headerlink" href="#planned-comparisons-vs-post-hoc-tests" title="Link to this heading">#</a></h2>
+<h3>Planned Comparisons vs Post-hoc Tests<a class="headerlink" href="#planned-comparisons-vs-post-hoc-tests" title="Link to this heading">#</a></h3>
 <p>… Beware of this reasoning. Although planned tests are more <em>credible</em> in the sense that you are not <span class="math notranslate nohighlight">\(p\)</span>-hacking, this does not change anything about the error rate. The error does not magically know what your intentions were and then change itself. The error rate is a fact of multiple testing that does not change with intent. As such, even if you have pre-specified tests, you still need to control for multiple comparisons.</p>
+</section>
+</section>
+<section id="effect-sizes-and-confidence-intervals">
+<h2>Effect Sizes and Confidence Intervals<a class="headerlink" href="#effect-sizes-and-confidence-intervals" title="Link to this heading">#</a></h2>
+<p>…On this basis, it is often not worth worrying about effect sizes on omnibus tests. Indeed, from the perspective of <em>estimation</em>, this form of error control is not really the focus. Remember, these ideas come from the Nyman-Pearson school of NHST and are based entirely on the concept of <em>accepting</em> or <em>rejecting</em> hypotheses over many repeats of an experiment. When focusing on effect sizes, our interpretation relates to whether an effect is <em>large</em> or <em>meaningful</em> in context. The effect we estimate is what it is, no matter how many other effects we also estimate. The same is true of a confidence interval. We do not need correction here because we are not looking at long-run error control of binary decisions. We simply used the interval to inform us about the <em>precision</em> of an estimate. From this perspective, not only are effect sizes on omnibus tests rarely of interest, the whole concept of an omnibus tests is debatable. As such, we can go straight from the model to our comparisons of interest, without having to go via an ANOVA table and without having to worry about multiple comparisons.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">vs</span><span class="o">|</span><span class="n">origin</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">eff_size</span><span class="p">(</span><span class="n">emm</span><span class="p">,</span><span class="w"> </span><span class="n">sigma</span><span class="o">=</span><span class="nf">sigma</span><span class="p">(</span><span class="n">mod</span><span class="p">),</span><span class="w"> </span><span class="n">edf</span><span class="o">=</span><span class="nf">df.residual</span><span class="p">(</span><span class="n">mod</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>origin = Europe:
+ contrast              effect.size    SE df lower.CL upper.CL
+ Straight - (V-shaped)        1.49 0.578 26   0.3042    2.682
+
+origin = Japan:
+ contrast              effect.size    SE df lower.CL upper.CL
+ Straight - (V-shaped)       -1.78 0.946 26  -3.7274    0.161
+
+origin = USA:
+ contrast              effect.size    SE df lower.CL upper.CL
+ Straight - (V-shaped)        1.45 0.688 26   0.0351    2.865
+
+sigma used for effect sizes: 4.15 
+Confidence level used: 0.95 
+</pre></div>
+</div>
+</div>
+</div>
+<p>If these effects were all very similar in magnitude, we might conclude that <code class="docutils literal notranslate"><span class="pre">origin</span></code> seems to make little difference here and collapse over that factor to look at the effects of <code class="docutils literal notranslate"><span class="pre">vs</span></code> alone. However, we need to take care to do this correctly in order to produce effects reflective of the Type II tests, as we will now discuss.</p>
+</section>
+<section id="type-ii-follow-up-tests">
+<h2>Type II Follow-up Tests<a class="headerlink" href="#type-ii-follow-up-tests" title="Link to this heading">#</a></h2>
+</section>
+<section id="higher-order-interactions">
+<h2>Higher-order Interactions<a class="headerlink" href="#higher-order-interactions" title="Link to this heading">#</a></h2>
+<p>Although we have now seen how to follow-up a 2-way interaction with <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>, things get more complex when we have even higher-order interactions in the model. In general, it is not recommended to go beyond a 3-way interaction due to the complexities that come with interpretation. You can, if you wish, but things start getting difficult very quickly. Here, we will demonstrate using <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> to break-down a 3-way interaction.</p>
+<p>In order to do so, we will be using a different dataset. Within the <code class="docutils literal notranslate"><span class="pre">datarium</span></code> package there is a dataset called <code class="docutils literal notranslate"><span class="pre">headache</span></code> that gives results from a clinical trial of 3 treatments for headaches. The factors available are <code class="docutils literal notranslate"><span class="pre">gender</span></code>, <code class="docutils literal notranslate"><span class="pre">risk</span></code> and <code class="docutils literal notranslate"><span class="pre">treatment</span></code>. The outcome variable is <code class="docutils literal notranslate"><span class="pre">pain_score</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;datarium&#39;</span><span class="p">)</span>
+<span class="nf">data</span><span class="p">(</span><span class="n">headache</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">head</span><span class="p">(</span><span class="n">headache</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span># A data frame: 6 × 5
+     id gender risk  treatment pain_score
+* &lt;int&gt; &lt;fct&gt;  &lt;fct&gt; &lt;fct&gt;          &lt;dbl&gt;
+1     1 male   low   X               79.3
+2     2 male   low   X               76.8
+3     3 male   low   X               70.8
+4     4 male   low   X               81.2
+5     5 male   low   X               75.1
+6     6 male   low   X               73.1
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can proceed using our usual approach, though we will skip the call to <code class="docutils literal notranslate"><span class="pre">summary()</span></code> and the checking of assumptions, in the interests of saving space.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">pain_score</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">gender</span><span class="o">*</span><span class="n">risk</span><span class="o">*</span><span class="n">treatment</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">headache</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">Anova</span><span class="p">(</span><span class="n">mod</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Anova Table (Type II tests)
+
+Response: pain_score
+                       Sum Sq Df F value    Pr(&gt;F)    
+gender                 313.36  1 16.1957 0.0001625 ***
+risk                  1793.56  1 92.6988   8.8e-14 ***
+treatment              283.17  2  7.3177 0.0014328 ** 
+gender:risk              2.73  1  0.1411 0.7084867    
+gender:treatment       129.18  2  3.3384 0.0422001 *  
+risk:treatment          27.60  2  0.7131 0.4942214    
+gender:risk:treatment  286.60  2  7.4063 0.0013345 ** 
+Residuals             1160.89 60                      
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+</pre></div>
+</div>
+</div>
+</div>
+<p>So we can see that there is a significant 3-way interaction. How do we follow this up? We could adapt the <code class="docutils literal notranslate"><span class="pre">pairwise</span> <span class="pre">~</span></code> syntax we used earlier to give</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">gender</span><span class="o">:</span><span class="n">risk</span><span class="o">|</span><span class="n">treatment</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">emm</span><span class="o">$</span><span class="n">contrasts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>treatment = X:
+ contrast                 estimate   SE df t.ratio p.value
+ male high - female high     13.87 2.54 60   5.463  &lt;.0001
+ male high - male low        16.69 2.54 60   6.571  &lt;.0001
+ male high - female low      18.58 2.54 60   7.317  &lt;.0001
+ female high - male low       2.81 2.54 60   1.108  0.6862
+ female high - female low     4.71 2.54 60   1.854  0.2588
+ male low - female low        1.90 2.54 60   0.746  0.8778
+
+treatment = Y:
+ contrast                 estimate   SE df t.ratio p.value
+ male high - female high      1.17 2.54 60   0.459  0.9676
+ male high - male low         9.20 2.54 60   3.624  0.0033
+ male high - female low      13.98 2.54 60   5.505  &lt;.0001
+ female high - male low       8.04 2.54 60   3.165  0.0127
+ female high - female low    12.81 2.54 60   5.045  &lt;.0001
+ male low - female low        4.78 2.54 60   1.881  0.2471
+
+treatment = Z:
+ contrast                 estimate   SE df t.ratio p.value
+ male high - female high     -1.35 2.54 60  -0.533  0.9506
+ male high - male low         5.22 2.54 60   2.057  0.1790
+ male high - female low       9.90 2.54 60   3.899  0.0014
+ female high - male low       6.58 2.54 60   2.591  0.0566
+ female high - female low    11.26 2.54 60   4.432  0.0002
+ male low - female low        4.68 2.54 60   1.841  0.2645
+
+P value adjustment: tukey method for comparing a family of 4 estimates 
+</pre></div>
+</div>
+</div>
+</div>
+<p>However, the problem here is that the <code class="docutils literal notranslate"><span class="pre">gender</span></code> and <code class="docutils literal notranslate"><span class="pre">risk</span></code> factors have been collapsed, leading to some comparisons that keep one factor constant (e.g. <code class="docutils literal notranslate"><span class="pre">male</span> <span class="pre">high</span> <span class="pre">-</span> <span class="pre">female</span> <span class="pre">high</span></code>) whereas others that change both factors (e.g. <code class="docutils literal notranslate"><span class="pre">male</span> <span class="pre">high</span> <span class="pre">-</span> <span class="pre">female</span> <span class="pre">low</span></code>).</p>
+<p>A better approach is to get <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> to more sensibly combine the levels of the various factors. One approach is to simply generate all the means and then use the <code class="docutils literal notranslate"><span class="pre">contrast()</span></code> function with the <code class="docutils literal notranslate"><span class="pre">interaction</span></code> and <code class="docutils literal notranslate"><span class="pre">by</span></code> options. For instance</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">gender</span><span class="o">*</span><span class="n">risk</span><span class="o">*</span><span class="n">treatment</span><span class="p">)</span>
+<span class="nf">contrast</span><span class="p">(</span><span class="n">emm</span><span class="p">,</span><span class="w"> </span><span class="n">interaction</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="n">gender</span><span class="o">=</span><span class="s">&quot;pairwise&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">risk</span><span class="o">=</span><span class="s">&quot;pairwise&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">by</span><span class="o">=</span><span class="s">&quot;treatment&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>treatment = X:
+ gender_pairwise risk_pairwise estimate   SE df t.ratio p.value
+ male - female   high - low       11.98 3.59 60   3.335  0.0015
+
+treatment = Y:
+ gender_pairwise risk_pairwise estimate   SE df t.ratio p.value
+ male - female   high - low       -3.61 3.59 60  -1.005  0.3188
+
+treatment = Z:
+ gender_pairwise risk_pairwise estimate   SE df t.ratio p.value
+ male - female   high - low       -6.03 3.59 60  -1.679  0.0983
+</pre></div>
+</div>
+</div>
+</div>
+<p>This has effectively given us 3 interaction tests, one for each level of treatment. So we can conclude that there is a significant interaction effect between <code class="docutils literal notranslate"><span class="pre">gender</span></code> and <code class="docutils literal notranslate"><span class="pre">risk</span></code>, but only for treatment <code class="docutils literal notranslate"><span class="pre">X</span></code>. We could investigate this further by holding one of the factors in the <code class="docutils literal notranslate"><span class="pre">interaction</span></code> option constant by setting its contrasts to <code class="docutils literal notranslate"><span class="pre">&quot;identity&quot;</span></code>. For example</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">contrast</span><span class="p">(</span><span class="n">emm</span><span class="p">,</span><span class="w"> </span><span class="n">interaction</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="n">gender</span><span class="o">=</span><span class="s">&quot;pairwise&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">risk</span><span class="o">=</span><span class="s">&quot;identity&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">by</span><span class="o">=</span><span class="s">&quot;treatment&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>treatment = X:
+ gender_pairwise risk_identity estimate   SE df t.ratio p.value
+ male - female   high             13.87 2.54 60   5.463  &lt;.0001
+ male - female   low               1.90 2.54 60   0.746  0.4583
+
+treatment = Y:
+ gender_pairwise risk_identity estimate   SE df t.ratio p.value
+ male - female   high              1.17 2.54 60   0.459  0.6477
+ male - female   low               4.78 2.54 60   1.881  0.0648
+
+treatment = Z:
+ gender_pairwise risk_identity estimate   SE df t.ratio p.value
+ male - female   high             -1.35 2.54 60  -0.533  0.5958
+ male - female   low               4.68 2.54 60   1.841  0.0705
+</pre></div>
+</div>
+</div>
+</div>
+<p>So we can see that the <code class="docutils literal notranslate"><span class="pre">gender</span></code> effect for treatment <code class="docutils literal notranslate"><span class="pre">X</span></code> is only within the <code class="docutils literal notranslate"><span class="pre">high</span></code> risk group and not the <code class="docutils literal notranslate"><span class="pre">low</span></code> risk group. There are marginal effect of <code class="docutils literal notranslate"><span class="pre">gender</span></code> for the other treatments, but we need to be careful interpreting these if the interaction effects were not significant. In addition, these effects may not survive multiple comparisons correction, as we will see in the next section.</p>
+<div class="tip admonition">
+<p class="admonition-title">Follow-up tests, post-hoc tests and planned comparisons</p>
+<p>As with many elements of statistics, comparisons that we run after the omnibus ANOVA tests have some different names with some subtle interpretational differences. In general, any test performed in an effort to unpack the ANOVA omnibus test is regarded as a <em>follow-up test</em>, because it follows the main ANOVA analysis. This is clearly unnecessary if the omnibus test only involves 2 means, so these tests are really for <em>main effects</em> of factors with <span class="math notranslate nohighlight">\(k &gt; 2\)</span> levels and for interactions. In some instances, this may necessitate further omnibus tests to break down a larger omnibus test. So the core distinction in terminology is not related to the form of the tests, but rather their <em>intent</em>. This is the difference between <em>post-hoc tests</em> and <em>planned comparisons</em>. Post-hoc tests are those where we have found a significant effect and then wish to break it down to find out what is driving it. Planned comparisons are those tests that we decided on <em>before</em> running the analysis. For instance, if we had a clinical trial then the only differences we might care about are those between the patients and controls. There are arguments around error control and the type of follow-up test we are using, but we will discuss those further below. For now, the main practical difference is that planned comparisons can make omnibus tests <em>redundant</em>. So, if you only have a small number of comparisons you want to make, you can probably skip the omnibus tests entirely and just go straight to those comparisons of interest.</p>
+</div>
 <hr class="footnotes docutils" />
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="bonf-foot" role="note">
@@ -553,7 +742,7 @@ P value adjustment: holm method for 3 tests
       </div>
     </a>
     <a class="right-next"
-       href="3.ANCOVA.html"
+       href="4.ANCOVA.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
@@ -578,9 +767,14 @@ P value adjustment: holm method for 3 tests
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#corrections-in-r">Corrections in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#corrections-and-families-of-tests-in-emmeans">Corrections and Families of Tests in <code class="docutils literal notranslate"><span class="pre">emmeans</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#planned-comparisons-vs-post-hoc-tests">Planned Comparisons vs Post-hoc Tests</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-comparison-correction">Multiple Comparison Correction</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#corrections-and-families-of-tests-in-emmeans">Corrections and Families of Tests in <code class="docutils literal notranslate"><span class="pre">emmeans</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#planned-comparisons-vs-post-hoc-tests">Planned Comparisons vs Post-hoc Tests</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#effect-sizes-and-confidence-intervals">Effect Sizes and Confidence Intervals</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-ii-follow-up-tests">Type II Follow-up Tests</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#higher-order-interactions">Higher-order Interactions</a></li>
 </ul>
   </nav></div>
 
