@@ -370,13 +370,15 @@
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-comparison-correction">Multiple Comparison Correction</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#corrections-and-families-of-tests-in-emmeans">Corrections and Families of Tests in <code class="docutils literal notranslate"><span class="pre">emmeans</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#planned-comparisons-vs-post-hoc-tests">Planned Comparisons vs Post-hoc Tests</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#familywise-error">Familywise Error</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#p-value-corrections-in-r"><span class="math notranslate nohighlight">\(p\)</span>-value Corrections in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#corrections-in-emmeans-and-families-of-tests">Corrections in <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> and Families of Tests</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#effect-sizes-and-confidence-intervals">Effect Sizes and Confidence Intervals</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-ii-follow-up-tests">Type II Follow-up Tests</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#higher-order-interactions">Higher-order Interactions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-contrast-weights">Custom Contrast Weights</a></li>
 </ul>
             </nav>
         </div>
@@ -392,6 +394,34 @@
 <h1>Advanced Uses of <code class="docutils literal notranslate"><span class="pre">emmeans</span></code><a class="headerlink" href="#advanced-uses-of-emmeans" title="Link to this heading">#</a></h1>
 <section id="multiple-comparison-correction">
 <h2>Multiple Comparison Correction<a class="headerlink" href="#multiple-comparison-correction" title="Link to this heading">#</a></h2>
+<section id="familywise-error">
+<h3>Familywise Error<a class="headerlink" href="#familywise-error" title="Link to this heading">#</a></h3>
+<p>Remembering back to our original justification for omnibus tests, we stated that the reason given is often one of error control. It is interesting to note that, historically, this perspective is much more in the Neyman-Pearson tradition than it is in the Fisherian tradition. After all, the notion of the familywise error (FWER) is couched in Neyman-Pearson decision making and how often we would make a false-positive decision over repeated tests. Fisher did not deny that calculating many <span class="math notranslate nohighlight">\(p\)</span>-values increased the chance of seeing small <span class="math notranslate nohighlight">\(p\)</span>-values. If you do something enough times, rare events will happen. However, he advocated for context and the use of the actual magnitude of the <span class="math notranslate nohighlight">\(p\)</span>-value to guide interpretation. In contrast, Neyman-Pearson wanted strict error control at a given <span class="math notranslate nohighlight">\(\alpha\)</span>-level. Based on their perspective, you can calculate the probability of incorrect decisions as</p>
+<div class="math notranslate nohighlight">
+\[
+\text{FWER} = 1 - (1 - \alpha)^{m},
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(m\)</span> is the number of tests being performed in the “family”. For instance, if we only perform one test at <span class="math notranslate nohighlight">\(\alpha - 0.05\)</span>, we have</p>
+<div class="math notranslate nohighlight">
+\[
+\text{FWER} = 1 - (1 - 0.05)^{1} = 0.05.
+\]</div>
+<p>However, if we perform 100 tests we have</p>
+<div class="math notranslate nohighlight">
+\[
+\text{FWER} = 1 - (1 - 0.05)^{100} = 1 - 0.006 = 0.994.
+\]</div>
+<p>So we go from only a 5% probability of one or more false-positive under the null to a 99.4% probability of one or more false-positive under the null. As such, using a strict decision rule with a  fixed <span class="math notranslate nohighlight">\(\alpha\)</span> only works to control the error-rate when we perform a single test. As soon as we start performing multiple tests, this error rate increases because the chance of seeing a rare event also increases if we do something over and over. It is like buying millions of lottery tickets. The chance of any single ticket winning is very low, but if we buy enough of them we can almost guarantee that <em>at least one</em> of the tickets will be a winner. We are simply providing more opportunities for a rare event to occur.</p>
+<p>Fisher acknowledged this situation, but he rejected the idea of fixing the error-rate <em>a priori</em> and then adjusting tests to suit that error-rate. Indeed, what he said about this whole idea was</p>
+<blockquote class="epigraph">
+<div><p>…the calculation is absurdly academic, for in fact no scientific worker has a fixed level of significance at which from year to year, and in all circumstances, he rejects hypotheses; he rather gives his mind to each particular case in the light of his evidence and his ideas.</p>
+<p class="attribution">—Fisher (Statistical Methods and Scientific Inference, 1956, p.42-45)</p>
+</div></blockquote>
+<p>So Fisher would tell us to interpret the <span class="math notranslate nohighlight">\(p\)</span>-values in context. We do not choose a single <span class="math notranslate nohighlight">\(\alpha\)</span> and then stick dogmatically to it in all circumstances. Rather, our marker for “significance” must be context-bound and relative to the problem at hand.</p>
+<p>However, in our modern mish-mash of NHST, it is more typical to do exactly what Fisher <em>did not</em> want and fixed our <span class="math notranslate nohighlight">\(\alpha = 0.05\)</span> in all circumstances, adjusting the results of tests to try and maintain this level irrespective of context. This is a deeply Nyman-Pearson idea, though we typically apply such corrections to Fisher’s <span class="math notranslate nohighlight">\(p\)</span>-values (rather than adjusting the critical value of the test, as Nyman-Pearson would want).</p>
+</section>
+<section id="p-value-corrections-in-r">
+<h3><span class="math notranslate nohighlight">\(p\)</span>-value Corrections in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#p-value-corrections-in-r" title="Link to this heading">#</a></h3>
 <p>General access to <span class="math notranslate nohighlight">\(p\)</span>-values corrections is available in base <code class="docutils literal notranslate"><span class="pre">R</span></code> using the <code class="docutils literal notranslate"><span class="pre">p.adjust()</span></code> function. We simply supply a list of <span class="math notranslate nohighlight">\(p\)</span>-values and the name of the method we want to use and <code class="docutils literal notranslate"><span class="pre">R</span></code> will return the adjusted values. For instance</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -447,8 +477,9 @@
 </div>
 </div>
 <p>noting that <code class="docutils literal notranslate"><span class="pre">fdr</span></code> is an alias for <code class="docutils literal notranslate"><span class="pre">BH</span></code>, and <code class="docutils literal notranslate"><span class="pre">none</span></code> is just a pass-through option that does nothing. It is somewhat beyond this lesson to go into the details of all of these. So, a very general heuristic is to use the <code class="docutils literal notranslate"><span class="pre">holm</span></code> method as the most general-purpose approach. This is more powerful than <code class="docutils literal notranslate"><span class="pre">bonferroni</span></code><a class="footnote-reference brackets" href="#bonf-foot" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, but has no additional assumptions. If the <span class="math notranslate nohighlight">\(p\)</span>-values are <em>correlated</em> (e.g. from repeated measurements), then <code class="docutils literal notranslate"><span class="pre">hochberg</span></code> is a better choice because it relaxes the assumption of independance yet retains good power.</p>
-<section id="corrections-and-families-of-tests-in-emmeans">
-<h3>Corrections and Families of Tests in <code class="docutils literal notranslate"><span class="pre">emmeans</span></code><a class="headerlink" href="#corrections-and-families-of-tests-in-emmeans" title="Link to this heading">#</a></h3>
+</section>
+<section id="corrections-in-emmeans-and-families-of-tests">
+<h3>Corrections in <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> and Families of Tests<a class="headerlink" href="#corrections-in-emmeans-and-families-of-tests" title="Link to this heading">#</a></h3>
 <p>In terms of using these corrections within <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>, it is a simple as using the <code class="docutils literal notranslate"><span class="pre">adjust</span></code> argument to name the correction that we want applied. As an example, using the <code class="docutils literal notranslate"><span class="pre">holm</span></code> method with the follow-up tests of the <code class="docutils literal notranslate"><span class="pre">vs:origin</span></code> interaction gives.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -502,10 +533,11 @@ P value adjustment: holm method for 3 tests
 </div>
 </div>
 <p>So, <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> takes this as two families, each containing 3 tests. Corrections to the <span class="math notranslate nohighlight">\(p\)</span>-values are then applied <em>within</em> families.</p>
-</section>
-<section id="planned-comparisons-vs-post-hoc-tests">
-<h3>Planned Comparisons vs Post-hoc Tests<a class="headerlink" href="#planned-comparisons-vs-post-hoc-tests" title="Link to this heading">#</a></h3>
+<div class="tip admonition">
+<p class="admonition-title">Follow-up tests, post-hoc tests and planned comparisons</p>
+<p>As with many elements of statistics, comparisons that we run after the omnibus ANOVA tests have some different names with some subtle interpretational differences. In general, any test performed in an effort to unpack the ANOVA omnibus test is regarded as a <em>follow-up test</em>, because it follows the main ANOVA analysis. This is clearly unnecessary if the omnibus test only involves 2 means, so these tests are really for <em>main effects</em> of factors with <span class="math notranslate nohighlight">\(k &gt; 2\)</span> levels and for interactions. In some instances, this may necessitate further omnibus tests to break down a larger omnibus test. So the core distinction in terminology is not related to the form of the tests, but rather their <em>intent</em>. This is the difference between <em>post-hoc tests</em> and <em>planned comparisons</em>. Post-hoc tests are those where we have found a significant effect and then wish to break it down to find out what is driving it. Planned comparisons are those tests that we decided on <em>before</em> running the analysis. For instance, if we had a clinical trial then the only differences we might care about are those between the patients and controls. There are arguments around error control and the type of follow-up test we are using, but we will discuss those further below. For now, the main practical difference is that planned comparisons can make omnibus tests <em>redundant</em>. So, if you only have a small number of comparisons you want to make, you can probably skip the omnibus tests entirely and just go straight to those comparisons of interest.</p>
 <p>… Beware of this reasoning. Although planned tests are more <em>credible</em> in the sense that you are not <span class="math notranslate nohighlight">\(p\)</span>-hacking, this does not change anything about the error rate. The error does not magically know what your intentions were and then change itself. The error rate is a fact of multiple testing that does not change with intent. As such, even if you have pre-specified tests, you still need to control for multiple comparisons.</p>
+</div>
 </section>
 </section>
 <section id="effect-sizes-and-confidence-intervals">
@@ -692,6 +724,10 @@ treatment = Z:
 <p class="admonition-title">Follow-up tests, post-hoc tests and planned comparisons</p>
 <p>As with many elements of statistics, comparisons that we run after the omnibus ANOVA tests have some different names with some subtle interpretational differences. In general, any test performed in an effort to unpack the ANOVA omnibus test is regarded as a <em>follow-up test</em>, because it follows the main ANOVA analysis. This is clearly unnecessary if the omnibus test only involves 2 means, so these tests are really for <em>main effects</em> of factors with <span class="math notranslate nohighlight">\(k &gt; 2\)</span> levels and for interactions. In some instances, this may necessitate further omnibus tests to break down a larger omnibus test. So the core distinction in terminology is not related to the form of the tests, but rather their <em>intent</em>. This is the difference between <em>post-hoc tests</em> and <em>planned comparisons</em>. Post-hoc tests are those where we have found a significant effect and then wish to break it down to find out what is driving it. Planned comparisons are those tests that we decided on <em>before</em> running the analysis. For instance, if we had a clinical trial then the only differences we might care about are those between the patients and controls. There are arguments around error control and the type of follow-up test we are using, but we will discuss those further below. For now, the main practical difference is that planned comparisons can make omnibus tests <em>redundant</em>. So, if you only have a small number of comparisons you want to make, you can probably skip the omnibus tests entirely and just go straight to those comparisons of interest.</p>
 </div>
+</section>
+<section id="custom-contrast-weights">
+<h2>Custom Contrast Weights<a class="headerlink" href="#custom-contrast-weights" title="Link to this heading">#</a></h2>
+<p>Finally, if we ever have a comparison that we want to make that cannot be expressed using the <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> formula syntax, we always have the option of using our own contrast weights.</p>
 <hr class="footnotes docutils" />
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="bonf-foot" role="note">
@@ -768,13 +804,15 @@ treatment = Z:
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-comparison-correction">Multiple Comparison Correction</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#corrections-and-families-of-tests-in-emmeans">Corrections and Families of Tests in <code class="docutils literal notranslate"><span class="pre">emmeans</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#planned-comparisons-vs-post-hoc-tests">Planned Comparisons vs Post-hoc Tests</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#familywise-error">Familywise Error</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#p-value-corrections-in-r"><span class="math notranslate nohighlight">\(p\)</span>-value Corrections in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#corrections-in-emmeans-and-families-of-tests">Corrections in <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> and Families of Tests</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#effect-sizes-and-confidence-intervals">Effect Sizes and Confidence Intervals</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-ii-follow-up-tests">Type II Follow-up Tests</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#higher-order-interactions">Higher-order Interactions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-contrast-weights">Custom Contrast Weights</a></li>
 </ul>
   </nav></div>
 
