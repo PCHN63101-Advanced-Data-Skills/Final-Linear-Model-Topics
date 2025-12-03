@@ -375,10 +375,13 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#corrections-in-emmeans-and-families-of-tests">Corrections in <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> and Families of Tests</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#effect-sizes-and-confidence-intervals">Effect Sizes and Confidence Intervals</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#effect-sizes-and-confidence-intervals">Effect Sizes and Confidence Intervals</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#effect-sizes-from-omnibus-tests">Effect Sizes from Omnibus Tests</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#effect-sizes-from-emmeans">Effect Sizes from <code class="docutils literal notranslate"><span class="pre">emmeans</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-ii-follow-up-tests">Type II Follow-up Tests</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#higher-order-interactions">Higher-order Interactions</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-contrast-weights">Custom Contrast Weights</a></li>
 </ul>
             </nav>
         </div>
@@ -396,12 +399,12 @@
 <h2>Multiple Comparison Correction<a class="headerlink" href="#multiple-comparison-correction" title="Link to this heading">#</a></h2>
 <section id="familywise-error">
 <h3>Familywise Error<a class="headerlink" href="#familywise-error" title="Link to this heading">#</a></h3>
-<p>Remembering back to our original justification for omnibus tests, we stated that the reason given is often one of error control. It is interesting to note that, historically, this perspective is much more in the Neyman-Pearson tradition than it is in the Fisherian tradition. After all, the notion of the familywise error (FWER) is couched in Neyman-Pearson decision making and how often we would make a false-positive decision over repeated tests. Fisher did not deny that calculating many <span class="math notranslate nohighlight">\(p\)</span>-values increased the chance of seeing small <span class="math notranslate nohighlight">\(p\)</span>-values. If you do something enough times, rare events will happen. However, he advocated for context and the use of the actual magnitude of the <span class="math notranslate nohighlight">\(p\)</span>-value to guide interpretation. In contrast, Neyman-Pearson wanted strict error control at a given <span class="math notranslate nohighlight">\(\alpha\)</span>-level. Based on their perspective, you can calculate the probability of incorrect decisions as</p>
+<p>Remembering back to our original justification for omnibus tests, we stated that the reason given is often one of error control. This perspective is much more in the Neyman-Pearson tradition than it is in the Fisherian tradition. The notion of the familywise error (FWER) is couched in Neyman-Pearson decision making and how often we would reach a false-positive conclusion over repeated tests. Fisher did not deny that calculating many <span class="math notranslate nohighlight">\(p\)</span>-values increased the chance of seeing small <span class="math notranslate nohighlight">\(p\)</span>-values. If you do something enough times, rare events will happen. However, he advocated for context and the use of the actual magnitude of the <span class="math notranslate nohighlight">\(p\)</span>-value to guide interpretation. In contrast, Neyman-Pearson wanted strict error control at a given <span class="math notranslate nohighlight">\(\alpha\)</span>-level. To briefly review, you can calculate the probability of false-positive decisions as</p>
 <div class="math notranslate nohighlight">
 \[
 \text{FWER} = 1 - (1 - \alpha)^{m},
 \]</div>
-<p>where <span class="math notranslate nohighlight">\(m\)</span> is the number of tests being performed in the “family”. For instance, if we only perform one test at <span class="math notranslate nohighlight">\(\alpha - 0.05\)</span>, we have</p>
+<p>where <span class="math notranslate nohighlight">\(m\)</span> is the number of tests being performed in the “family”. For instance, if we only perform one test at <span class="math notranslate nohighlight">\(\alpha = 0.05\)</span>, we have</p>
 <div class="math notranslate nohighlight">
 \[
 \text{FWER} = 1 - (1 - 0.05)^{1} = 0.05.
@@ -411,14 +414,14 @@
 \[
 \text{FWER} = 1 - (1 - 0.05)^{100} = 1 - 0.006 = 0.994.
 \]</div>
-<p>So we go from only a 5% probability of one or more false-positive under the null to a 99.4% probability of one or more false-positive under the null. As such, using a strict decision rule with a  fixed <span class="math notranslate nohighlight">\(\alpha\)</span> only works to control the error-rate when we perform a single test. As soon as we start performing multiple tests, this error rate increases because the chance of seeing a rare event also increases if we do something over and over. It is like buying millions of lottery tickets. The chance of any single ticket winning is very low, but if we buy enough of them we can almost guarantee that <em>at least one</em> of the tickets will be a winner. We are simply providing more opportunities for a rare event to occur.</p>
-<p>Fisher acknowledged this situation, but he rejected the idea of fixing the error-rate <em>a priori</em> and then adjusting tests to suit that error-rate. Indeed, what he said about this whole idea was</p>
+<p>So we go from only a 5% probability of one or more false-positive under the null to a 99.4% probability of one or more false-positive under the null. As such, using a strict decision rule with a  fixed <span class="math notranslate nohighlight">\(\alpha\)</span> only works to control the error-rate when we perform a single test. As soon as we start performing multiple tests, this error rate increases because the chance of seeing a rare event also increases. It is like buying millions of lottery tickets. The chance of any single ticket winning is very low, but if we buy enough of them we can almost guarantee that <em>at least one</em> of the tickets will be a winner. We are simply providing <em>more opportunities</em> for a rare event to occur.</p>
+<p>Fisher acknowledged this situation, but he rejected the idea of fixing the error-rate <em>a priori</em>. Indeed, he said</p>
 <blockquote class="epigraph">
 <div><p>…the calculation is absurdly academic, for in fact no scientific worker has a fixed level of significance at which from year to year, and in all circumstances, he rejects hypotheses; he rather gives his mind to each particular case in the light of his evidence and his ideas.</p>
 <p class="attribution">—Fisher (Statistical Methods and Scientific Inference, 1956, p.42-45)</p>
 </div></blockquote>
 <p>So Fisher would tell us to interpret the <span class="math notranslate nohighlight">\(p\)</span>-values in context. We do not choose a single <span class="math notranslate nohighlight">\(\alpha\)</span> and then stick dogmatically to it in all circumstances. Rather, our marker for “significance” must be context-bound and relative to the problem at hand.</p>
-<p>However, in our modern mish-mash of NHST, it is more typical to do exactly what Fisher <em>did not</em> want and fixed our <span class="math notranslate nohighlight">\(\alpha = 0.05\)</span> in all circumstances, adjusting the results of tests to try and maintain this level irrespective of context. This is a deeply Nyman-Pearson idea, though we typically apply such corrections to Fisher’s <span class="math notranslate nohighlight">\(p\)</span>-values (rather than adjusting the critical value of the test, as Nyman-Pearson would want).</p>
+<p>However, in our modern mish-mash of NHST, it is more typical to do exactly what Fisher did <em>not</em> want and fix <span class="math notranslate nohighlight">\(\alpha = 0.05\)</span> in all circumstances, adjusting the results of tests to try and maintain this level irrespective of context. This is a deeply Nyman-Pearson idea, though we typically apply such corrections to Fisher’s <span class="math notranslate nohighlight">\(p\)</span>-values rather than adjusting the critical value of the test.</p>
 </section>
 <section id="p-value-corrections-in-r">
 <h3><span class="math notranslate nohighlight">\(p\)</span>-value Corrections in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#p-value-corrections-in-r" title="Link to this heading">#</a></h3>
@@ -438,7 +441,7 @@
 </div>
 </div>
 </div>
-<p>In this example, the basic Bonferroni method is used where each <span class="math notranslate nohighlight">\(p\)</span>-value is multiplied by the number of <span class="math notranslate nohighlight">\(p\)</span>-values. We can see this for ourseleves by calculating this correction manually.</p>
+<p>In this example, the basic Bonferroni method is used where each <span class="math notranslate nohighlight">\(p\)</span>-value is multiplied by the total number of <span class="math notranslate nohighlight">\(p\)</span>-values. We can see this for ourseleves by calculating this correction manually.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># bonferroni correction</span>
@@ -446,11 +449,7 @@
 <span class="n">p.adj</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">p.raw</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">n.p</span><span class="w"> </span>
 
 <span class="c1"># make sure all p &lt;= 1</span>
-<span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">n.p</span><span class="p">){</span>
-<span class="w">    </span><span class="kr">if</span><span class="w"> </span><span class="p">(</span><span class="n">p.adj</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="m">1</span><span class="p">){</span>
-<span class="w">        </span><span class="n">p.adj</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
+<span class="n">p.adj</span><span class="p">[</span><span class="n">p.adj</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span>
 
 <span class="nf">print</span><span class="p">(</span><span class="n">p.adj</span><span class="p">)</span>
 </pre></div>
@@ -476,7 +475,7 @@
 </div>
 </div>
 </div>
-<p>noting that <code class="docutils literal notranslate"><span class="pre">fdr</span></code> is an alias for <code class="docutils literal notranslate"><span class="pre">BH</span></code>, and <code class="docutils literal notranslate"><span class="pre">none</span></code> is just a pass-through option that does nothing. It is somewhat beyond this lesson to go into the details of all of these. So, a very general heuristic is to use the <code class="docutils literal notranslate"><span class="pre">holm</span></code> method as the most general-purpose approach. This is more powerful than <code class="docutils literal notranslate"><span class="pre">bonferroni</span></code><a class="footnote-reference brackets" href="#bonf-foot" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, but has no additional assumptions. If the <span class="math notranslate nohighlight">\(p\)</span>-values are <em>correlated</em> (e.g. from repeated measurements), then <code class="docutils literal notranslate"><span class="pre">hochberg</span></code> is a better choice because it relaxes the assumption of independance yet retains good power.</p>
+<p>noting that <code class="docutils literal notranslate"><span class="pre">fdr</span></code> is an alias for <code class="docutils literal notranslate"><span class="pre">BH</span></code>, and <code class="docutils literal notranslate"><span class="pre">none</span></code> is just a pass-through option that does nothing. It is somewhat beyond this lesson to go into the details of all of these. A general heuristic is to use the <code class="docutils literal notranslate"><span class="pre">holm</span></code> method as the most general-purpose approach. This is more powerful than <code class="docutils literal notranslate"><span class="pre">bonferroni</span></code>, but has no additional assumptions. If the <span class="math notranslate nohighlight">\(p\)</span>-values are <em>correlated</em> (e.g. from repeated measurements), then <code class="docutils literal notranslate"><span class="pre">hochberg</span></code> is a better choice because it relaxes the assumption of independance, yet retains good power. If you have <em>a lot</em> of <span class="math notranslate nohighlight">\(p\)</span>-values (in the hundreds or thousands), then controlling the <code class="docutils literal notranslate"><span class="pre">fdr</span></code> is a more sensitive approach than controlling the FWER. For instance, FDR is a common method used in neuroimaging where the number of simultaneous tests across the brain can be in the hundreds of thousands.</p>
 </section>
 <section id="corrections-in-emmeans-and-families-of-tests">
 <h3>Corrections in <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> and Families of Tests<a class="headerlink" href="#corrections-in-emmeans-and-families-of-tests" title="Link to this heading">#</a></h3>
@@ -505,8 +504,8 @@ origin = USA:
 </div>
 </div>
 <p>Now, you would be forgiven for thinking that nothing has changed here. And, in fact, you would be right. In this instance, <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> has not applied any correction, despite our request. So what is going on?</p>
-<p>The answer is that concept of multiple comparisons is not always as straightforward as it might seem. …</p>
-<p>… Each level of the second factor is taken to define a family of tests, independent from other levels. We can see this if we swap the tests defined earlier to look at the effects of <code class="docutils literal notranslate"><span class="pre">origin</span></code> at each level of <code class="docutils literal notranslate"><span class="pre">vs</span></code></p>
+<p>The answer lies in the concept of a <em>family</em> of tests. Note from the definition of FWER that <span class="math notranslate nohighlight">\(m\)</span> was the number of tests <em>in the family</em>. Similarly, the name FWER literally indicates that the error rate is defined <em>familywise</em>. So what is a family? Simply put, it is a collection of tests that we choose to treat as a single unit with a similar inferential goal. So, there is no formal of mathematical definition here. The family is whatever we choose it to be for the purpose of Type I error control.</p>
+<p>Within <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>, a family is defined by whatever factor we place on the right-hand side of the <code class="docutils literal notranslate"><span class="pre">|</span></code> symbol. In the example above, we place <code class="docutils literal notranslate"><span class="pre">origin</span></code> here so that the effect of <code class="docutils literal notranslate"><span class="pre">vs</span></code> was evaluated at each level of <code class="docutils literal notranslate"><span class="pre">origin</span></code>. Each level of <code class="docutils literal notranslate"><span class="pre">origin</span></code> therefore forms a <em>family</em> of tests with a common inferential goal and any correction is applied within each family separately. Because the <code class="docutils literal notranslate"><span class="pre">vs</span></code> factor only has two levels only a single test is performed within each family and no correction is applied. However, if we define the interaction tests the other way around, so that the levels of <code class="docutils literal notranslate"><span class="pre">vs</span></code> form the families, we can see that the correction <em>is</em> applied.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="o">|</span><span class="n">vs</span><span class="p">,</span><span class="w"> </span><span class="n">adjust</span><span class="o">=</span><span class="s">&quot;holm&quot;</span><span class="p">)</span>
@@ -532,21 +531,60 @@ P value adjustment: holm method for 3 tests
 </div>
 </div>
 </div>
-<p>So, <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> takes this as two families, each containing 3 tests. Corrections to the <span class="math notranslate nohighlight">\(p\)</span>-values are then applied <em>within</em> families.</p>
 <div class="tip admonition">
-<p class="admonition-title">Follow-up tests, post-hoc tests and planned comparisons</p>
-<p>As with many elements of statistics, comparisons that we run after the omnibus ANOVA tests have some different names with some subtle interpretational differences. In general, any test performed in an effort to unpack the ANOVA omnibus test is regarded as a <em>follow-up test</em>, because it follows the main ANOVA analysis. This is clearly unnecessary if the omnibus test only involves 2 means, so these tests are really for <em>main effects</em> of factors with <span class="math notranslate nohighlight">\(k &gt; 2\)</span> levels and for interactions. In some instances, this may necessitate further omnibus tests to break down a larger omnibus test. So the core distinction in terminology is not related to the form of the tests, but rather their <em>intent</em>. This is the difference between <em>post-hoc tests</em> and <em>planned comparisons</em>. Post-hoc tests are those where we have found a significant effect and then wish to break it down to find out what is driving it. Planned comparisons are those tests that we decided on <em>before</em> running the analysis. For instance, if we had a clinical trial then the only differences we might care about are those between the patients and controls. There are arguments around error control and the type of follow-up test we are using, but we will discuss those further below. For now, the main practical difference is that planned comparisons can make omnibus tests <em>redundant</em>. So, if you only have a small number of comparisons you want to make, you can probably skip the omnibus tests entirely and just go straight to those comparisons of interest.</p>
-<p>… Beware of this reasoning. Although planned tests are more <em>credible</em> in the sense that you are not <span class="math notranslate nohighlight">\(p\)</span>-hacking, this does not change anything about the error rate. The error does not magically know what your intentions were and then change itself. The error rate is a fact of multiple testing that does not change with intent. As such, even if you have pre-specified tests, you still need to control for multiple comparisons.</p>
+<p class="admonition-title">Post-hoc Tests and Planned Comparisons</p>
+<p>In general, any test performed in an effort to unpack the ANOVA omnibus test is regarded as a <em>follow-up test</em>, because it follows the main ANOVA analysis. However, a distinction is sometimes made related to the <em>intent</em> behind the tests. Sometimes, follow-up tests are known as <em>post-hoc tests</em> when we have found a significant effect and then wish to break it down. Other times, follow-up tests are known as <em>planned comparisons</em> when we decided on the comparisons we wanted to make <em>before</em> running the analysis, irrespective of the omnibus results. This distinction is really between whether we wish to be guided by the omnibus tests and then exhaustively search the results to discover what the omnibus test is trying to tell us, versus deciding on a few choice comparisons before the analysis and then just sticking to those and not looking at anything else. <em>Post-hoc</em> tests are quite common in Psychology and Cognitive Neuroscience, whereas <em>planned comparisons</em> may be more relevant for something like a clinical trial where the only differences we care about are those between the patients and controls.</p>
+<p>The point of bringing this up is that arguments are sometimes made around error-control and the type of follow-up test we are using. For instance, it is common to hear that multiple comparisons corrections are only needed with post-hoc tests, but not with planned comparisons. This indicates that if you decide on your comparisons beforehand, you do not need to perform any sort of <span class="math notranslate nohighlight">\(p\)</span>-value correction. <em>Beware of this reasoning</em>. Although planned comparisons are more <em>credible</em> in the sense that you are not <span class="math notranslate nohighlight">\(p\)</span>-hacking, this does not change anything about the error rate. The error does not magically know what your intentions were and then change itself. The error rate is a fact of multiple testing that does not change with intent. As such, even if you have pre-specified tests, you still need to control for multiple comparisons. <em>Our intentions do not change the laws of probability</em>.</p>
 </div>
 </section>
 </section>
 <section id="effect-sizes-and-confidence-intervals">
 <h2>Effect Sizes and Confidence Intervals<a class="headerlink" href="#effect-sizes-and-confidence-intervals" title="Link to this heading">#</a></h2>
-<p>…On this basis, it is often not worth worrying about effect sizes on omnibus tests. Indeed, from the perspective of <em>estimation</em>, this form of error control is not really the focus. Remember, these ideas come from the Nyman-Pearson school of NHST and are based entirely on the concept of <em>accepting</em> or <em>rejecting</em> hypotheses over many repeats of an experiment. When focusing on effect sizes, our interpretation relates to whether an effect is <em>large</em> or <em>meaningful</em> in context. The effect we estimate is what it is, no matter how many other effects we also estimate. The same is true of a confidence interval. We do not need correction here because we are not looking at long-run error control of binary decisions. We simply used the interval to inform us about the <em>precision</em> of an estimate. From this perspective, not only are effect sizes on omnibus tests rarely of interest, the whole concept of an omnibus tests is debatable. As such, we can go straight from the model to our comparisons of interest, without having to go via an ANOVA table and without having to worry about multiple comparisons.</p>
+<p>Given that all our inference so far has relied on NHST, it is useful to know how we could produce something more in-line with the ideas of the New Statistics, focusing on <em>estimation</em> and <em>precision</em>, rather than hypothesis testing. To that end, we will breifly discuss effect sizes, confidence intervals and how they can be generated.</p>
+<section id="effect-sizes-from-omnibus-tests">
+<h3>Effect Sizes from Omnibus Tests<a class="headerlink" href="#effect-sizes-from-omnibus-tests" title="Link to this heading">#</a></h3>
+<p>As a first topic, we might want to simply replace our inferential device for all elements of our ANOVA analysis to one aligned with <em>estimation</em> rather than NHST. So, our starting point is the omnibus tests. There are a myriad of effect sizes available to use for the omnibus tests (<span class="math notranslate nohighlight">\(\eta^{2}, \text{partial}-\eta^{2}, \omega^{2}\)</span>, etc.), but perhaps the easiest to intepret is Cohen’s <span class="math notranslate nohighlight">\(f^{2}\)</span>. This is defined in terms of the <span class="math notranslate nohighlight">\(R^{2}\)</span> from the the null and full models, so has a direct connection with the ANOVA as a model comparisons procedure. The formula is given by</p>
+<div class="math notranslate nohighlight">
+\[
+f^{2} = \frac{R^{2}_{\text{full}} - R^{2}_{\text{null}}}{1 - R^{2}_{full}}.
+\]</div>
+<p>Remembering that <span class="math notranslate nohighlight">\(R^{2}\)</span> gives the proportion of variance explained by the model, <span class="math notranslate nohighlight">\(f^{2}\)</span> tells us how large the change in variance explained is, relative to how much variance is still left over. The bigger <span class="math notranslate nohighlight">\(f^{2}\)</span> is, the more variance the full model has explained, relative to how much still remains to be explained. The square-root is also taken sometimes to give Cohen’s <span class="math notranslate nohighlight">\(f\)</span>, which is the same matric but expressed in units of <em>standard deviation</em>.</p>
+<p>To calculate this in <code class="docutils literal notranslate"><span class="pre">R</span></code>, we can make use of the <code class="docutils literal notranslate"><span class="pre">effectsize</span></code> package</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">effectsize</span><span class="p">)</span>
+<span class="n">anova.table</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">Anova</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
+<span class="n">effect.size</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">cohens_f</span><span class="p">(</span><span class="n">anova.table</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">effect.size</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Blue"># Effect Size for ANOVA (Type II)</span>
+
+Parameter | Cohen&#39;s f (partial) |      95% CI
+---------------------------------------------
+origin    |                1.22 | [0.76, Inf]
+vs        |                0.47 | [0.12, Inf]
+origin:vs |                0.64 | [0.22, Inf]
+
+<span class=" -Color -Color-Cyan">- One-sided CIs: upper bound fixed at [Inf].</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>So how do we interpret this? One approach is to use Cohen’s own cutoffs of … However, this is controversial because these values are somewhat arbitrary and realistically cannot be universally applicable in all situations. In addition, if all we are doing is determining how meaningful effects are based on arbitrary cut-offs, we are not doing much better than NHST with <span class="math notranslate nohighlight">\(\alpha = 0.05\)</span>. The more <em>New Statistics</em> way is to interpret each effect on its own in relation to its mangitude and precision. For instance, we can see that <code class="docutils literal notranslate"><span class="pre">origin</span></code> has the largest effect, followed by <code class="docutils literal notranslate"><span class="pre">origin:vs</span></code> and then <code class="docutils literal notranslate"><span class="pre">vs</span></code> alone. Focusing on the interaction, <span class="math notranslate nohighlight">\(f^2 = 0.64^2 = 0.41\)</span>. So, the interaction’s contribution to the model is 41% as large as the residual variance of the full model. This feels a bit wonky to interpret, but we need to think of the residual variance of the full model as our <em>noise floor</em>. For this model, we cannot make the noise any smaller than this value. As such, this is our benchmark by which we judge the variance reduced by a given predictor. However, this still does not feel particularly <em>intuitive</em>. The problem is that <em>all</em> omnibus effect sizes are a compromise because an omnibus effect is a <em>pattern</em> not a <em>quantity</em>. In trying to reduce this to a single number, we run into difficulties because, funamentally, an omnibus test is not related to any practical effect we are actually interested in. In a way, this idea of an “overall effect” is not really of much use to us and is difficult to define in any coherent way that relates to the actual differences in the data that we care about.</p>
+<p>On this basis, it is not often worth worrying about effect sizes on omnibus tests. Indeed, from the perspective of <em>estimation</em>, omnibus tests are not really of any interest. If we take them as a form of error-control, then this is no longer relevant because we are only interested in effects and their precision, not long-run decision making. If we take them as a form of time-saving screening, this is largely unnecessary in the modern world because computers can create all the comparisons we want instantaneously. The only legitimate argument in their favour is the idea that omnibus tests can serve as an <em>optional noise filter</em>, giving you a quick global check on whether a factor has any signal worth interpreting before diving into multiple individual effects. This is more coherently expressed in the idea of finding the <em>best model</em> for the data before interpreting the effects and so will depend upon what metric is used to define “best” in this scenario. Indeed, we can simply replace the idea of omnibus tests with the idea of <em>model building</em> and then interpret the individual comparisons once we have a model we are happy with. This is a much more modern and coherent perspective than omnibus ANOVA tests. We will see more about model comparisons and model building in the Machine Learning module next semester.</p>
+</section>
+<section id="effect-sizes-from-emmeans">
+<h3>Effect Sizes from <code class="docutils literal notranslate"><span class="pre">emmeans</span></code><a class="headerlink" href="#effect-sizes-from-emmeans" title="Link to this heading">#</a></h3>
+<p>The much more interpretable application of effect sizes comes directly from the individual comparisons of means. This is where we can use Cohen’s <span class="math notranslate nohighlight">\(d\)</span> as an easily interpretable standardised mean difference on the scale of the standard deviation. This can be calculated directly using the <code class="docutils literal notranslate"><span class="pre">eff_size()</span></code> function from <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>. For instance</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">vs</span><span class="o">|</span><span class="n">origin</span><span class="p">)</span>
-<span class="nf">print</span><span class="p">(</span><span class="nf">eff_size</span><span class="p">(</span><span class="n">emm</span><span class="p">,</span><span class="w"> </span><span class="n">sigma</span><span class="o">=</span><span class="nf">sigma</span><span class="p">(</span><span class="n">mod</span><span class="p">),</span><span class="w"> </span><span class="n">edf</span><span class="o">=</span><span class="nf">df.residual</span><span class="p">(</span><span class="n">mod</span><span class="p">)))</span>
+<span class="n">eff</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">eff_size</span><span class="p">(</span><span class="n">emm</span><span class="p">,</span><span class="w"> </span><span class="n">sigma</span><span class="o">=</span><span class="nf">sigma</span><span class="p">(</span><span class="n">mod</span><span class="p">),</span><span class="w"> </span><span class="n">edf</span><span class="o">=</span><span class="nf">df.residual</span><span class="p">(</span><span class="n">mod</span><span class="p">))</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="n">eff</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -569,7 +607,56 @@ Confidence level used: 0.95
 </div>
 </div>
 </div>
-<p>If these effects were all very similar in magnitude, we might conclude that <code class="docutils literal notranslate"><span class="pre">origin</span></code> seems to make little difference here and collapse over that factor to look at the effects of <code class="docutils literal notranslate"><span class="pre">vs</span></code> alone. However, we need to take care to do this correctly in order to produce effects reflective of the Type II tests, as we will now discuss.</p>
+<p>Here we can see each of the comparisons between <code class="docutils literal notranslate"><span class="pre">Straight</span></code> and <code class="docutils literal notranslate"><span class="pre">V-shaped</span></code> engines expressed in standard deviation units. In general, each of these effects represents a change of around 1.5 standard deviations in MPG. We can think of this as a mean shift between two standard normal distributions. This is illustrated in the plot below and gives some visual intuition behind what Cohen’s <span class="math notranslate nohighlight">\(d\)</span> is telling us.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1">#========================================================================================#</span>
+<span class="c1"># Use this function to visualise any value of Cohen&#39;s d</span>
+<span class="c1">#========================================================================================#</span>
+<span class="n">plot.cohens.d</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">d</span><span class="p">){</span>
+<span class="w">    </span><span class="c1"># Sequence of x values covering both distributions</span>
+<span class="w">    </span><span class="kr">if</span><span class="w"> </span><span class="p">(</span><span class="n">d</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="m">0</span><span class="p">){</span>
+<span class="w">        </span><span class="n">x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="m">-4</span><span class="o">+</span><span class="n">d</span><span class="p">,</span><span class="w"> </span><span class="m">4</span><span class="p">,</span><span class="w">   </span><span class="n">length.out</span><span class="o">=</span><span class="m">1000</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="kr">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="m">-4</span><span class="p">,</span><span class="w">   </span><span class="m">4</span><span class="o">+</span><span class="n">d</span><span class="p">,</span><span class="w"> </span><span class="n">length.out</span><span class="o">=</span><span class="m">1000</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1"># Standard normal</span>
+<span class="w">    </span><span class="n">y1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">dnorm</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">sd</span><span class="o">=</span><span class="m">1</span><span class="p">)</span>
+
+<span class="w">    </span><span class="c1"># Shifted normal</span>
+<span class="w">    </span><span class="n">y2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">dnorm</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="n">d</span><span class="p">,</span><span class="w"> </span><span class="n">sd</span><span class="o">=</span><span class="m">1</span><span class="p">)</span>
+
+<span class="w">    </span><span class="c1"># Plot</span>
+<span class="w">    </span><span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y1</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&quot;l&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">lwd</span><span class="o">=</span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="s">&quot;blue&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">xlab</span><span class="o">=</span><span class="s">&quot;Value&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="o">=</span><span class="s">&quot;Density&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="n">main</span><span class="o">=</span><span class="nf">paste0</span><span class="p">(</span><span class="s">&quot;Cohen&#39;s d = &quot;</span><span class="p">,</span><span class="n">d</span><span class="p">))</span>
+
+<span class="w">    </span><span class="nf">lines</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y2</span><span class="p">,</span><span class="w"> </span><span class="n">lwd</span><span class="o">=</span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="s">&quot;red&quot;</span><span class="p">)</span>
+
+<span class="w">    </span><span class="c1"># Add vertical lines at the means</span>
+<span class="w">    </span><span class="nf">abline</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">lwd</span><span class="o">=</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="s">&quot;blue&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">lty</span><span class="o">=</span><span class="m">2</span><span class="p">)</span>
+<span class="w">    </span><span class="nf">abline</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="n">d</span><span class="p">,</span><span class="w"> </span><span class="n">lwd</span><span class="o">=</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="s">&quot;red&quot;</span><span class="p">,</span><span class="w">  </span><span class="n">lty</span><span class="o">=</span><span class="m">2</span><span class="p">)</span>
+
+<span class="w">    </span><span class="nf">legend</span><span class="p">(</span><span class="s">&quot;topright&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">legend</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;Group 1 ~ N(  0, 1)&quot;</span><span class="p">,</span><span class="w"> </span><span class="nf">paste0</span><span class="p">(</span><span class="s">&quot;Group 2 ~ N(&quot;</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="s">&quot;, 1)&quot;</span><span class="p">)),</span>
+<span class="w">           </span><span class="n">col</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;blue&quot;</span><span class="p">,</span><span class="s">&quot;red&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">lwd</span><span class="o">=</span><span class="m">3</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="nf">plot.cohens.d</span><span class="p">(</span><span class="m">1.5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="_images/32d45080c6dcaeaa5c22cd7f672893c4bdc428dfbd74ba6a7ecdddc3061669ec.png"><img alt="_images/32d45080c6dcaeaa5c22cd7f672893c4bdc428dfbd74ba6a7ecdddc3061669ec.png" src="_images/32d45080c6dcaeaa5c22cd7f672893c4bdc428dfbd74ba6a7ecdddc3061669ec.png" style="width: 420px; height: 420px;" /></a>
+</div>
+</div>
+<p>So, in all cases, this is potentially an interesting effect. However, we also need to consider the precision. For he <code class="docutils literal notranslate"><span class="pre">Europe</span></code> comparison, the 95% CI is <span class="math notranslate nohighlight">\([0.30,2.68]\)</span>, which is reasonably uncertain. It suggests that the true effect could be as small as <span class="math notranslate nohighlight">\(d=0.3\)</span> (a tiny mean shift) or as large as <span class="math notranslate nohighlight">\(d=2.68\)</span> (quite a large mean shift). So whilst this is at least indicative of a <em>positive</em> effect, its exact magnitude remains a bit uncertain. Similarly, the 95% CI for <code class="docutils literal notranslate"><span class="pre">USA</span></code> is <span class="math notranslate nohighlight">\([0.04,2.87]\)</span>, which is even wider and thus even more uncertain. Finally, the interval for <code class="docutils literal notranslate"><span class="pre">Japan</span></code> is <span class="math notranslate nohighlight">\([-3.73,0.16]\)</span>, which is even more uncertain, especially as it includes both 0 and a reversal of the direction of the effect. So, based on this, we are most confident about the estimate for <code class="docutils literal notranslate"><span class="pre">Europe</span></code>, less so about the estimate for <code class="docutils literal notranslate"><span class="pre">USA</span></code> and even less so about the estimate for <code class="docutils literal notranslate"><span class="pre">Japan</span></code>.</p>
+</section>
 </section>
 <section id="type-ii-follow-up-tests">
 <h2>Type II Follow-up Tests<a class="headerlink" href="#type-ii-follow-up-tests" title="Link to this heading">#</a></h2>
@@ -697,7 +784,7 @@ treatment = Z:
 <p>This has effectively given us 3 interaction tests, one for each level of treatment. So we can conclude that there is a significant interaction effect between <code class="docutils literal notranslate"><span class="pre">gender</span></code> and <code class="docutils literal notranslate"><span class="pre">risk</span></code>, but only for treatment <code class="docutils literal notranslate"><span class="pre">X</span></code>. We could investigate this further by holding one of the factors in the <code class="docutils literal notranslate"><span class="pre">interaction</span></code> option constant by setting its contrasts to <code class="docutils literal notranslate"><span class="pre">&quot;identity&quot;</span></code>. For example</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">contrast</span><span class="p">(</span><span class="n">emm</span><span class="p">,</span><span class="w"> </span><span class="n">interaction</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="n">gender</span><span class="o">=</span><span class="s">&quot;pairwise&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">risk</span><span class="o">=</span><span class="s">&quot;identity&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">by</span><span class="o">=</span><span class="s">&quot;treatment&quot;</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">contrast</span><span class="p">(</span><span class="n">emm</span><span class="p">,</span><span class="w"> </span><span class="n">interaction</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="n">gender</span><span class="o">=</span><span class="s">&quot;pairwise&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">risk</span><span class="o">=</span><span class="s">&quot;identity&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">by</span><span class="o">=</span><span class="s">&quot;treatment&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">adjust</span><span class="o">=</span><span class="s">&quot;holm&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -710,32 +797,19 @@ treatment = Z:
 treatment = Y:
  gender_pairwise risk_identity estimate   SE df t.ratio p.value
  male - female   high              1.17 2.54 60   0.459  0.6477
- male - female   low               4.78 2.54 60   1.881  0.0648
+ male - female   low               4.78 2.54 60   1.881  0.1297
 
 treatment = Z:
  gender_pairwise risk_identity estimate   SE df t.ratio p.value
  male - female   high             -1.35 2.54 60  -0.533  0.5958
- male - female   low               4.68 2.54 60   1.841  0.0705
+ male - female   low               4.68 2.54 60   1.841  0.1410
+
+P value adjustment: holm method for 2 tests 
 </pre></div>
 </div>
 </div>
 </div>
 <p>So we can see that the <code class="docutils literal notranslate"><span class="pre">gender</span></code> effect for treatment <code class="docutils literal notranslate"><span class="pre">X</span></code> is only within the <code class="docutils literal notranslate"><span class="pre">high</span></code> risk group and not the <code class="docutils literal notranslate"><span class="pre">low</span></code> risk group. There are marginal effect of <code class="docutils literal notranslate"><span class="pre">gender</span></code> for the other treatments, but we need to be careful interpreting these if the interaction effects were not significant. In addition, these effects may not survive multiple comparisons correction, as we will see in the next section.</p>
-<div class="tip admonition">
-<p class="admonition-title">Follow-up tests, post-hoc tests and planned comparisons</p>
-<p>As with many elements of statistics, comparisons that we run after the omnibus ANOVA tests have some different names with some subtle interpretational differences. In general, any test performed in an effort to unpack the ANOVA omnibus test is regarded as a <em>follow-up test</em>, because it follows the main ANOVA analysis. This is clearly unnecessary if the omnibus test only involves 2 means, so these tests are really for <em>main effects</em> of factors with <span class="math notranslate nohighlight">\(k &gt; 2\)</span> levels and for interactions. In some instances, this may necessitate further omnibus tests to break down a larger omnibus test. So the core distinction in terminology is not related to the form of the tests, but rather their <em>intent</em>. This is the difference between <em>post-hoc tests</em> and <em>planned comparisons</em>. Post-hoc tests are those where we have found a significant effect and then wish to break it down to find out what is driving it. Planned comparisons are those tests that we decided on <em>before</em> running the analysis. For instance, if we had a clinical trial then the only differences we might care about are those between the patients and controls. There are arguments around error control and the type of follow-up test we are using, but we will discuss those further below. For now, the main practical difference is that planned comparisons can make omnibus tests <em>redundant</em>. So, if you only have a small number of comparisons you want to make, you can probably skip the omnibus tests entirely and just go straight to those comparisons of interest.</p>
-</div>
-</section>
-<section id="custom-contrast-weights">
-<h2>Custom Contrast Weights<a class="headerlink" href="#custom-contrast-weights" title="Link to this heading">#</a></h2>
-<p>Finally, if we ever have a comparison that we want to make that cannot be expressed using the <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> formula syntax, we always have the option of using our own contrast weights.</p>
-<hr class="footnotes docutils" />
-<aside class="footnote-list brackets">
-<aside class="footnote brackets" id="bonf-foot" role="note">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
-<p>Bonferroni is a very common correction where each <span class="math notranslate nohighlight">\(p\)</span>-value is multiplied by the number of tests.</p>
-</aside>
-</aside>
 </section>
 </section>
 
@@ -810,10 +884,13 @@ treatment = Z:
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#corrections-in-emmeans-and-families-of-tests">Corrections in <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> and Families of Tests</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#effect-sizes-and-confidence-intervals">Effect Sizes and Confidence Intervals</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#effect-sizes-and-confidence-intervals">Effect Sizes and Confidence Intervals</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#effect-sizes-from-omnibus-tests">Effect Sizes from Omnibus Tests</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#effect-sizes-from-emmeans">Effect Sizes from <code class="docutils literal notranslate"><span class="pre">emmeans</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-ii-follow-up-tests">Type II Follow-up Tests</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#higher-order-interactions">Higher-order Interactions</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-contrast-weights">Custom Contrast Weights</a></li>
 </ul>
   </nav></div>
 
