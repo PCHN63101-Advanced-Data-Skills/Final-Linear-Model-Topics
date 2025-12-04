@@ -395,8 +395,10 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="advanced-uses-of-emmeans">
 <h1>Advanced Uses of <code class="docutils literal notranslate"><span class="pre">emmeans</span></code><a class="headerlink" href="#advanced-uses-of-emmeans" title="Link to this heading">#</a></h1>
+<p>In this section of the lesson, we will examine more advanced ways we can use <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>. Specifically, we will see how to implement multiple comparisons correct, how to calculate effect sizes and confidence intervals, how to make sure the follow-up tests match the Type II ANOVA tests and how to use <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> to break-down more complex higher-order ANOVA effects.</p>
 <section id="multiple-comparison-correction">
 <h2>Multiple Comparison Correction<a class="headerlink" href="#multiple-comparison-correction" title="Link to this heading">#</a></h2>
+<p>To begin with, we will focus on the topic of multiple comparison correction. This was mentioned in the previous lesson as a justification for omnibus tests. However, even if we have filtered our comparisons by first using an omnibus test, the issue of multiple testing does not go away. As such, it becomes necessary to implement some form of correction when calculating any follow-up tests.</p>
 <section id="familywise-error">
 <h3>Familywise Error<a class="headerlink" href="#familywise-error" title="Link to this heading">#</a></h3>
 <p>Remembering back to our original justification for omnibus tests, we stated that the reason given is often one of error control. This perspective is much more in the Neyman-Pearson tradition than it is in the Fisherian tradition. The notion of the familywise error (FWER) is couched in Neyman-Pearson decision making and how often we would reach a false-positive conclusion over repeated tests. Fisher did not deny that calculating many <span class="math notranslate nohighlight">\(p\)</span>-values increased the chance of seeing small <span class="math notranslate nohighlight">\(p\)</span>-values. If you do something enough times, rare events will happen. However, he advocated for context and the use of the actual magnitude of the <span class="math notranslate nohighlight">\(p\)</span>-value to guide interpretation. In contrast, Neyman-Pearson wanted strict error control at a given <span class="math notranslate nohighlight">\(\alpha\)</span>-level. To briefly review, you can calculate the probability of false-positive decisions as</p>
@@ -414,7 +416,7 @@
 \[
 \text{FWER} = 1 - (1 - 0.05)^{100} = 1 - 0.006 = 0.994.
 \]</div>
-<p>So we go from only a 5% probability of one or more false-positive under the null to a 99.4% probability of one or more false-positive under the null. As such, using a strict decision rule with a  fixed <span class="math notranslate nohighlight">\(\alpha\)</span> only works to control the error-rate when we perform a single test. As soon as we start performing multiple tests, this error rate increases because the chance of seeing a rare event also increases. It is like buying millions of lottery tickets. The chance of any single ticket winning is very low, but if we buy enough of them we can almost guarantee that <em>at least one</em> of the tickets will be a winner. We are simply providing <em>more opportunities</em> for a rare event to occur.</p>
+<p>So we go from only a 5% probability of one or more false-positives under the null to a 99.4% probability of one or more false-positives under the null. As such, using a strict decision rule with a  fixed <span class="math notranslate nohighlight">\(\alpha\)</span> only works to control the error-rate when we perform a single test. As soon as we start performing multiple tests, this error rate increases because the chance of seeing a rare event also increases. It is like buying millions of lottery tickets. The chance of any single ticket winning is very low, but if we buy enough of them we can almost guarantee that <em>at least one</em> of the tickets will be a winner. We are simply providing <em>more opportunities</em> for a rare event to occur.</p>
 <p>Fisher acknowledged this situation, but he rejected the idea of fixing the error-rate <em>a priori</em>. Indeed, he said</p>
 <blockquote class="epigraph">
 <div><p>…the calculation is absurdly academic, for in fact no scientific worker has a fixed level of significance at which from year to year, and in all circumstances, he rejects hypotheses; he rather gives his mind to each particular case in the light of his evidence and his ideas.</p>
@@ -425,7 +427,8 @@
 </section>
 <section id="p-value-corrections-in-r">
 <h3><span class="math notranslate nohighlight">\(p\)</span>-value Corrections in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#p-value-corrections-in-r" title="Link to this heading">#</a></h3>
-<p>General access to <span class="math notranslate nohighlight">\(p\)</span>-values corrections is available in base <code class="docutils literal notranslate"><span class="pre">R</span></code> using the <code class="docutils literal notranslate"><span class="pre">p.adjust()</span></code> function. We simply supply a list of <span class="math notranslate nohighlight">\(p\)</span>-values and the name of the method we want to use and <code class="docutils literal notranslate"><span class="pre">R</span></code> will return the adjusted values. For instance</p>
+<p>In order to maintain a nominal significance level under conditions of multiple testing, we typically have to <em>adjust</em> the <span class="math notranslate nohighlight">\(p\)</span>-values for the number of tests. The idea is that we want to fix FWER = 0.05. Looking at the equation above, the only way to do that is to adjust <span class="math notranslate nohighlight">\(\alpha\)</span> to some other value. Only when <span class="math notranslate nohighlight">\(m = 1\)</span> will the FWER and <span class="math notranslate nohighlight">\(\alpha\)</span> match. So, the aim is to change <span class="math notranslate nohighlight">\(\alpha\)</span> so that the FWER is 5%, given the number of tests. Practically, this involves either changing our threshold for significance and keeping the <span class="math notranslate nohighlight">\(p\)</span>-values as they are, or keeping our threshold for significance the same and changing the <span class="math notranslate nohighlight">\(p\)</span>-values. The outcome will be the same. In general, adjusting the <span class="math notranslate nohighlight">\(p\)</span>-values and keeping our threshold at <span class="math notranslate nohighlight">\(p &lt; 0.05\)</span> is the more useful approach, as we do not need to keep a mental note of different significance thresholds across different families of tests.</p>
+<p>General access to <span class="math notranslate nohighlight">\(p\)</span>-value corrections is available in base <code class="docutils literal notranslate"><span class="pre">R</span></code> using the <code class="docutils literal notranslate"><span class="pre">p.adjust()</span></code> function. We simply supply a list of <span class="math notranslate nohighlight">\(p\)</span>-values and the name of the method we want to use and <code class="docutils literal notranslate"><span class="pre">R</span></code> will return the adjusted values. For instance</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">p.raw</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0.002</span><span class="p">,</span><span class="w"> </span><span class="m">0.765</span><span class="p">,</span><span class="w"> </span><span class="m">0.05</span><span class="p">,</span><span class="w"> </span><span class="m">0.123</span><span class="p">)</span>
@@ -441,26 +444,27 @@
 </div>
 </div>
 </div>
-<p>In this example, the basic Bonferroni method is used where each <span class="math notranslate nohighlight">\(p\)</span>-value is multiplied by the total number of <span class="math notranslate nohighlight">\(p\)</span>-values. We can see this for ourseleves by calculating this correction manually.</p>
+<p>In this example, the basic Bonferroni method is used where each <span class="math notranslate nohighlight">\(p\)</span>-value is multiplied by the total number of <span class="math notranslate nohighlight">\(p\)</span>-values. This is equivalent to dividing <span class="math notranslate nohighlight">\(\alpha\)</span> by the number of tests. For instance, if we had 13 tests then the FWER would be</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># bonferroni correction</span>
-<span class="n">n.p</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">length</span><span class="p">(</span><span class="n">p.raw</span><span class="p">)</span>
-<span class="n">p.adj</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">p.raw</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">n.p</span><span class="w"> </span>
-
-<span class="c1"># make sure all p &lt;= 1</span>
-<span class="n">p.adj</span><span class="p">[</span><span class="n">p.adj</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span>
-
-<span class="nf">print</span><span class="p">(</span><span class="n">p.adj</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="m">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="m">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">0.05</span><span class="p">)</span><span class="o">^</span><span class="m">13</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 0.008 1.000 0.200 0.492
+<div class="output text_html">0.486657916720495</div></div>
+</div>
+<p>But if we divide our <span class="math notranslate nohighlight">\(\alpha\)</span> by the number of tests, we get</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="m">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="m">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="m">0.05</span><span class="o">/</span><span class="m">13</span><span class="p">))</span><span class="o">^</span><span class="m">13</span>
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html">0.048862270649818</div></div>
 </div>
+<p>and our nominal significance level is pretty much returned to normal.</p>
 <p>In terms of other adjustment methods, <code class="docutils literal notranslate"><span class="pre">R</span></code> has 6 built-in possibilities that can be listed by calling <code class="docutils literal notranslate"><span class="pre">p.adjust.methods</span></code></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
