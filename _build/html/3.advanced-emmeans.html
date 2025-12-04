@@ -395,8 +395,10 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="advanced-uses-of-emmeans">
 <h1>Advanced Uses of <code class="docutils literal notranslate"><span class="pre">emmeans</span></code><a class="headerlink" href="#advanced-uses-of-emmeans" title="Link to this heading">#</a></h1>
+<p>In this section of the lesson, we will examine more advanced ways we can use <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>. Specifically, we will see how to implement multiple comparisons correct, how to calculate effect sizes and confidence intervals, how to make sure the follow-up tests match the Type II ANOVA tests and how to use <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> to break-down more complex higher-order ANOVA effects.</p>
 <section id="multiple-comparison-correction">
 <h2>Multiple Comparison Correction<a class="headerlink" href="#multiple-comparison-correction" title="Link to this heading">#</a></h2>
+<p>To begin with, we will focus on the topic of multiple comparison correction. This was mentioned in the previous lesson as a justification for omnibus tests. However, even if we have filtered our comparisons by first using an omnibus test, the issue of multiple testing does not go away. As such, it becomes necessary to implement some form of correction when calculating any follow-up tests.</p>
 <section id="familywise-error">
 <h3>Familywise Error<a class="headerlink" href="#familywise-error" title="Link to this heading">#</a></h3>
 <p>Remembering back to our original justification for omnibus tests, we stated that the reason given is often one of error control. This perspective is much more in the Neyman-Pearson tradition than it is in the Fisherian tradition. The notion of the familywise error (FWER) is couched in Neyman-Pearson decision making and how often we would reach a false-positive conclusion over repeated tests. Fisher did not deny that calculating many <span class="math notranslate nohighlight">\(p\)</span>-values increased the chance of seeing small <span class="math notranslate nohighlight">\(p\)</span>-values. If you do something enough times, rare events will happen. However, he advocated for context and the use of the actual magnitude of the <span class="math notranslate nohighlight">\(p\)</span>-value to guide interpretation. In contrast, Neyman-Pearson wanted strict error control at a given <span class="math notranslate nohighlight">\(\alpha\)</span>-level. To briefly review, you can calculate the probability of false-positive decisions as</p>
@@ -414,7 +416,7 @@
 \[
 \text{FWER} = 1 - (1 - 0.05)^{100} = 1 - 0.006 = 0.994.
 \]</div>
-<p>So we go from only a 5% probability of one or more false-positive under the null to a 99.4% probability of one or more false-positive under the null. As such, using a strict decision rule with a  fixed <span class="math notranslate nohighlight">\(\alpha\)</span> only works to control the error-rate when we perform a single test. As soon as we start performing multiple tests, this error rate increases because the chance of seeing a rare event also increases. It is like buying millions of lottery tickets. The chance of any single ticket winning is very low, but if we buy enough of them we can almost guarantee that <em>at least one</em> of the tickets will be a winner. We are simply providing <em>more opportunities</em> for a rare event to occur.</p>
+<p>So we go from only a 5% probability of one or more false-positives under the null to a 99.4% probability of one or more false-positives under the null. As such, using a strict decision rule with a  fixed <span class="math notranslate nohighlight">\(\alpha\)</span> only works to control the error-rate when we perform a single test. As soon as we start performing multiple tests, this error rate increases because the chance of seeing a rare event also increases. It is like buying millions of lottery tickets. The chance of any single ticket winning is very low, but if we buy enough of them we can almost guarantee that <em>at least one</em> of the tickets will be a winner. We are simply providing <em>more opportunities</em> for a rare event to occur.</p>
 <p>Fisher acknowledged this situation, but he rejected the idea of fixing the error-rate <em>a priori</em>. Indeed, he said</p>
 <blockquote class="epigraph">
 <div><p>…the calculation is absurdly academic, for in fact no scientific worker has a fixed level of significance at which from year to year, and in all circumstances, he rejects hypotheses; he rather gives his mind to each particular case in the light of his evidence and his ideas.</p>
@@ -425,7 +427,8 @@
 </section>
 <section id="p-value-corrections-in-r">
 <h3><span class="math notranslate nohighlight">\(p\)</span>-value Corrections in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#p-value-corrections-in-r" title="Link to this heading">#</a></h3>
-<p>General access to <span class="math notranslate nohighlight">\(p\)</span>-values corrections is available in base <code class="docutils literal notranslate"><span class="pre">R</span></code> using the <code class="docutils literal notranslate"><span class="pre">p.adjust()</span></code> function. We simply supply a list of <span class="math notranslate nohighlight">\(p\)</span>-values and the name of the method we want to use and <code class="docutils literal notranslate"><span class="pre">R</span></code> will return the adjusted values. For instance</p>
+<p>In order to maintain a nominal significance level under conditions of multiple testing, we typically have to <em>adjust</em> the <span class="math notranslate nohighlight">\(p\)</span>-values for the number of tests. The idea is that we want to fix FWER = 0.05. Looking at the equation above, the only way to do that is to adjust <span class="math notranslate nohighlight">\(\alpha\)</span> to some other value. Only when <span class="math notranslate nohighlight">\(m = 1\)</span> will the FWER and <span class="math notranslate nohighlight">\(\alpha\)</span> match. So, the aim is to change <span class="math notranslate nohighlight">\(\alpha\)</span> so that the FWER is 5%, given the number of tests. Practically, this involves either changing our threshold for significance and keeping the <span class="math notranslate nohighlight">\(p\)</span>-values as they are, or keeping our threshold for significance the same and changing the <span class="math notranslate nohighlight">\(p\)</span>-values. The outcome will be the same. In general, adjusting the <span class="math notranslate nohighlight">\(p\)</span>-values and keeping our threshold at <span class="math notranslate nohighlight">\(p &lt; 0.05\)</span> is the more useful approach, as we do not need to keep a mental note of different significance thresholds across different families of tests.</p>
+<p>General access to <span class="math notranslate nohighlight">\(p\)</span>-value corrections is available in base <code class="docutils literal notranslate"><span class="pre">R</span></code> using the <code class="docutils literal notranslate"><span class="pre">p.adjust()</span></code> function. We simply supply a list of <span class="math notranslate nohighlight">\(p\)</span>-values and the name of the method we want to use and <code class="docutils literal notranslate"><span class="pre">R</span></code> will return the adjusted values. For instance</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">p.raw</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0.002</span><span class="p">,</span><span class="w"> </span><span class="m">0.765</span><span class="p">,</span><span class="w"> </span><span class="m">0.05</span><span class="p">,</span><span class="w"> </span><span class="m">0.123</span><span class="p">)</span>
@@ -441,27 +444,36 @@
 </div>
 </div>
 </div>
-<p>In this example, the basic Bonferroni method is used where each <span class="math notranslate nohighlight">\(p\)</span>-value is multiplied by the total number of <span class="math notranslate nohighlight">\(p\)</span>-values. We can see this for ourseleves by calculating this correction manually.</p>
+<p>In this example, the basic Bonferroni method is used where each <span class="math notranslate nohighlight">\(p\)</span>-value is multiplied by the total number of <span class="math notranslate nohighlight">\(p\)</span>-values. This is equivalent to dividing <span class="math notranslate nohighlight">\(\alpha\)</span> by the number of tests. For instance, if we had 13 tests then the FWER would be</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># bonferroni correction</span>
-<span class="n">n.p</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">length</span><span class="p">(</span><span class="n">p.raw</span><span class="p">)</span>
-<span class="n">p.adj</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">p.raw</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">n.p</span><span class="w"> </span>
-
-<span class="c1"># make sure all p &lt;= 1</span>
-<span class="n">p.adj</span><span class="p">[</span><span class="n">p.adj</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span>
-
-<span class="nf">print</span><span class="p">(</span><span class="n">p.adj</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">FWER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="m">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">0.05</span><span class="p">)</span><span class="o">^</span><span class="m">13</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">FWER</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 0.008 1.000 0.200 0.492
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 0.4866579
 </pre></div>
 </div>
 </div>
 </div>
-<p>In terms of other adjustment methods, <code class="docutils literal notranslate"><span class="pre">R</span></code> has 6 built-in possibilities that can be listed by calling <code class="docutils literal notranslate"><span class="pre">p.adjust.methods</span></code></p>
+<p>But if we divide our <span class="math notranslate nohighlight">\(\alpha\)</span> by the number of tests, we get</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">FWER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="m">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="m">0.05</span><span class="o">/</span><span class="m">13</span><span class="p">))</span><span class="o">^</span><span class="m">13</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">FWER</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 0.04886227
+</pre></div>
+</div>
+</div>
+</div>
+<p>and our nominal significance level is pretty much returned to normal.</p>
+<p>In terms of other adjustment methods, <code class="docutils literal notranslate"><span class="pre">R</span></code> has several built-in possibilities that can be listed by calling <code class="docutils literal notranslate"><span class="pre">p.adjust.methods</span></code></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="n">p.adjust.methods</span><span class="p">)</span>
@@ -475,11 +487,11 @@
 </div>
 </div>
 </div>
-<p>noting that <code class="docutils literal notranslate"><span class="pre">fdr</span></code> is an alias for <code class="docutils literal notranslate"><span class="pre">BH</span></code>, and <code class="docutils literal notranslate"><span class="pre">none</span></code> is just a pass-through option that does nothing. It is somewhat beyond this lesson to go into the details of all of these. A general heuristic is to use the <code class="docutils literal notranslate"><span class="pre">holm</span></code> method as the most general-purpose approach. This is more powerful than <code class="docutils literal notranslate"><span class="pre">bonferroni</span></code>, but has no additional assumptions. If the <span class="math notranslate nohighlight">\(p\)</span>-values are <em>correlated</em> (e.g. from repeated measurements), then <code class="docutils literal notranslate"><span class="pre">hochberg</span></code> is a better choice because it relaxes the assumption of independance, yet retains good power. If you have <em>a lot</em> of <span class="math notranslate nohighlight">\(p\)</span>-values (in the hundreds or thousands), then controlling the <code class="docutils literal notranslate"><span class="pre">fdr</span></code> is a more sensitive approach than controlling the FWER. For instance, FDR is a common method used in neuroimaging where the number of simultaneous tests across the brain can be in the hundreds of thousands.</p>
+<p>It is somewhat beyond this lesson to go into the details of all of these. A general heuristic is to use the <code class="docutils literal notranslate"><span class="pre">holm</span></code> method as the most general-purpose approach. This is more powerful than <code class="docutils literal notranslate"><span class="pre">bonferroni</span></code>, but has no additional assumptions. If the <span class="math notranslate nohighlight">\(p\)</span>-values are <em>correlated</em> (e.g. from repeated measurements), then <code class="docutils literal notranslate"><span class="pre">hochberg</span></code> is a better choice because it relaxes the assumption of independance, yet retains good power. If you have <em>a lot</em> of <span class="math notranslate nohighlight">\(p\)</span>-values (in the hundreds or thousands), then controlling the <code class="docutils literal notranslate"><span class="pre">fdr</span></code> is a more sensitive approach than controlling the FWER. For instance, FDR is a common method used in neuroimaging where the number of simultaneous tests across the brain can be in the thousands. The same is true of genetics data (such as the results of a GWAS), where the number of genes can also be in the thousands.</p>
 </section>
 <section id="corrections-in-emmeans-and-families-of-tests">
 <h3>Corrections in <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> and Families of Tests<a class="headerlink" href="#corrections-in-emmeans-and-families-of-tests" title="Link to this heading">#</a></h3>
-<p>In terms of using these corrections within <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>, it is a simple as using the <code class="docutils literal notranslate"><span class="pre">adjust</span></code> argument to name the correction that we want applied. As an example, using the <code class="docutils literal notranslate"><span class="pre">holm</span></code> method with the follow-up tests of the <code class="docutils literal notranslate"><span class="pre">vs:origin</span></code> interaction gives.</p>
+<p>In terms of using these corrections within <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>, it is as simple as using the <code class="docutils literal notranslate"><span class="pre">adjust=</span></code> argument to name the correction that we want applied. As an example, using the <code class="docutils literal notranslate"><span class="pre">holm</span></code> method with the follow-up tests of the <code class="docutils literal notranslate"><span class="pre">vs:origin</span></code> interaction gives.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">vs</span><span class="o">|</span><span class="n">origin</span><span class="p">,</span><span class="w"> </span><span class="n">adjust</span><span class="o">=</span><span class="s">&quot;holm&quot;</span><span class="p">)</span>
@@ -504,8 +516,8 @@ origin = USA:
 </div>
 </div>
 <p>Now, you would be forgiven for thinking that nothing has changed here. And, in fact, you would be right. In this instance, <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> has not applied any correction, despite our request. So what is going on?</p>
-<p>The answer lies in the concept of a <em>family</em> of tests. Note from the definition of FWER that <span class="math notranslate nohighlight">\(m\)</span> was the number of tests <em>in the family</em>. Similarly, the name FWER literally indicates that the error rate is defined <em>familywise</em>. So what is a family? Simply put, it is a collection of tests that we choose to treat as a single unit with a similar inferential goal. So, there is no formal of mathematical definition here. The family is whatever we choose it to be for the purpose of Type I error control.</p>
-<p>Within <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>, a family is defined by whatever factor we place on the right-hand side of the <code class="docutils literal notranslate"><span class="pre">|</span></code> symbol. In the example above, we place <code class="docutils literal notranslate"><span class="pre">origin</span></code> here so that the effect of <code class="docutils literal notranslate"><span class="pre">vs</span></code> was evaluated at each level of <code class="docutils literal notranslate"><span class="pre">origin</span></code>. Each level of <code class="docutils literal notranslate"><span class="pre">origin</span></code> therefore forms a <em>family</em> of tests with a common inferential goal and any correction is applied within each family separately. Because the <code class="docutils literal notranslate"><span class="pre">vs</span></code> factor only has two levels only a single test is performed within each family and no correction is applied. However, if we define the interaction tests the other way around, so that the levels of <code class="docutils literal notranslate"><span class="pre">vs</span></code> form the families, we can see that the correction <em>is</em> applied.</p>
+<p>The answer lies in the concept of a <em>family</em> of tests. Note from the definition of FWER that <span class="math notranslate nohighlight">\(m\)</span> was the number of tests <em>in the family</em>. Similarly, the name FWER literally indicates that the error rate is defined <em>familywise</em>. So what is a family? Simply put, it is a collection of tests that we choose to treat as a single unit with a similar inferential goal. So, there is no formal or mathematical definition here. The family is whatever we choose it to be for the purpose of Type I error control.</p>
+<p>Within <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>, a family is defined by whatever factor we place on the right-hand side of the <code class="docutils literal notranslate"><span class="pre">|</span></code> symbol. In the example above, we place <code class="docutils literal notranslate"><span class="pre">origin</span></code> here so that the effect of <code class="docutils literal notranslate"><span class="pre">vs</span></code> was evaluated at each level of <code class="docutils literal notranslate"><span class="pre">origin</span></code>. Each level of <code class="docutils literal notranslate"><span class="pre">origin</span></code> therefore forms a <em>family</em> of tests with a common inferential goal and any correction is applied within each family separately. Because the <code class="docutils literal notranslate"><span class="pre">vs</span></code> factor only has two levels, only a single test is performed within each family and no correction is applied. However, if we define the interaction tests the other way around, so that the levels of <code class="docutils literal notranslate"><span class="pre">vs</span></code> form the families, we can see that there are 3 tests within each family and a correction <em>is</em> applied.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="o">|</span><span class="n">vs</span><span class="p">,</span><span class="w"> </span><span class="n">adjust</span><span class="o">=</span><span class="s">&quot;holm&quot;</span><span class="p">)</span>
@@ -540,7 +552,7 @@ P value adjustment: holm method for 3 tests
 </section>
 <section id="effect-sizes-and-confidence-intervals">
 <h2>Effect Sizes and Confidence Intervals<a class="headerlink" href="#effect-sizes-and-confidence-intervals" title="Link to this heading">#</a></h2>
-<p>Given that all our inference so far has relied on NHST, it is useful to know how we could produce something more in-line with the ideas of the New Statistics, focusing on <em>estimation</em> and <em>precision</em>, rather than hypothesis testing. To that end, we will breifly discuss effect sizes, confidence intervals and how they can be generated.</p>
+<p>Given that all our inference so far has relied on NHST, it is useful to know how we could produce something more in-line with the ideas of the New Statistics, focusing on <em>estimation</em> and <em>precision</em>, rather than hypothesis testing. To that end, we will briefly discuss effect sizes, confidence intervals and how they can be generated using <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> and other <code class="docutils literal notranslate"><span class="pre">R</span></code> packages.</p>
 <section id="effect-sizes-from-omnibus-tests">
 <h3>Effect Sizes from Omnibus Tests<a class="headerlink" href="#effect-sizes-from-omnibus-tests" title="Link to this heading">#</a></h3>
 <p>As a first topic, we might want to simply replace our inferential device for all elements of our ANOVA analysis to one aligned with <em>estimation</em> rather than NHST. So, our starting point is the omnibus tests. There are a myriad of effect sizes available to use for the omnibus tests (<span class="math notranslate nohighlight">\(\eta^{2}, \text{partial}-\eta^{2}, \omega^{2}\)</span>, etc.), but perhaps the easiest to intepret is Cohen’s <span class="math notranslate nohighlight">\(f^{2}\)</span>. This is defined in terms of the <span class="math notranslate nohighlight">\(R^{2}\)</span> from the the null and full models, so has a direct connection with the ANOVA as a model comparisons procedure. The formula is given by</p>
@@ -548,8 +560,8 @@ P value adjustment: holm method for 3 tests
 \[
 f^{2} = \frac{R^{2}_{\text{full}} - R^{2}_{\text{null}}}{1 - R^{2}_{full}}.
 \]</div>
-<p>Remembering that <span class="math notranslate nohighlight">\(R^{2}\)</span> gives the proportion of variance explained by the model, <span class="math notranslate nohighlight">\(f^{2}\)</span> tells us how large the change in variance explained is, relative to how much variance is still left over. The bigger <span class="math notranslate nohighlight">\(f^{2}\)</span> is, the more variance the full model has explained, relative to how much still remains to be explained. The square-root is also taken sometimes to give Cohen’s <span class="math notranslate nohighlight">\(f\)</span>, which is the same matric but expressed in units of <em>standard deviation</em>.</p>
-<p>To calculate this in <code class="docutils literal notranslate"><span class="pre">R</span></code>, we can make use of the <code class="docutils literal notranslate"><span class="pre">effectsize</span></code> package</p>
+<p>Remembering that <span class="math notranslate nohighlight">\(R^{2}\)</span> gives the proportion of variance explained by the model, <span class="math notranslate nohighlight">\(f^{2}\)</span> tells us how large the change in variance explained is, relative to how much variance is still left over. The bigger <span class="math notranslate nohighlight">\(f^{2}\)</span> is, the more variance the full model has explained, relative to how much still remains to be explained. The square-root can also taken sometimes to give Cohen’s <span class="math notranslate nohighlight">\(f\)</span>, which is the same matric but expressed in units of <em>standard deviation</em>.</p>
+<p>To calculate these values in <code class="docutils literal notranslate"><span class="pre">R</span></code>, we can make use of the <code class="docutils literal notranslate"><span class="pre">effectsize</span></code> package</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">effectsize</span><span class="p">)</span>
@@ -573,12 +585,25 @@ origin:vs |                0.64 | [0.22, Inf]
 </div>
 </div>
 </div>
-<p>So how do we interpret this? One approach is to use Cohen’s own cutoffs of … However, this is controversial because these values are somewhat arbitrary and realistically cannot be universally applicable in all situations. In addition, if all we are doing is determining how meaningful effects are based on arbitrary cut-offs, we are not doing much better than NHST with <span class="math notranslate nohighlight">\(\alpha = 0.05\)</span>. The more <em>New Statistics</em> way is to interpret each effect on its own in relation to its mangitude and precision. For instance, we can see that <code class="docutils literal notranslate"><span class="pre">origin</span></code> has the largest effect, followed by <code class="docutils literal notranslate"><span class="pre">origin:vs</span></code> and then <code class="docutils literal notranslate"><span class="pre">vs</span></code> alone. Focusing on the interaction, <span class="math notranslate nohighlight">\(f^2 = 0.64^2 = 0.41\)</span>. So, the interaction’s contribution to the model is 41% as large as the residual variance of the full model. This feels a bit wonky to interpret, but we need to think of the residual variance of the full model as our <em>noise floor</em>. For this model, we cannot make the noise any smaller than this value. As such, this is our benchmark by which we judge the variance reduced by a given predictor. However, this still does not feel particularly <em>intuitive</em>. The problem is that <em>all</em> omnibus effect sizes are a compromise because an omnibus effect is a <em>pattern</em> not a <em>quantity</em>. In trying to reduce this to a single number, we run into difficulties because, funamentally, an omnibus test is not related to any practical effect we are actually interested in. In a way, this idea of an “overall effect” is not really of much use to us and is difficult to define in any coherent way that relates to the actual differences in the data that we care about.</p>
-<p>On this basis, it is not often worth worrying about effect sizes on omnibus tests. Indeed, from the perspective of <em>estimation</em>, omnibus tests are not really of any interest. If we take them as a form of error-control, then this is no longer relevant because we are only interested in effects and their precision, not long-run decision making. If we take them as a form of time-saving screening, this is largely unnecessary in the modern world because computers can create all the comparisons we want instantaneously. The only legitimate argument in their favour is the idea that omnibus tests can serve as an <em>optional noise filter</em>, giving you a quick global check on whether a factor has any signal worth interpreting before diving into multiple individual effects. This is more coherently expressed in the idea of finding the <em>best model</em> for the data before interpreting the effects and so will depend upon what metric is used to define “best” in this scenario. Indeed, we can simply replace the idea of omnibus tests with the idea of <em>model building</em> and then interpret the individual comparisons once we have a model we are happy with. This is a much more modern and coherent perspective than omnibus ANOVA tests. We will see more about model comparisons and model building in the Machine Learning module next semester.</p>
+<p>Notice that we now have effect size measures for each effect, as well as a <em>one-sided</em> confidence interval (CI). The fact that the CI is only a lower-bound is not problematic, as we rarely care about an effect being <em>too big</em>. Rather, we can get a sense of the precision and how small the effect <em>might</em> be from the lower-bound alone.</p>
+<p>So how do we interpret the values of <span class="math notranslate nohighlight">\(f\)</span>? One approach is to use Cohen’s own cutoffs of</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(f = 0.10\)</span> (<em>small</em>)</p></li>
+<li><p><span class="math notranslate nohighlight">\(f = 0.25\)</span> (<em>medium</em>)</p></li>
+<li><p><span class="math notranslate nohighlight">\(f = 0.40\)</span> (<em>large</em>)</p></li>
+</ul>
+<p>On this basis, we have found 3 <em>large</em> effects, though only <code class="docutils literal notranslate"><span class="pre">origin</span></code> is unambiguously large when we take the precision into account. The lower-bound on both <code class="docutils literal notranslate"><span class="pre">vs</span></code> and <code class="docutils literal notranslate"><span class="pre">origin:vs</span></code> dip into the <em>small-medium</em> range, making their magnitude more uncertain.</p>
+<p>Although seemingly quite simple, this approach is controversial because the values given by Cohen are entirely arbitrary and realistically cannot be universally applicable in all situations. What Cohen calls a <em>small</em> effect could actually be quite large in certain contexts, where data is fundamentally more noisy. In addition, it is difficult to not fall into the trap of equating <em>magnitude</em> with <em>meaning</em>. A <em>small</em> effect could still be important and meaningful, but the implication is often that <em>small</em> = <em>uninteresting</em>. Finally, if all we are doing is determining how meaningful effects are based on arbitrary cut-offs, we are not doing much better than NHST with <span class="math notranslate nohighlight">\(p &lt; 0.05\)</span>. Indeed, rather than dichotomising evidence, we have simply <em>trichotomised</em> it.</p>
+<p>The more <em>New Statistics</em> way is to interpret each effect on its own in relation to its mangitude and precision. For instance, we can see that <code class="docutils literal notranslate"><span class="pre">origin</span></code> has the largest effect, followed by <code class="docutils literal notranslate"><span class="pre">origin:vs</span></code> and then <code class="docutils literal notranslate"><span class="pre">vs</span></code> alone. Focusing on the interaction, <span class="math notranslate nohighlight">\(f^2 = 0.64^2 = 0.41\)</span>. So, the interaction’s contribution to the model is 41% as large as the residual variance of the full model. This feels a bit wonky to interpret, but we need to think of the residual variance of the full model as our <em>noise floor</em>. For this model, we cannot make the noise any smaller than this value. As such, this is our benchmark by which we judge the variance reduced by a given predictor. This magnitude is not nothing, even when we take the lower-bound of the CI into account, so we have some good justification for following the interaction up with further tests.</p>
+<p>Unfortunately, even when this process is explained it still does not feel particularly <em>intuitive</em>. The problem is that <em>all</em> omnibus effect sizes are a compromise because an omnibus effect is a <em>pattern</em> not a <em>quantity</em>. In trying to reduce this to a single number, we run into interpretational difficulties because, funamentally, an omnibus test is not related to any practical effect we are actually interested in. In a way, this idea of an “overall effect” is not really of much use to us and is difficult to define in any coherent way that relates to the actual differences in the data that we care about.</p>
+<div class="warning admonition">
+<p class="admonition-title">Omnibus effect sizes are not that useful!</p>
+<p>Given the discussion above, it is not actually worth worrying about effect sizes on omnibus tests. Indeed, from the perspective of <em>estimation</em>, omnibus tests are not really of any interest. If we take them as a form of error-control, then this is no longer relevant because we are only interested in effects and their precision, not long-run decision making. If we take them as a form of time-saving screening, this is largely unnecessary in the modern world because computers can create all the comparisons we want instantaneously. The only legitimate argument in their favour is the idea that omnibus tests can serve as an <em>optional noise filter</em>, giving you a quick global check on whether a factor has any signal worth interpreting before diving into multiple individual effects. This is more coherently expressed in the idea of finding the <em>best model</em> for the data before interpreting the effects and so will depend upon what metric is used to define “best” in this scenario. Indeed, we can simply replace the idea of omnibus tests with the idea of <em>model building</em> and then interpret the individual comparisons once we have a model we are happy with. This is a much more modern and coherent perspective than omnibus ANOVA tests. We will learn more about model comparisons and model building in the Machine Learning module next semester.</p>
+</div>
 </section>
 <section id="effect-sizes-from-emmeans">
 <h3>Effect Sizes from <code class="docutils literal notranslate"><span class="pre">emmeans</span></code><a class="headerlink" href="#effect-sizes-from-emmeans" title="Link to this heading">#</a></h3>
-<p>The much more interpretable application of effect sizes comes directly from the individual comparisons of means. This is where we can use Cohen’s <span class="math notranslate nohighlight">\(d\)</span> as an easily interpretable standardised mean difference on the scale of the standard deviation. This can be calculated directly using the <code class="docutils literal notranslate"><span class="pre">eff_size()</span></code> function from <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>. For instance</p>
+<p>Given that effect sizes on omnibus tests are fraught with interpretational difficulties, the much more practical application of effect sizes comes directly from the individual comparisons of means. Indeed, these comparisons are the actual things we are interested in, rather than the somewhat vague and unhelpful omnibus tests. This is where we can use Cohen’s <span class="math notranslate nohighlight">\(d\)</span> as an easily interpretable standardised mean difference on the scale of the standard deviation. This can be calculated directly using the <code class="docutils literal notranslate"><span class="pre">eff_size()</span></code> function from <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>. For instance</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">vs</span><span class="o">|</span><span class="n">origin</span><span class="p">)</span>
@@ -634,7 +659,7 @@ Confidence level used: 0.95
 
 <span class="w">    </span><span class="c1"># Plot</span>
 <span class="w">    </span><span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y1</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&quot;l&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">lwd</span><span class="o">=</span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="s">&quot;blue&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">xlab</span><span class="o">=</span><span class="s">&quot;Value&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="o">=</span><span class="s">&quot;Density&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="n">main</span><span class="o">=</span><span class="nf">paste0</span><span class="p">(</span><span class="s">&quot;Cohen&#39;s d = &quot;</span><span class="p">,</span><span class="n">d</span><span class="p">))</span>
+<span class="w">         </span><span class="n">main</span><span class="o">=</span><span class="nf">paste0</span><span class="p">(</span><span class="s">&quot;Cohen&#39;s d = &quot;</span><span class="p">,</span><span class="n">d</span><span class="p">))</span>
 
 <span class="w">    </span><span class="nf">lines</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y2</span><span class="p">,</span><span class="w"> </span><span class="n">lwd</span><span class="o">=</span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="s">&quot;red&quot;</span><span class="p">)</span>
 
@@ -642,7 +667,7 @@ Confidence level used: 0.95
 <span class="w">    </span><span class="nf">abline</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">lwd</span><span class="o">=</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="s">&quot;blue&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">lty</span><span class="o">=</span><span class="m">2</span><span class="p">)</span>
 <span class="w">    </span><span class="nf">abline</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="n">d</span><span class="p">,</span><span class="w"> </span><span class="n">lwd</span><span class="o">=</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="s">&quot;red&quot;</span><span class="p">,</span><span class="w">  </span><span class="n">lty</span><span class="o">=</span><span class="m">2</span><span class="p">)</span>
 
-<span class="w">    </span><span class="nf">legend</span><span class="p">(</span><span class="s">&quot;topright&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">legend</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;Group 1 ~ N(  0, 1)&quot;</span><span class="p">,</span><span class="w"> </span><span class="nf">paste0</span><span class="p">(</span><span class="s">&quot;Group 2 ~ N(&quot;</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="s">&quot;, 1)&quot;</span><span class="p">)),</span>
+<span class="w">    </span><span class="nf">legend</span><span class="p">(</span><span class="s">&quot;topright&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">legend</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;Group 1 ~ N(0,1)&quot;</span><span class="p">,</span><span class="w"> </span><span class="nf">paste0</span><span class="p">(</span><span class="s">&quot;Group 2 ~ N(&quot;</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="s">&quot;,1)&quot;</span><span class="p">)),</span>
 <span class="w">           </span><span class="n">col</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;blue&quot;</span><span class="p">,</span><span class="s">&quot;red&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">lwd</span><span class="o">=</span><span class="m">3</span><span class="p">)</span>
 <span class="p">}</span>
 
@@ -652,7 +677,7 @@ Confidence level used: 0.95
 </div>
 </details>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="_images/32d45080c6dcaeaa5c22cd7f672893c4bdc428dfbd74ba6a7ecdddc3061669ec.png"><img alt="_images/32d45080c6dcaeaa5c22cd7f672893c4bdc428dfbd74ba6a7ecdddc3061669ec.png" src="_images/32d45080c6dcaeaa5c22cd7f672893c4bdc428dfbd74ba6a7ecdddc3061669ec.png" style="width: 420px; height: 420px;" /></a>
+<a class="reference internal image-reference" href="_images/647ba11a64e23591c2aba9306142afdce6742aebde0dd1b69c454328ed186ba7.png"><img alt="_images/647ba11a64e23591c2aba9306142afdce6742aebde0dd1b69c454328ed186ba7.png" src="_images/647ba11a64e23591c2aba9306142afdce6742aebde0dd1b69c454328ed186ba7.png" style="width: 420px; height: 420px;" /></a>
 </div>
 </div>
 <p>So, in all cases, this is potentially an interesting effect. However, we also need to consider the precision. For he <code class="docutils literal notranslate"><span class="pre">Europe</span></code> comparison, the 95% CI is <span class="math notranslate nohighlight">\([0.30,2.68]\)</span>, which is reasonably uncertain. It suggests that the true effect could be as small as <span class="math notranslate nohighlight">\(d=0.3\)</span> (a tiny mean shift) or as large as <span class="math notranslate nohighlight">\(d=2.68\)</span> (quite a large mean shift). So whilst this is at least indicative of a <em>positive</em> effect, its exact magnitude remains a bit uncertain. Similarly, the 95% CI for <code class="docutils literal notranslate"><span class="pre">USA</span></code> is <span class="math notranslate nohighlight">\([0.04,2.87]\)</span>, which is even wider and thus even more uncertain. Finally, the interval for <code class="docutils literal notranslate"><span class="pre">Japan</span></code> is <span class="math notranslate nohighlight">\([-3.73,0.16]\)</span>, which is even more uncertain, especially as it includes both 0 and a reversal of the direction of the effect. So, based on this, we are most confident about the estimate for <code class="docutils literal notranslate"><span class="pre">Europe</span></code>, less so about the estimate for <code class="docutils literal notranslate"><span class="pre">USA</span></code> and even less so about the estimate for <code class="docutils literal notranslate"><span class="pre">Japan</span></code>.</p>
@@ -660,12 +685,141 @@ Confidence level used: 0.95
 </section>
 <section id="type-ii-follow-up-tests">
 <h2>Type II Follow-up Tests<a class="headerlink" href="#type-ii-follow-up-tests" title="Link to this heading">#</a></h2>
-<p>… If we go back to our original (non-fake) data where there is no 2-way interaction, …</p>
+<p>Returning back to the concept of omnibus tests, there is an important detail that we need to understand about the means generated by <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>. To see this, let us go back to our original (non-fake) <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> data where there is <em>no</em> 2-way interaction.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vs</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">origin</span><span class="o">:</span><span class="n">vs</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">Anova</span><span class="p">(</span><span class="n">mod</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Anova Table (Type II tests)
+
+Response: mpg
+          Sum Sq Df F value    Pr(&gt;F)    
+origin    179.61  2  5.2153 0.0124621 *  
+vs        282.26  1 16.3921 0.0004117 ***
+origin:vs   2.21  2  0.0641 0.9380730    
+Residuals 447.70 26                      
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+</pre></div>
+</div>
+</div>
+</div>
+<p>On this basis, we may wish to follow-up the main effects using <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>. Let us see what happens if we do this for <code class="docutils literal notranslate"><span class="pre">vs</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">vs</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">emm</span><span class="o">$</span><span class="n">contrasts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NOTE: Results may be misleading due to involvement in interactions
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> contrast              estimate   SE df t.ratio p.value
+ Straight - (V-shaped)      6.6 1.73 26   3.825  0.0007
+
+Results are averaged over the levels of: origin 
+</pre></div>
+</div>
+</div>
+</div>
+<p>Can you see a problem here? Given that <code class="docutils literal notranslate"><span class="pre">vs</span></code> only has 2 levels, the follow-up test should be <em>identical</em> to the ANOVA test. However, the <span class="math notranslate nohighlight">\(p\)</span>-values are different. We should also have <span class="math notranslate nohighlight">\(t^2 = F\)</span>, but</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">t</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.data.frame</span><span class="p">(</span><span class="n">emm</span><span class="o">$</span><span class="n">contrasts</span><span class="p">)</span><span class="o">$</span><span class="n">t.ratio</span><span class="p">[</span><span class="m">1</span><span class="p">]</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">t</span><span class="o">^</span><span class="m">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 14.62853
+</pre></div>
+</div>
+</div>
+</div>
+<p>So what is going on? The answer is that, in the presence of an interaction term, the means used by <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> correspond to the Type III tests rather than the Type II. We can see this if we generate the Type III ANOVA table</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod.sum</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vs</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">origin</span><span class="o">:</span><span class="n">vs</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">,</span><span class="w"> </span>
+<span class="w">              </span><span class="n">contrasts</span><span class="o">=</span><span class="nf">list</span><span class="p">(</span><span class="n">origin</span><span class="o">=</span><span class="n">contr.sum</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                             </span><span class="n">vs</span><span class="o">=</span><span class="n">contr.sum</span><span class="p">))</span>
+
+<span class="c1"># Type III ANOVA table</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">Anova</span><span class="p">(</span><span class="n">mod.sum</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&quot;III&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Anova Table (Type III tests)
+
+Response: mpg
+             Sum Sq Df  F value    Pr(&gt;F)    
+(Intercept) 10488.5  1 609.1096 &lt; 2.2e-16 ***
+origin        166.5  2   4.8354 0.0163901 *  
+vs            251.9  1  14.6285 0.0007372 ***
+origin:vs       2.2  2   0.0641 0.9380730    
+Residuals     447.7 26                       
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+</pre></div>
+</div>
+</div>
+</div>
+<p>where we can see that the effect for <code class="docutils literal notranslate"><span class="pre">vs</span></code> now matches the result from <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>.</p>
+<p>In order to get main effect follow-up tests that match the Type II tests, we need to provide the <code class="docutils literal notranslate"><span class="pre">submodel=&quot;type2&quot;</span></code> argument.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">vs</span><span class="p">,</span><span class="w"> </span><span class="n">submodel</span><span class="o">=</span><span class="s">&quot;type2&quot;</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">emm</span><span class="o">$</span><span class="n">contrasts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NOTE: Results may be misleading due to involvement in interactions
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> contrast              estimate   SE df t.ratio p.value
+ Straight - (V-shaped)     6.38 1.58 26   4.049  0.0004
+
+Results are averaged over the levels of: origin 
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now the results match and the follow-up tests are calculated from a model where the interaction effect is assumed to be 0. We can do the same with <code class="docutils literal notranslate"><span class="pre">origin</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="p">,</span><span class="w"> </span><span class="n">submodel</span><span class="o">=</span><span class="s">&quot;type2&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">adjust</span><span class="o">=</span><span class="s">&quot;holm&quot;</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">emm</span><span class="o">$</span><span class="n">contrasts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NOTE: Results may be misleading due to involvement in interactions
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> contrast       estimate   SE df t.ratio p.value
+ Europe - Japan    -3.57 2.16 26  -1.651  0.1107
+ Europe - USA       3.50 1.69 26   2.073  0.0964
+ Japan - USA        7.07 2.26 26   3.127  0.0129
+
+Results are averaged over the levels of: vs 
+P value adjustment: holm method for 3 tests 
+</pre></div>
+</div>
+</div>
+</div>
+<p>So just remember, when following-up main effects we need to provide this argument for consistency of inference.</p>
 </section>
 <section id="higher-order-interactions">
 <h2>Higher-order Interactions<a class="headerlink" href="#higher-order-interactions" title="Link to this heading">#</a></h2>
 <p>Although we have now seen how to follow-up a 2-way interaction with <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>, things get more complex when we have even higher-order interactions in the model. In general, it is not recommended to go beyond a 3-way interaction due to the complexities that come with interpretation. You can, if you wish, but things start getting difficult very quickly. Here, we will demonstrate using <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> to break-down a 3-way interaction.</p>
-<p>In order to do so, we will be using a different dataset. Within the <code class="docutils literal notranslate"><span class="pre">datarium</span></code> package there is a dataset called <code class="docutils literal notranslate"><span class="pre">headache</span></code> that gives results from a clinical trial of 3 treatments for headaches. The factors available are <code class="docutils literal notranslate"><span class="pre">gender</span></code>, <code class="docutils literal notranslate"><span class="pre">risk</span></code> and <code class="docutils literal notranslate"><span class="pre">treatment</span></code>. The outcome variable is <code class="docutils literal notranslate"><span class="pre">pain_score</span></code>.</p>
+<p>For this demonstration, we will need a different dataset. Within the <code class="docutils literal notranslate"><span class="pre">datarium</span></code> package there is a dataset called <code class="docutils literal notranslate"><span class="pre">headache</span></code> that gives results from a clinical trial of 3 treatments for headaches. The factors available are <code class="docutils literal notranslate"><span class="pre">gender</span></code>, <code class="docutils literal notranslate"><span class="pre">risk</span></code> and <code class="docutils literal notranslate"><span class="pre">treatment</span></code>. The outcome variable is <code class="docutils literal notranslate"><span class="pre">pain_score</span></code>. For instance, the first 6 entries are given by</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;datarium&#39;</span><span class="p">)</span>
@@ -688,7 +842,7 @@ Confidence level used: 0.95
 </div>
 </div>
 </div>
-<p>We can proceed using our usual approach, though we will skip the call to <code class="docutils literal notranslate"><span class="pre">summary()</span></code> and the checking of assumptions, in the interests of saving space.</p>
+<p>We can proceed using our usual approach, though we will skip the call to <code class="docutils literal notranslate"><span class="pre">summary()</span></code> and the checking of assumptions (only in the interests of saving space).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">pain_score</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">gender</span><span class="o">*</span><span class="n">risk</span><span class="o">*</span><span class="n">treatment</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">headache</span><span class="p">)</span>
@@ -718,7 +872,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 <p>So we can see that there is a significant 3-way interaction. How do we follow this up? We could adapt the <code class="docutils literal notranslate"><span class="pre">pairwise</span> <span class="pre">~</span></code> syntax we used earlier to give</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">gender</span><span class="o">:</span><span class="n">risk</span><span class="o">|</span><span class="n">treatment</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">gender</span><span class="o">:</span><span class="n">risk</span><span class="o">|</span><span class="n">treatment</span><span class="p">,</span><span class="w"> </span><span class="n">adjust</span><span class="o">=</span><span class="s">&quot;holm&quot;</span><span class="p">)</span>
 <span class="nf">print</span><span class="p">(</span><span class="n">emm</span><span class="o">$</span><span class="n">contrasts</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -729,62 +883,40 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
  male high - female high     13.87 2.54 60   5.463  &lt;.0001
  male high - male low        16.69 2.54 60   6.571  &lt;.0001
  male high - female low      18.58 2.54 60   7.317  &lt;.0001
- female high - male low       2.81 2.54 60   1.108  0.6862
- female high - female low     4.71 2.54 60   1.854  0.2588
- male low - female low        1.90 2.54 60   0.746  0.8778
+ female high - male low       2.81 2.54 60   1.108  0.5448
+ female high - female low     4.71 2.54 60   1.854  0.2059
+ male low - female low        1.90 2.54 60   0.746  0.5448
 
 treatment = Y:
  contrast                 estimate   SE df t.ratio p.value
- male high - female high      1.17 2.54 60   0.459  0.9676
- male high - male low         9.20 2.54 60   3.624  0.0033
+ male high - female high      1.17 2.54 60   0.459  0.6477
+ male high - male low         9.20 2.54 60   3.624  0.0024
  male high - female low      13.98 2.54 60   5.505  &lt;.0001
- female high - male low       8.04 2.54 60   3.165  0.0127
+ female high - male low       8.04 2.54 60   3.165  0.0073
  female high - female low    12.81 2.54 60   5.045  &lt;.0001
- male low - female low        4.78 2.54 60   1.881  0.2471
+ male low - female low        4.78 2.54 60   1.881  0.1297
 
 treatment = Z:
  contrast                 estimate   SE df t.ratio p.value
- male high - female high     -1.35 2.54 60  -0.533  0.9506
- male high - male low         5.22 2.54 60   2.057  0.1790
- male high - female low       9.90 2.54 60   3.899  0.0014
- female high - male low       6.58 2.54 60   2.591  0.0566
+ male high - female high     -1.35 2.54 60  -0.533  0.5958
+ male high - male low         5.22 2.54 60   2.057  0.1320
+ male high - female low       9.90 2.54 60   3.899  0.0012
+ female high - male low       6.58 2.54 60   2.591  0.0480
  female high - female low    11.26 2.54 60   4.432  0.0002
- male low - female low        4.68 2.54 60   1.841  0.2645
+ male low - female low        4.68 2.54 60   1.841  0.1410
 
-P value adjustment: tukey method for comparing a family of 4 estimates 
+P value adjustment: holm method for 6 tests 
 </pre></div>
 </div>
 </div>
 </div>
 <p>However, the problem here is that the <code class="docutils literal notranslate"><span class="pre">gender</span></code> and <code class="docutils literal notranslate"><span class="pre">risk</span></code> factors have been collapsed, leading to some comparisons that keep one factor constant (e.g. <code class="docutils literal notranslate"><span class="pre">male</span> <span class="pre">high</span> <span class="pre">-</span> <span class="pre">female</span> <span class="pre">high</span></code>) whereas others that change both factors (e.g. <code class="docutils literal notranslate"><span class="pre">male</span> <span class="pre">high</span> <span class="pre">-</span> <span class="pre">female</span> <span class="pre">low</span></code>).</p>
-<p>A better approach is to get <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> to more sensibly combine the levels of the various factors. One approach is to simply generate all the means and then use the <code class="docutils literal notranslate"><span class="pre">contrast()</span></code> function with the <code class="docutils literal notranslate"><span class="pre">interaction</span></code> and <code class="docutils literal notranslate"><span class="pre">by</span></code> options. For instance</p>
+<p>A better approach is to get <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> to more sensibly combine the levels of the various factors. One approach is to use the <code class="docutils literal notranslate"><span class="pre">contrast()</span></code> function with the <code class="docutils literal notranslate"><span class="pre">interaction</span></code> and <code class="docutils literal notranslate"><span class="pre">by</span></code> options. For instance, setting one factor to <code class="docutils literal notranslate"><span class="pre">&quot;pairwise&quot;</span></code> and the other to <code class="docutils literal notranslate"><span class="pre">&quot;identity&quot;</span></code> results in the following</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">gender</span><span class="o">*</span><span class="n">risk</span><span class="o">*</span><span class="n">treatment</span><span class="p">)</span>
-<span class="nf">contrast</span><span class="p">(</span><span class="n">emm</span><span class="p">,</span><span class="w"> </span><span class="n">interaction</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="n">gender</span><span class="o">=</span><span class="s">&quot;pairwise&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">risk</span><span class="o">=</span><span class="s">&quot;pairwise&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">by</span><span class="o">=</span><span class="s">&quot;treatment&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>treatment = X:
- gender_pairwise risk_pairwise estimate   SE df t.ratio p.value
- male - female   high - low       11.98 3.59 60   3.335  0.0015
-
-treatment = Y:
- gender_pairwise risk_pairwise estimate   SE df t.ratio p.value
- male - female   high - low       -3.61 3.59 60  -1.005  0.3188
-
-treatment = Z:
- gender_pairwise risk_pairwise estimate   SE df t.ratio p.value
- male - female   high - low       -6.03 3.59 60  -1.679  0.0983
-</pre></div>
-</div>
-</div>
-</div>
-<p>This has effectively given us 3 interaction tests, one for each level of treatment. So we can conclude that there is a significant interaction effect between <code class="docutils literal notranslate"><span class="pre">gender</span></code> and <code class="docutils literal notranslate"><span class="pre">risk</span></code>, but only for treatment <code class="docutils literal notranslate"><span class="pre">X</span></code>. We could investigate this further by holding one of the factors in the <code class="docutils literal notranslate"><span class="pre">interaction</span></code> option constant by setting its contrasts to <code class="docutils literal notranslate"><span class="pre">&quot;identity&quot;</span></code>. For example</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">contrast</span><span class="p">(</span><span class="n">emm</span><span class="p">,</span><span class="w"> </span><span class="n">interaction</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="n">gender</span><span class="o">=</span><span class="s">&quot;pairwise&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">risk</span><span class="o">=</span><span class="s">&quot;identity&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">by</span><span class="o">=</span><span class="s">&quot;treatment&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">adjust</span><span class="o">=</span><span class="s">&quot;holm&quot;</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">gender</span><span class="o">*</span><span class="n">risk</span><span class="o">*</span><span class="n">treatment</span><span class="p">)</span><span class="w">            </span><span class="c1"># generate all cell means</span>
+<span class="nf">contrast</span><span class="p">(</span><span class="n">emm</span><span class="p">,</span><span class="w"> </span><span class="n">interaction</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="n">gender</span><span class="o">=</span><span class="s">&quot;pairwise&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">risk</span><span class="o">=</span><span class="s">&quot;identity&quot;</span><span class="p">),</span><span class="w"> </span>
+<span class="w">         </span><span class="n">by</span><span class="o">=</span><span class="s">&quot;treatment&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">adjust</span><span class="o">=</span><span class="s">&quot;holm&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -809,7 +941,16 @@ P value adjustment: holm method for 2 tests
 </div>
 </div>
 </div>
-<p>So we can see that the <code class="docutils literal notranslate"><span class="pre">gender</span></code> effect for treatment <code class="docutils literal notranslate"><span class="pre">X</span></code> is only within the <code class="docutils literal notranslate"><span class="pre">high</span></code> risk group and not the <code class="docutils literal notranslate"><span class="pre">low</span></code> risk group. There are marginal effect of <code class="docutils literal notranslate"><span class="pre">gender</span></code> for the other treatments, but we need to be careful interpreting these if the interaction effects were not significant. In addition, these effects may not survive multiple comparisons correction, as we will see in the next section.</p>
+<p>So we can see that there is a significant <code class="docutils literal notranslate"><span class="pre">gender</span></code> effect for treatment <code class="docutils literal notranslate"><span class="pre">X</span></code>, but only within the <code class="docutils literal notranslate"><span class="pre">high</span></code> risk group and not the <code class="docutils literal notranslate"><span class="pre">low</span></code> risk group.</p>
+<aside class="topic">
+<p class="topic-title">What do you now know?</p>
+<p>In this section, we have explored … After reading this section, you should have a good sense of:</p>
+<ul class="simple">
+<li><p>…</p></li>
+<li><p>…</p></li>
+<li><p>…</p></li>
+</ul>
+</aside>
 </section>
 </section>
 
