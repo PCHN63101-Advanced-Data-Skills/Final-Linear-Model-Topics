@@ -61,6 +61,8 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '1.unbalanced-ANOVA';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -367,9 +369,12 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-problem-of-imbalance">The Problem of Imbalance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-principle-of-marginality">The Principle of Marginality</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-i-sums-of-squares">Type I Sums-of-squares</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-ii-sums-of-squares">Type II Sums-of-squares</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-iii-sums-of-squares">Type III Sums-of-squares</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resolving-the-sums-of-squares-circus">Resolving the Sums-of-squares Circus</a></li>
 </ul>
             </nav>
         </div>
@@ -388,6 +393,14 @@
 </figure>
 <p>… Indeed, whole textbooks were written about unbalanced data (as can be seen on the <em>right</em>). So this is a topic that deserves some attention, even if it is largely <em>ignored</em> by modern teaching in Psychology. There is something of an assumption that the issues of balance have been <em>solved</em> and thus do not need considering anymore. However, this is not really true. The “solution” implemented by SAS and SPSS is the Type III sums-of-squares, which researchers continue to use because it is the default<a class="footnote-reference brackets" href="#default-foot" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. However, as discussed briefly last week, this approach is highly flawed.</p>
 <p>In this part of the lesson, we will dig deeper into the Type I/II/III debate so that you understand what each type of sums-of-squares means, when they are most appropriate to use and what the various arguments are for/against them. In general, we will be recommending Type II for 95% of all use-cases. However, it is important not to just take our word for it. Instead, it is important that you <em>understand</em> the difference and can make your own informed judgement.</p>
+<section id="the-problem-of-imbalance">
+<h2>The Problem of Imbalance<a class="headerlink" href="#the-problem-of-imbalance" title="Link to this heading">#</a></h2>
+<p>… Perhaps the most important thing to recognise here is that imbalance is only a problem when we insist on trying to interpret effects that <em>do not make sense</em> in the context of the model. For instance, trying to interpret a main effect in the presence of an interaction. If an interaction effect is <em>large</em> then the main effects make no sense however, when the interaction effect is <em>small</em>, it adds little to the predictive accuracy of the model and should not be there.</p>
+<p>The key point here is that all this hassle goes away if we just engage with the idea of <em>model building</em> and only interpret tests once we have a suitable model in place</p>
+</section>
+<section id="the-principle-of-marginality">
+<h2>The Principle of Marginality<a class="headerlink" href="#the-principle-of-marginality" title="Link to this heading">#</a></h2>
+</section>
 <section id="type-i-sums-of-squares">
 <h2>Type I Sums-of-squares<a class="headerlink" href="#type-i-sums-of-squares" title="Link to this heading">#</a></h2>
 </section>
@@ -396,6 +409,98 @@
 </section>
 <section id="type-iii-sums-of-squares">
 <h2>Type III Sums-of-squares<a class="headerlink" href="#type-iii-sums-of-squares" title="Link to this heading">#</a></h2>
+</section>
+<section id="resolving-the-sums-of-squares-circus">
+<h2>Resolving the Sums-of-squares Circus<a class="headerlink" href="#resolving-the-sums-of-squares-circus" title="Link to this heading">#</a></h2>
+<p>… The truth is that the main reason all this hassle exists is because the neat partition of the ANOVA effects disappears when the data are imbalanced. In order to resolve this, we have to choose a method of partitioning the sums-of-squares. The definitions given above come directly from SAS, who’s aim was not some principled statistical derivation that makes sense, rather it was to give their users what they wanted: identical ANOVA output irrespective of balance. Because the traditional ANOVA was not seen as an exercise in model building, it was not typical to remove terms that appeared redundant. In order to maintain this completeness, SAS wanted ANOVA tables that contained <em>all</em> terms, rather than certain terms disappearing under imbalance. As such, different methods for decomposing these effects were developed and a choice was provided.</p>
+<p>From a modern perspective, all this hassle is unnecessary if we engage with the process of <em>model building</em>. This is something we will discuss in much greater detail in the machine learning module next semester. However, the idea is very simple. If a term adds little predictive utility, remove it and create the simplest model you can. From this perspective, if the highest-order interaction is <em>small</em> it would be removed and then the lower-order terms become interpretable again. No need for Type II tests to make them intepretable <em>despite</em> the presence of the interaction term. However, if an interaction is <em>large</em>, it stays in the model and we only interpret the highest-order term for each factor. Under this scheme, the whole Type I/II/III debate disappears.</p>
+<p>As an example, say we have the model</p>
+<div class="math notranslate nohighlight">
+\[
+Y = A + B + C + AB + AC + BC + ABC.
+\]</div>
+<p>If the 3-way interaction is uninteresting, we can drop it to form</p>
+<div class="math notranslate nohighlight">
+\[
+Y = A + B + C + AB + AC + BC.
+\]</div>
+<p>Now, say that <span class="math notranslate nohighlight">\(AC\)</span> and <span class="math notranslate nohighlight">\(BC\)</span> are also uninteresting, we can settle on</p>
+<div class="math notranslate nohighlight">
+\[
+Y = A + B + C + AB.
+\]</div>
+<p>We would now interpret the 2-way interaction <span class="math notranslate nohighlight">\(AB\)</span> and the main effect <span class="math notranslate nohighlight">\(C\)</span>. Because we have respected marginality here when building these models, all these terms have interpretable effects</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;datarium&#39;</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="s">&#39;car&#39;</span><span class="p">)</span>
+<span class="nf">data</span><span class="p">(</span><span class="n">headache</span><span class="p">)</span>
+<span class="n">mod</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">pain_score</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">gender</span><span class="o">*</span><span class="n">risk</span><span class="o">*</span><span class="n">treatment</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">headache</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">Anova</span><span class="p">(</span><span class="n">mod</span><span class="p">))</span>
+
+<span class="n">mod</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">pain_score</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">gender</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">risk</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">treatment</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">risk</span><span class="o">:</span><span class="n">treatment</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">headache</span><span class="p">)</span>
+
+<span class="n">mod.sum</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">pain_score</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">gender</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">risk</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">treatment</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">risk</span><span class="o">:</span><span class="n">treatment</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">headache</span><span class="p">,</span><span class="w"> </span><span class="n">contrasts</span><span class="o">=</span><span class="nf">list</span><span class="p">(</span><span class="n">gender</span><span class="o">=</span><span class="n">contr.sum</span><span class="p">,</span><span class="n">risk</span><span class="o">=</span><span class="n">contr.sum</span><span class="p">,</span><span class="n">treatment</span><span class="o">=</span><span class="n">contr.sum</span><span class="p">))</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="nf">anova</span><span class="p">(</span><span class="n">mod</span><span class="p">))</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">Anova</span><span class="p">(</span><span class="n">mod</span><span class="p">))</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">Anova</span><span class="p">(</span><span class="n">mod.sum</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&quot;III&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Anova Table (Type II tests)
+
+Response: pain_score
+                       Sum Sq Df F value    Pr(&gt;F)    
+gender                 313.36  1 16.1957 0.0001625 ***
+risk                  1793.56  1 92.6988   8.8e-14 ***
+treatment              283.17  2  7.3177 0.0014328 ** 
+gender:risk              2.73  1  0.1411 0.7084867    
+gender:treatment       129.18  2  3.3384 0.0422001 *  
+risk:treatment          27.60  2  0.7131 0.4942214    
+gender:risk:treatment  286.60  2  7.4063 0.0013345 ** 
+Residuals             1160.89 60                      
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Analysis of Variance Table
+
+Response: pain_score
+               Df  Sum Sq Mean Sq F value    Pr(&gt;F)    
+gender          1  313.36  313.36 12.8962 0.0006333 ***
+risk            1 1793.56 1793.56 73.8135 2.607e-12 ***
+treatment       2  283.17  141.58  5.8269 0.0047027 ** 
+risk:treatment  2   27.60   13.80  0.5678 0.5695375    
+Residuals      65 1579.40   24.30                      
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Anova Table (Type II tests)
+
+Response: pain_score
+                Sum Sq Df F value    Pr(&gt;F)    
+gender          313.36  1 12.8962 0.0006333 ***
+risk           1793.56  1 73.8135 2.607e-12 ***
+treatment       283.17  2  5.8269 0.0047027 ** 
+risk:treatment   27.60  2  0.5678 0.5695375    
+Residuals      1579.40 65                      
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Anova Table (Type III tests)
+
+Response: pain_score
+               Sum Sq Df    F value    Pr(&gt;F)    
+(Intercept)    434108  1 17865.6292 &lt; 2.2e-16 ***
+gender            313  1    12.8962 0.0006333 ***
+risk             1794  1    73.8135 2.607e-12 ***
+treatment         283  2     5.8269 0.0047027 ** 
+risk:treatment     28  2     0.5678 0.5695375    
+Residuals        1579 65                         
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+</pre></div>
+</div>
+</div>
+</div>
 <aside class="topic">
 <p class="topic-title">What do you now know?</p>
 <p>In this section, we have explored … After reading this section, you should have a good sense of:</p>
@@ -480,9 +585,12 @@
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-problem-of-imbalance">The Problem of Imbalance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-principle-of-marginality">The Principle of Marginality</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-i-sums-of-squares">Type I Sums-of-squares</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-ii-sums-of-squares">Type II Sums-of-squares</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-iii-sums-of-squares">Type III Sums-of-squares</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resolving-the-sums-of-squares-circus">Resolving the Sums-of-squares Circus</a></li>
 </ul>
   </nav></div>
 
