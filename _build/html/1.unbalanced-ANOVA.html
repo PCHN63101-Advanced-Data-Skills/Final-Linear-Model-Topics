@@ -16,20 +16,22 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-  
-  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
-
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b76e3c8a" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -37,10 +39,11 @@
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="_static/test.css?v=90b7ad94" />
   
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
@@ -67,6 +70,7 @@
     <link rel="prev" title="Introduction" href="0.intro.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -82,19 +86,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="search.html"
       method="get">
@@ -102,7 +95,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search this book..."
          aria-label="Search this book..."
          autocomplete="off"
@@ -110,8 +102,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -127,7 +119,8 @@
       
       
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -157,21 +150,17 @@
     
     
     <img src="_static/logo.png" class="logo__image only-light" alt="Linear Models V: Advanced ANOVA Topics - Home"/>
-    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Linear Models V: Advanced ANOVA Topics - Home"/>`);</script>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="Linear Models V: Advanced ANOVA Topics - Home"/>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
@@ -196,9 +185,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -342,24 +336,16 @@
 
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-  </button>
-`);
-</script>
+</button>
 <button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
@@ -383,7 +369,10 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-problem-of-imbalance">The Problem of Imbalance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-problem-of-imbalance">The Problem of Imbalance</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#venn-diagram-intuition">Venn Diagram Intuition</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-principle-of-marginality">The Principle of Marginality</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-i-sums-of-squares">Type I Sums-of-squares</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-ii-sums-of-squares">Type II Sums-of-squares</a></li>
@@ -400,19 +389,7 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">car</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading required package: carData
-</pre></div>
-</div>
-</div>
-</div>
-<section class="tex2jax_ignore mathjax_ignore" id="unbalanced-anova-models">
+  <section class="tex2jax_ignore mathjax_ignore" id="unbalanced-anova-models">
 <h1>Unbalanced ANOVA Models<a class="headerlink" href="#unbalanced-anova-models" title="Link to this heading">#</a></h1>
 <figure class="align-right">
 <a class="reference internal image-reference" href="_images/unbalanced-text.webp"><img alt="_images/unbalanced-text.webp" src="_images/unbalanced-text.webp" style="width: 240.0px; height: 360.8px;" /></a>
@@ -421,12 +398,37 @@ document.write(`
 <p>In this part of the lesson, we will dig deeper into the Type I/II/III debate so that you understand what each type of sums-of-squares means, when they are most appropriate to use and what the various arguments are for/against them. In general, we will be recommending Type II for 95% of all use-cases. However, it is important not to just take our word for it. Instead, it is important that you <em>understand</em> the difference and can make your own informed judgement.</p>
 <section id="the-problem-of-imbalance">
 <h2>The Problem of Imbalance<a class="headerlink" href="#the-problem-of-imbalance" title="Link to this heading">#</a></h2>
-<p>… Perhaps the most important thing to recognise here is that imbalance is only a problem when we insist on trying to interpret effects that <em>do not make sense</em> in the context of the model. For instance, trying to interpret a main effect in the presence of an interaction. If an interaction effect is <em>large</em> then the main effects make no sense however, when the interaction effect is <em>small</em>, it adds little to the predictive accuracy of the model and should not be there.</p>
-<p>The key point here is that all this hassle goes away if we just engage with the idea of <em>model building</em> and only interpret tests once we have a suitable model in place</p>
+<p>The arithmetic behind the traditional ANOVA relates to a simple decomposition of the sums-of-squares. When there are an equal number of data points in each cell (using a 2-way ANOVA as an example), we simply have</p>
+<div class="math notranslate nohighlight">
+\[
+SS_{\text{A}} + SS_{\text{B}} + SS_{\text{AB}} = SS_{\text{Model}}.
+\]</div>
+<p>So, the total amount of variance explained by the model can be neatly decomposed into several chunks. These decompositions are said to be <em>orthogonal</em>, which you can take to mean <em>independant</em>. The value of each sum-of-squares is not affected by any of the others and they represent a neat and simple partition of the amount explained by the model. Together, we then have</p>
+<div class="math notranslate nohighlight">
+\[
+SS_{\text{Total}} = SS_{\text{Model}} + SS_{\text{Error}}.
+\]</div>
+<p>Unfortunately, when there is an <em>unequal</em> number of data points across cells, application of the standard ANOVA equations results in</p>
+<div class="math notranslate nohighlight">
+\[
+SS_{\text{A}} + SS_{\text{B}} + SS_{\text{AB}} &gt; SS_{\text{Model}}.
+\]</div>
+<p>Adding these decompositions together is now <em>not</em> the same as the amount of variance explained by the model. What happens is that the effects “bleed” into each other. They no longer represent an independent partition of the variance. A lack of balance kills the symmetry that allows the ANOVA to neatly decompose the variance. What this means practically is that each effect now contains some element of the other effects and adding them together means we double-count some chunks of variance. This leads to a larger <span class="math notranslate nohighlight">\(SS_{\text{Model}}\)</span> than there actually is.</p>
+<p>What does this mean in terms of using an ANOVA model? It means that each sums-of-squares we calculate is influenced <em>by the other terms in the model</em>. This means we have several options when we decompose the sums-of-squares in terms of what else is in the model at the time. Each chunk that gets calculated will represent the variance associated with a given effect <em>minus</em> the overlap with anything else in the model. Unfortunately, wherever there is choice, there is also disagreement. For an unbalance ANOVA, this disagreement surrounds 3 possible ways of decomposing the sums-of-squares in an unbalanced ANOVA model. These are known as Type I, Type II and Type III sums-of-squares and will be the focus of this part of the lesson.</p>
+<section id="venn-diagram-intuition">
+<h3>Venn Diagram Intuition<a class="headerlink" href="#venn-diagram-intuition" title="Link to this heading">#</a></h3>
+<p>Perhaps the simplest way to gain intuition about what happens in an unbalanced ANOVA is to return to the Venn diagram visualisation we saw previously in multiple regression. Here, each circle represents the sum-of-squares associated with each main effect A and B, along with their interaction AB.</p>
+<p>When the ANOVA is <em>balanced</em>, the situation is as shown below</p>
+<p>…</p>
+<p>Here, there is no overlap between the circles. Each effect is completely independant and it does not matter what else is in the model at the point where we calculate its sum-of-squares. We could entirely remove B and AB when calculating <span class="math notranslate nohighlight">\(SS_{\text{A}}\)</span> and it would not make any difference. The model therefore does not matter, as the sum-of-squares will be the same.</p>
+<p>When the ANOVA is <em>unbalanced</em>, the situation is as shown below</p>
+<p>…</p>
+<p>Here, the effects now <em>overlap</em>. This means there is some element of both <span class="math notranslate nohighlight">\(B\)</span> and <span class="math notranslate nohighlight">\(AB\)</span> inside the sum-of-squares for <span class="math notranslate nohighlight">\(A\)</span>. We can now see why the sum of these terms is too big. If we count the <span class="math notranslate nohighlight">\(A\)</span> circle, <span class="math notranslate nohighlight">\(B\)</span> circle and <span class="math notranslate nohighlight">\(AB\)</span> circle we will double-count the areas of overlap and the sum will be too big. This is why <span class="math notranslate nohighlight">\(SS_{\text{A}} + SS_{\text{B}} + SS_{\text{AB}} &gt; SS_{\text{Model}}\)</span>. Furthermore, we now have several options when it comes to decomposing the value of the sums-of-sqaures.</p>
+<p>Using <span class="math notranslate nohighlight">\(SS_{\text{A}}\)</span> as an examples, what we could do is ….</p>
+</section>
 </section>
 <section id="the-principle-of-marginality">
 <h2>The Principle of Marginality<a class="headerlink" href="#the-principle-of-marginality" title="Link to this heading">#</a></h2>
-<p>One of the key ways of resolving</p>
 </section>
 <section id="type-i-sums-of-squares">
 <h2>Type I Sums-of-squares<a class="headerlink" href="#type-i-sums-of-squares" title="Link to this heading">#</a></h2>
@@ -436,104 +438,6 @@ document.write(`
 </section>
 <section id="type-iii-sums-of-squares">
 <h2>Type III Sums-of-squares<a class="headerlink" href="#type-iii-sums-of-squares" title="Link to this heading">#</a></h2>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">data</span><span class="p">(</span><span class="n">mtcars</span><span class="p">)</span>
-
-<span class="c1"># Origin factor</span>
-<span class="n">mtcars</span><span class="o">$</span><span class="n">origin</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&#39;Japan&#39;</span><span class="p">,</span><span class="s">&#39;Japan&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span>
-<span class="w">                   </span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span>
-<span class="w">                   </span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Japan&#39;</span><span class="p">,</span><span class="s">&#39;Japan&#39;</span><span class="p">,</span><span class="s">&#39;Japan&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span>
-<span class="w">                   </span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">)</span>
-<span class="n">mtcars</span><span class="o">$</span><span class="n">origin</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.factor</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">origin</span><span class="p">)</span>
-
-<span class="c1"># VS factor</span>
-<span class="n">vs.lab</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rep</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="nf">length</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">vs</span><span class="p">))</span><span class="w"> </span>
-<span class="n">vs.lab</span><span class="p">[</span><span class="n">mtcars</span><span class="o">$</span><span class="n">vs</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">0</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">&quot;V-shaped&quot;</span>
-<span class="n">vs.lab</span><span class="p">[</span><span class="n">mtcars</span><span class="o">$</span><span class="n">vs</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">&quot;Straight&quot;</span>
-<span class="n">mtcars</span><span class="o">$</span><span class="n">vs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.factor</span><span class="p">(</span><span class="n">vs.lab</span><span class="p">)</span>
-
-<span class="c1"># Create fake interaction</span>
-<span class="n">mpg.fake</span><span class="w">          </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="w">                  </span><span class="c1"># copy mpg</span>
-<span class="n">mpg.idx</span><span class="w">           </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">origin</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;Japan&quot;</span><span class="w"> </span><span class="o">&amp;</span>
-<span class="w">                     </span><span class="n">mtcars</span><span class="o">$</span><span class="n">vs</span><span class="w">     </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;V-shaped&quot;</span><span class="w"> </span><span class="c1"># index of Japan-VShaped cell</span>
-<span class="n">mpg.fake</span><span class="p">[</span><span class="n">mpg.idx</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mpg.fake</span><span class="p">[</span><span class="n">mpg.idx</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">15</span><span class="w">      </span><span class="c1"># add constant to all data from that cell</span>
-<span class="n">mtcars</span><span class="o">$</span><span class="n">mpg.fake</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mpg.fake</span><span class="w">   </span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod.full</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg.fake</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">vs</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vs</span><span class="o">:</span><span class="n">origin</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
-
-<span class="nf">print</span><span class="p">(</span><span class="nf">drop1</span><span class="p">(</span><span class="n">mod.full</span><span class="p">,</span><span class="w"> </span><span class="n">scope</span><span class="o">=</span><span class="s">&quot;vs&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">test</span><span class="o">=</span><span class="s">&quot;F&quot;</span><span class="p">))</span>
-<span class="nf">Anova</span><span class="p">(</span><span class="n">mod.full</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&quot;III&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Single term deletions
-
-Model:
-mpg.fake ~ vs + origin + vs:origin
-       Df Sum of Sq    RSS     AIC F value  Pr(&gt;F)  
-&lt;none&gt;              447.70  96.429                  
-vs      1    131.62 579.32 102.676  7.6436 0.01034 *
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-</pre></div>
-</div>
-<div class="output text_html"><table class="dataframe">
-<caption>A anova: 5 × 4</caption>
-<thead>
-	<tr><th></th><th scope=col>Sum Sq</th><th scope=col>Df</th><th scope=col>F value</th><th scope=col>Pr(&gt;F)</th></tr>
-	<tr><th></th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th></tr>
-</thead>
-<tbody>
-	<tr><th scope=row>(Intercept)</th><td>4787.31125</td><td> 1</td><td>278.018874</td><td>2.114455e-15</td></tr>
-	<tr><th scope=row>vs</th><td> 131.61720</td><td> 1</td><td>  7.643553</td><td>1.033623e-02</td></tr>
-	<tr><th scope=row>origin</th><td>  92.20887</td><td> 2</td><td>  2.677474</td><td>8.763434e-02</td></tr>
-	<tr><th scope=row>vs:origin</th><td> 181.54541</td><td> 2</td><td>  5.271545</td><td>1.197251e-02</td></tr>
-	<tr><th scope=row>Residuals</th><td> 447.70375</td><td>26</td><td>        NA</td><td>          NA</td></tr>
-</tbody>
-</table>
-</div></div>
-</div>
-<p>So this had not worked. Why? The reason is due to the form of dummy coding used by <code class="docutils literal notranslate"><span class="pre">R</span></code>. Put simply, the missing term <code class="docutils literal notranslate"><span class="pre">vs</span></code> is absorbed into the <code class="docutils literal notranslate"><span class="pre">vs:origin</span></code> term, making the two models <em>identical</em>. In fact, the only way to get this comparison to produce a result for us is to <em>change</em> the dummy coding. The fact that we need to adjust an arbitrary element of the model to get the numbers we want should be a clue that this is <em>not</em> a sensible comparison to make. Nevertheless, if we change the coding to a form where each term represents an independant element of the variance decomposition, we can get a result here. This form of coding is known as <em>sum-to-zero</em> coding, or <em>sum</em> coding for short. We do not need to understand this in any great detail, but we do need to highlight that the result depends on the coding. This means that Type III tests only work <em>under certain ANOVA constraints</em>. Given that the constraint is not a core component of the model (as the model will work identically under any arbitrary constrain), this is another clue that this method makes little sense.</p>
-<p>In the example below, we set the coding used for each factor in the call to <code class="docutils literal notranslate"><span class="pre">lm()</span></code>. This <em>can</em> be set globally, but then it becomes easy to forget to switch it back again and we may get confused when trying to interpret the model parameters.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod.sum</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg.fake</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">vs</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vs</span><span class="o">:</span><span class="n">origin</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">,</span><span class="w"> </span><span class="n">contrasts</span><span class="o">=</span><span class="nf">list</span><span class="p">(</span><span class="n">vs</span><span class="o">=</span><span class="n">contr.sum</span><span class="p">,</span><span class="w"> </span><span class="n">origin</span><span class="o">=</span><span class="n">contr.sum</span><span class="p">))</span>
-
-<span class="nf">print</span><span class="p">(</span><span class="nf">Anova</span><span class="p">(</span><span class="n">mod.sum</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&quot;III&quot;</span><span class="p">))</span>
-<span class="nf">print</span><span class="p">(</span><span class="nf">drop1</span><span class="p">(</span><span class="n">mod.sum</span><span class="p">,</span><span class="w"> </span><span class="n">scope</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;vs&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">test</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;F&quot;</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Anova Table (Type III tests)
-
-Response: mpg.fake
-             Sum Sq Df  F value    Pr(&gt;F)    
-(Intercept) 13094.1  1 760.4268 &lt; 2.2e-16 ***
-vs             14.9  1   0.8631   0.36142    
-origin        680.8  2  19.7672 6.033e-06 ***
-vs:origin     181.5  2   5.2715   0.01197 *  
-Residuals     447.7 26                       
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-Single term deletions
-
-Model:
-mpg.fake ~ vs + origin + vs:origin
-       Df Sum of Sq    RSS    AIC F value Pr(&gt;F)
-&lt;none&gt;              447.70 96.429               
-vs      1    14.862 462.57 95.474  0.8631 0.3614
-</pre></div>
-</div>
-</div>
-</div>
 </section>
 <section id="resolving-the-sums-of-squares-circus">
 <h2>Resolving the Sums-of-squares Circus<a class="headerlink" href="#resolving-the-sums-of-squares-circus" title="Link to this heading">#</a></h2>
@@ -574,10 +478,54 @@ Y = A + B + C + AB.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="n">Error</span> <span class="ow">in</span> <span class="n">library</span><span class="p">(</span><span class="s2">&quot;datarium&quot;</span><span class="p">):</span> <span class="n">there</span> <span class="ow">is</span> <span class="n">no</span> <span class="n">package</span> <span class="n">called</span> <span class="err">‘</span><span class="n">datarium</span><span class="err">’</span>
-<span class="ne">Traceback</span>:
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Anova Table (Type II tests)
 
-<span class="mi">1</span><span class="o">.</span> <span class="n">stop</span><span class="p">(</span><span class="n">packageNotFoundError</span><span class="p">(</span><span class="n">package</span><span class="p">,</span> <span class="n">lib</span><span class="o">.</span><span class="n">loc</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">call</span><span class="p">()))</span>
+Response: pain_score
+                       Sum Sq Df F value    Pr(&gt;F)    
+gender                 313.36  1 16.1957 0.0001625 ***
+risk                  1793.56  1 92.6988   8.8e-14 ***
+treatment              283.17  2  7.3177 0.0014328 ** 
+gender:risk              2.73  1  0.1411 0.7084867    
+gender:treatment       129.18  2  3.3384 0.0422001 *  
+risk:treatment          27.60  2  0.7131 0.4942214    
+gender:risk:treatment  286.60  2  7.4063 0.0013345 ** 
+Residuals             1160.89 60                      
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Analysis of Variance Table
+
+Response: pain_score
+               Df  Sum Sq Mean Sq F value    Pr(&gt;F)    
+gender          1  313.36  313.36 12.8962 0.0006333 ***
+risk            1 1793.56 1793.56 73.8135 2.607e-12 ***
+treatment       2  283.17  141.58  5.8269 0.0047027 ** 
+risk:treatment  2   27.60   13.80  0.5678 0.5695375    
+Residuals      65 1579.40   24.30                      
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Anova Table (Type II tests)
+
+Response: pain_score
+                Sum Sq Df F value    Pr(&gt;F)    
+gender          313.36  1 12.8962 0.0006333 ***
+risk           1793.56  1 73.8135 2.607e-12 ***
+treatment       283.17  2  5.8269 0.0047027 ** 
+risk:treatment   27.60  2  0.5678 0.5695375    
+Residuals      1579.40 65                      
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Anova Table (Type III tests)
+
+Response: pain_score
+               Sum Sq Df    F value    Pr(&gt;F)    
+(Intercept)    434108  1 17865.6292 &lt; 2.2e-16 ***
+gender            313  1    12.8962 0.0006333 ***
+risk             1794  1    73.8135 2.607e-12 ***
+treatment         283  2     5.8269 0.0047027 ** 
+risk:treatment     28  2     0.5678 0.5695375    
+Residuals        1579 65                         
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 </pre></div>
 </div>
 </div>
@@ -656,7 +604,8 @@ Y = A + B + C + AB.
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -665,7 +614,10 @@ Y = A + B + C + AB.
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-problem-of-imbalance">The Problem of Imbalance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-problem-of-imbalance">The Problem of Imbalance</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#venn-diagram-intuition">Venn Diagram Intuition</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-principle-of-marginality">The Principle of Marginality</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-i-sums-of-squares">Type I Sums-of-squares</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-ii-sums-of-squares">Type II Sums-of-squares</a></li>
@@ -719,8 +671,8 @@ By Dr Martyn McFarquhar & Dr George Farmer
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
   </footer>
