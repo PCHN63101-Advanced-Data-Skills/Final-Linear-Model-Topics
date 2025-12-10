@@ -377,8 +377,13 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-i-sums-of-squares">Type I Sums-of-squares</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-ii-sums-of-squares">Type II Sums-of-squares</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-iii-sums-of-squares">Type III Sums-of-squares</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sums-of-squares-in-r">Sums-of-Squares in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resolving-the-sums-of-squares-circus">Resolving the Sums-of-squares Circus</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#when-do-the-sums-of-squares-not-matter">When Do the Sums-of-squares <em>Not</em> Matter?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sums-of-squares-in-r">Sums-of-Squares in <code class="docutils literal notranslate"><span class="pre">R</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#type-i-and-type-ii-in-r">Type I and Type II in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#type-iii-in-r">Type III in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-sums-of-squares-circus">The Sums-of-squares Circus</a></li>
 </ul>
             </nav>
         </div>
@@ -414,39 +419,86 @@ SS_{\text{Total}} = SS_{\text{Model}} + SS_{\text{Error}}.
 \[
 SS_{\text{A}} + SS_{\text{B}} + SS_{\text{AB}} &gt; SS_{\text{Model}}.
 \]</div>
-<p>Adding these decompositions together is now <em>not</em> the same as the amount of variance explained by the model. What happens is that the effects “bleed” into each other. They no longer represent an independent partition of the variance. A lack of balance kills the symmetry that allows the ANOVA to neatly decompose the variance. What this means practically is that each effect now contains some element of the other effects and adding them together means we double-count some chunks of variance. This leads to a larger <span class="math notranslate nohighlight">\(SS_{\text{Model}}\)</span> than there actually is.</p>
-<p>What does this mean in terms of using an ANOVA model? It means that each sums-of-squares we calculate is influenced <em>by the other terms in the model</em>. This means we have several options when we decompose the sums-of-squares in terms of what else is in the model at the time. Each chunk that gets calculated will represent the variance associated with a given effect <em>minus</em> the overlap with anything else in the model. Unfortunately, wherever there is choice, there is also disagreement. For an unbalance ANOVA, this disagreement surrounds 3 possible ways of decomposing the sums-of-squares in an unbalanced ANOVA model. These are known as Type I, Type II and Type III sums-of-squares and will be the focus of this part of the lesson.</p>
+<p>Adding these decompositions together is now <em>not</em> the same as the amount of variance explained by the model. What happens is that the effects “bleed” into each other. They no longer represent an independent partition of the variance. A lack of balance kills the symmetry that allows the ANOVA to neatly decompose the variance. What this means practically is that each effect now contains some element of the other effects and adding them together means we double-count some chunks of variance. This leads to a larger sum <span class="math notranslate nohighlight">\(\left(SS_{\text{A}} + SS_{\text{B}} + SS_{\text{AB}}\right)\)</span> than the model actually explains.</p>
+<p>What does this mean in terms of applying an ANOVA model to unbalanced data? It means that each sums-of-squares we calculate is influenced <em>by the other terms in the model</em>. This means we have several options when we decompose the sums-of-squares related to what else is in the model at the time. Each chunk that gets calculated will represent the variance associated with a given effect <em>minus</em> the overlap with anything else in the model. Unfortunately, wherever there is choice, there is also disagreement. For an unbalance ANOVA, this disagreement surrounds three possible ways of decomposing the sums-of-squares in an unbalanced ANOVA model. These are known as Type I, Type II and Type III sums-of-squares and will be the focus of this part of the lesson.</p>
 <section id="venn-diagram-intuition">
 <h3>Venn Diagram Intuition<a class="headerlink" href="#venn-diagram-intuition" title="Link to this heading">#</a></h3>
-<p>Perhaps the simplest way to gain intuition about what happens in an unbalanced ANOVA is to return to the Venn diagram visualisation we saw previously in multiple regression. Here, each circle represents the sum-of-squares associated with each main effect A and B, along with their interaction AB.</p>
+<p>Perhaps the simplest way to gain intuition about what happens in an unbalanced ANOVA is to return to the Venn diagram visualisation we saw previously in multiple regression. Here, each circle represents the sum-of-squares associated with each main effect <span class="math notranslate nohighlight">\(\text{A}\)</span> and <span class="math notranslate nohighlight">\(\text{B}\)</span>, along with their interaction <span class="math notranslate nohighlight">\(\text{AB}\)</span>.</p>
 <p>When the ANOVA is <em>balanced</em>, the situation is as shown below</p>
 <figure class="align-center">
 <a class="reference internal image-reference" href="_images/orthog-ANOVA.png"><img alt="_images/orthog-ANOVA.png" src="_images/orthog-ANOVA.png" style="width: 342.1px; height: 326.15000000000003px;" /></a>
 </figure>
-<p>Here, there is no overlap between the circles. Each effect is completely independant and it does not matter what else is in the model at the point where we calculate its sum-of-squares. We could entirely remove B and AB when calculating <span class="math notranslate nohighlight">\(SS_{\text{A}}\)</span> and it would not make any difference. The model therefore does not matter, as the sum-of-squares will be the same.</p>
+<p>Here, there is no overlap between the circles. Each effect is completely independant and it does not mater what else is in the model at the point where we calculate its sum-of-squares. We could entirely remove <span class="math notranslate nohighlight">\(\text{B}\)</span> and <span class="math notranslate nohighlight">\(\text{AB}\)</span> when calculating <span class="math notranslate nohighlight">\(SS_{\text{A}}\)</span> and it would not make any difference. The other model terms therefore do not matter<a class="footnote-reference brackets" href="#modterms-foot" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p>
 <p>When the ANOVA is <em>unbalanced</em>, the situation is as shown below</p>
 <figure class="align-center">
 <a class="reference internal image-reference" href="_images/unbalanced-ANOVA.png"><img alt="_images/unbalanced-ANOVA.png" src="_images/unbalanced-ANOVA.png" style="width: 272.25px; height: 266.75px;" /></a>
 </figure>
-<p>Here, the effects now <em>overlap</em>. This means there is some element of both <span class="math notranslate nohighlight">\(B\)</span> and <span class="math notranslate nohighlight">\(AB\)</span> inside the sum-of-squares for <span class="math notranslate nohighlight">\(A\)</span>. We can now see why the sum of these terms is too big. If we count the <span class="math notranslate nohighlight">\(A\)</span> circle, <span class="math notranslate nohighlight">\(B\)</span> circle and <span class="math notranslate nohighlight">\(AB\)</span> circle we will double-count the areas of overlap and the sum will be too big. This is why <span class="math notranslate nohighlight">\(SS_{\text{A}} + SS_{\text{B}} + SS_{\text{AB}} &gt; SS_{\text{Model}}\)</span>. Furthermore, we now have several options when it comes to decomposing the value of the sums-of-sqaures.</p>
-<p>Using <span class="math notranslate nohighlight">\(SS_{\text{A}}\)</span> as an examples, we could calculate the sums-of-squares with nothing else in the model, or we could calculate it with <span class="math notranslate nohighlight">\(SS_{\text{B}}\)</span> in the model (but no interaction), or we could calculate it with both <span class="math notranslate nohighlight">\(SS_{\text{B}}\)</span> and <span class="math notranslate nohighlight">\(SS_{\text{AB}}\)</span> in the model. These options are all illustrated below and correspond to the Type I, Type II and Type III sums-of-squares.</p>
+<p>Here, the effects now <em>overlap</em>. This means there is some element of both <span class="math notranslate nohighlight">\(\text{B}\)</span> and <span class="math notranslate nohighlight">\(\text{AB}\)</span> inside the sum-of-squares for <span class="math notranslate nohighlight">\(\text{A}\)</span>. This tells us why the sum of these terms is too big. If we sum the area of the <span class="math notranslate nohighlight">\(\text{A}\)</span> circle, <span class="math notranslate nohighlight">\(\text{B}\)</span> circle and <span class="math notranslate nohighlight">\(\text{C}\)</span> circle we will double-count the areas of overlap. This will be larger than the total area of all the circles (the <span class="math notranslate nohighlight">\(SS_{\text{Model}}\)</span>). Furthermore, because each sum-of-squares will now depend upon the other terms in the model, we now have several options when it comes to calculating them.</p>
+<p>Using <span class="math notranslate nohighlight">\(SS_{\text{A}}\)</span> as an examples, we could</p>
+<ul class="simple">
+<li><p>Calculate <span class="math notranslate nohighlight">\(SS_{\text{A}}\)</span> with nothing else in the model</p></li>
+<li><p>Calculate <span class="math notranslate nohighlight">\(SS_{\text{A}}\)</span> with <span class="math notranslate nohighlight">\(\text{B}\)</span> in the model, but no <span class="math notranslate nohighlight">\(\text{AB}\)</span>.</p></li>
+<li><p>Calculate <span class="math notranslate nohighlight">\(SS_{\text{A}}\)</span> with <em>both</em> <span class="math notranslate nohighlight">\(\text{B}\)</span> and <span class="math notranslate nohighlight">\(\text{AB}\)</span> in the model.</p></li>
+</ul>
+<p>In each case, the <span class="math notranslate nohighlight">\(SS_{\text{A}}\)</span> will represent only the <em>unique</em> portion of the cicle, with the overlaps removed. These options are illustrated below and correspond to the Type I, Type II and Type III sums-of-squares.</p>
 <figure class="align-center">
 <a class="reference internal image-reference" href="_images/SS-Types.png"><img alt="_images/SS-Types.png" src="_images/SS-Types.png" style="width: 515.9000000000001px; height: 221.10000000000002px;" /></a>
 </figure>
-<p>As we can see, the Type I method would calculate all the explanatory variance associated with factor A, taking none of the overlap into account. The Type II method would calculate the explanatory variance after taking B into account. As such, the effect is based on removing the overlap with B, but nothing else. Finally, the Type III method would calculate the explanatory variance after taking B and AB into account. So this removes <em>all</em> overlap with the other effects, only leaving the unique element of A.</p>
 </section>
 </section>
 <section id="the-principle-of-marginality">
 <h2>The Principle of Marginality<a class="headerlink" href="#the-principle-of-marginality" title="Link to this heading">#</a></h2>
-<p>In trying to determine which of the sums-of-squares to choose, we can be guided by the idea of building <em>meaningful</em> models. This is encapsulated by the <em>principle of marginality</em>, which was laid out by <a class="reference external" href="https://www.jstor.org/stable/2344517">Nelder (1977)</a> as a response to his dissatisfaction in the way that linear models were being applied in statistics.</p>
+<p>In trying to determine which of the sums-of-squares to choose, we can be guided by the idea of building <em>meaningful</em> models. This is encapsulated by the <em>principle of marginality</em>, which was laid out by <a class="reference external" href="https://www.jstor.org/stable/2344517">Nelder (1977)</a> as a response to his dissatisfaction with the way that linear models were being applied in statistics. In brief, this principle states that <em>if an interaction is in the model, all the constituent lower-order terms must also be in the model</em>.</p>
+<p>For example, if we include <span class="math notranslate nohighlight">\(\text{AB}\)</span>, we must also include <span class="math notranslate nohighlight">\(\text{A}\)</span> and <span class="math notranslate nohighlight">\(\text{B}\)</span>. If we include <span class="math notranslate nohighlight">\(\text{ABC}\)</span> we must also include <span class="math notranslate nohighlight">\(\text{A}\)</span>, <span class="math notranslate nohighlight">\(\text{B}\)</span>, <span class="math notranslate nohighlight">\(\text{C}\)</span>, <span class="math notranslate nohighlight">\(\text{AB}\)</span>, <span class="math notranslate nohighlight">\(\text{AC}\)</span>, <span class="math notranslate nohighlight">\(\text{BC}\)</span>. From this perspective, interpretation flows <em>downwards</em>. We interpret the highest-order significant terms and ignore any lower-order terms that are nested inside it. We must start at the <em>bottom</em> of the ANOVA table and work our way up, respecting marginality along the way. This reflects the fact that removing a lower-order term destroys the meaning of the interaction term. Remember, an interaction is defined as a <em>departure from additivity</em>. Without the additive components present in the model, this deviation has no meaning.</p>
+<p>For instance, if we fit the model</p>
+<div class="math notranslate nohighlight">
+\[
+y_{ijk} = \mu + \beta_{k} + (\alpha\beta)_{jk} + \epsilon_{ijk},
+\]</div>
+<p>then there is no main effect of <span class="math notranslate nohighlight">\(\text{A}\)</span>, there is only the main effect of <span class="math notranslate nohighlight">\(\text{B}\)</span> and the <span class="math notranslate nohighlight">\(\text{AB}\)</span> interaction. However, the interaction term <span class="math notranslate nohighlight">\((\alpha\beta)_{jk}\)</span> will no longer behave as a “deviation from additivity”. Instead, it will need to soak-up both the main effect of <span class="math notranslate nohighlight">\(\text{A}\)</span> and the <span class="math notranslate nohighlight">\(\text{AB}\)</span> interaction. So the value of this term will be a combination of the main effect and the interaction, which is uninterpretable. This is all because this model does not respect the principle of marginality and thus the clean interpretation of each term is destroyed. Although the model above does not seem sensible, we will see below that the Type III sums-of-squares actually make <em>implicit</em> comparisons with these forms of models.</p>
 </section>
 <section id="type-i-sums-of-squares">
 <h2>Type I Sums-of-squares<a class="headerlink" href="#type-i-sums-of-squares" title="Link to this heading">#</a></h2>
-<p>… In terms of their adherence to marginality, this depends entirely upon the order in which the terms enter the model.</p>
+<p>As indicated above, the Type I sums-of-squares for factor <span class="math notranslate nohighlight">\(\text{A}\)</span> are calculated based on nothing else being in the model. However, this does not tell the full story. To understand these effects, it is useful to introduce some new notation. In comparing the following two models</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    \mathcal{M}_{0} &amp;: y_{ijk} = \mu + \beta_{k} + \epsilon_{ijk} \\
+    \mathcal{M}_{1} &amp;: y_{ijk} = \mu + \alpha_{j} + \beta_{k} + \epsilon_{ijk} \\
+\end{alignat*}
+\end{split}\]</div>
+<p>we can denote the <em>reduction</em> in sums-of-squares as follows</p>
+<div class="math notranslate nohighlight">
+\[
+R(\alpha|\beta).
+\]</div>
+<p>This is read as “the reduction in residual sums-of-squares for <span class="math notranslate nohighlight">\(\alpha\)</span>, after taking <span class="math notranslate nohighlight">\(\beta\)</span> into account”. So the terms on the <em>left</em> of <span class="math notranslate nohighlight">\(|\)</span> are added and removed between the two models, whereas the terms on the <em>right</em> of <span class="math notranslate nohighlight">\(|\)</span> remain in both models.</p>
+<p>With this in mind, the Type I sums-of-squares are a <em>sequential</em> decomposition, where terms are added <em>in the same order</em> as the model equation. Thus, for a 2-way ANOVA, the sums-of-squares for each term are as follows</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    SS_{\text{A}}  &amp;: R(\alpha|\mu)        \\
+    SS_{\text{B}}  &amp;: R(\beta|\mu, \alpha) \\
+    SS_{\text{AB}} &amp;: R((\alpha\beta)|\mu, \alpha, \beta)
+\end{alignat*}
+\end{split}\]</div>
+<p>As such, the order of the model equation matters here, as each term is added <em>in turn</em> and then compared to the previous model. So we start with only <span class="math notranslate nohighlight">\(\mu\)</span>, we then add <span class="math notranslate nohighlight">\(\alpha\)</span> and see what the difference is. We then add <span class="math notranslate nohighlight">\(\beta\)</span> and see what the difference is from the model containing both <span class="math notranslate nohighlight">\(\mu\)</span> and <span class="math notranslate nohighlight">\(\alpha\)</span>, and so on.</p>
+<p>In terms of the Venn diagram intuition, we can see below what the standard order of terms produces in terms of the Type I tests.</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/SS-I.png"><img alt="_images/SS-I.png" src="_images/SS-I.png" style="width: 471.5px; height: 210.0px;" /></a>
+</figure>
+<p>Of these, the test of <span class="math notranslate nohighlight">\(\text{B}\)</span> and <span class="math notranslate nohighlight">\(\text{AB}\)</span> are useful because they take other terms into account. However, the test of <span class="math notranslate nohighlight">\(\text{A}\)</span> is less useful, because it does not take the effect of <span class="math notranslate nohighlight">\(\text{B}\)</span> into account. Importantly, however, this will change entirely if the model is specified in a <em>different</em> order. This reliance on order makes the Type I sums-of-squares dubious in their usefulness. Unfortunately, this is exactly what the <code class="docutils literal notranslate"><span class="pre">anova()</span></code> function from base <code class="docutils literal notranslate"><span class="pre">R</span></code> produces and why this method is not really suitable for <em>unbalanced</em> data. Here, the adherence to marginality depends entirely upon the order in which the terms enter the model and will only produce <em>some</em> useful tests, but not necessarily all.</p>
+<div class="info admonition">
+<p class="admonition-title">Why does R default to Type I sums-of-squares?</p>
+<p>It may seem strange that the <code class="docutils literal notranslate"><span class="pre">anova()</span></code> function would choose to use the Type I sums-of-squares. However, we need to understand that <code class="docutils literal notranslate"><span class="pre">anova()</span></code> is only designed for use on <em>balanced</em> data. With this in mind, the choice of decomposition technique is entirely due to computational ease. The Type I effects are easy to calculate because we simply loop through each term, comparing the change in residual sums-of-squares to the previous model. Under balance, this is identical to the traditional ANOVA decompositon and is also identical to Type II and Type III tests. From this perspective, it is easy to see why <code class="docutils literal notranslate"><span class="pre">anova()</span></code> does things this way. However, it is important to understand that this should not be used with <em>unbalanced</em> data. At least, not without understanding what the tests actually mean.</p>
+</div>
 </section>
 <section id="type-ii-sums-of-squares">
 <h2>Type II Sums-of-squares<a class="headerlink" href="#type-ii-sums-of-squares" title="Link to this heading">#</a></h2>
 <p>… In terms of their adherence to marginality, the Type II sums-of-squares are the <em>only</em> method of the 3 that does respect marginality.</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/SS-II.png"><img alt="_images/SS-II.png" src="_images/SS-II.png" style="width: 479.5px; height: 211.5px;" /></a>
+</figure>
 </section>
 <section id="type-iii-sums-of-squares">
 <h2>Type III Sums-of-squares<a class="headerlink" href="#type-iii-sums-of-squares" title="Link to this heading">#</a></h2>
@@ -459,12 +511,232 @@ SS_{\text{A}} + SS_{\text{B}} + SS_{\text{AB}} &gt; SS_{\text{Model}}.
 \end{alignat*}
 \end{split}\]</div>
 <p>In other words, by considering a model that contains an interaction, without one of the associated main effects. This is arguably a wholly <em>meaningless</em> model, where we simultaneously suggest that there is 0 difference between the levels of a factor, but also that this difference changes depending upon another factor. What this model comparison ends up calculating is the effect of A after removing the effect of B <em>and</em> AB. So a main effect with the interaction <em>removed</em>. So what exactly does this mean? If we pretend that the effect of A does not depend upon B, what would the effect of A be? If there is a meaningful interaction, this is then calculating a fantasy. To bring back the example from last week, if the effectiveness of a treatment depends upon diagnosis, if makes little sense to calculate the effect of treatment <em>ignoring</em> diagnosis. It is like someone asking you whether the treament works, and you ask them what the diagnosis is and they refuse to answer and just ask you again whether the treatment works. From this perspective, Type III sums-of-squares are of little use to us, despite being the default in many statistical packages.</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/SS-III.png"><img alt="_images/SS-III.png" src="_images/SS-III.png" style="width: 473.5px; height: 207.0px;" /></a>
+</figure>
+</section>
+<section id="when-do-the-sums-of-squares-not-matter">
+<h2>When Do the Sums-of-squares <em>Not</em> Matter?<a class="headerlink" href="#when-do-the-sums-of-squares-not-matter" title="Link to this heading">#</a></h2>
+<p>… Balance, <span class="math notranslate nohighlight">\(t\)</span>-tests, oneway ANOVA and multiple regression with only continuous predictors…</p>
 </section>
 <section id="sums-of-squares-in-r">
 <h2>Sums-of-Squares in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#sums-of-squares-in-r" title="Link to this heading">#</a></h2>
+<p>…</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">data</span><span class="p">(</span><span class="n">mtcars</span><span class="p">)</span>
+
+<span class="c1"># Origin factor</span>
+<span class="n">mtcars</span><span class="o">$</span><span class="n">origin</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&#39;Japan&#39;</span><span class="p">,</span><span class="s">&#39;Japan&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span>
+<span class="w">                   </span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span>
+<span class="w">                   </span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Japan&#39;</span><span class="p">,</span><span class="s">&#39;Japan&#39;</span><span class="p">,</span><span class="s">&#39;Japan&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span>
+<span class="w">                   </span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">)</span>
+<span class="n">mtcars</span><span class="o">$</span><span class="n">origin</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.factor</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">origin</span><span class="p">)</span>
+
+<span class="c1"># VS factor</span>
+<span class="n">vs.lab</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rep</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="nf">length</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">vs</span><span class="p">))</span><span class="w"> </span>
+<span class="n">vs.lab</span><span class="p">[</span><span class="n">mtcars</span><span class="o">$</span><span class="n">vs</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">0</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">&quot;V-shaped&quot;</span>
+<span class="n">vs.lab</span><span class="p">[</span><span class="n">mtcars</span><span class="o">$</span><span class="n">vs</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">&quot;Straight&quot;</span>
+<span class="n">mtcars</span><span class="o">$</span><span class="n">vs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.factor</span><span class="p">(</span><span class="n">vs.lab</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+<p>We can examine the degree of imbalance using the <code class="docutils literal notranslate"><span class="pre">tables()</span></code> function to generate a contingency table of the factors</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">with</span><span class="p">(</span><span class="n">mtcars</span><span class="p">,</span><span class="w"> </span><span class="nf">table</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span><span class="n">vs</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>        vs
+origin   Straight V-shaped
+  Europe        8        6
+  Japan         3        2
+  USA           3       10
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mpg.mod</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vs</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">origin</span><span class="o">:</span><span class="n">vs</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="type-i-and-type-ii-in-r">
+<h3>Type I and Type II in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#type-i-and-type-ii-in-r" title="Link to this heading">#</a></h3>
+<p>Type I and II sums-of-sqaures are simple to produce. For Type I, we simply use the built-in <code class="docutils literal notranslate"><span class="pre">anova()</span></code> function.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="nf">anova</span><span class="p">(</span><span class="n">mpg.mod</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Analysis of Variance Table
+
+Response: mpg
+          Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+origin     2 393.88 196.938 11.4370 0.0002733 ***
+vs         1 282.26 282.261 16.3921 0.0004117 ***
+origin:vs  2   2.21   1.104  0.0641 0.9380730    
+Residuals 26 447.70  17.219                      
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note that whilst we might think we could recreate these through model comparisons, only the sums-of-squares will agree. All these tests use the error term from the model containing <em>all</em> the factors. So we can recreate the <em>numerators</em> of the <span class="math notranslate nohighlight">\(F\)</span>-statistics, but the denominators will not be the same.</p>
+<p>For Type II, we can simply use <code class="docutils literal notranslate"><span class="pre">Anova()</span></code> without any options, as the Type II tests are the default. We can also specify <code class="docutils literal notranslate"><span class="pre">type='II'</span></code>, if we want to be explicit about it.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="nf">Anova</span><span class="p">(</span><span class="n">mpg.mod</span><span class="p">))</span><span class="w"> </span><span class="c1"># or Anova(mpg.mod, type=&quot;II&quot;)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Anova Table (Type II tests)
+
+Response: mpg
+          Sum Sq Df F value    Pr(&gt;F)    
+origin    179.61  2  5.2153 0.0124621 *  
+vs        282.26  1 16.3921 0.0004117 ***
+origin:vs   2.21  2  0.0641 0.9380730    
+Residuals 447.70 26                      
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+</pre></div>
+</div>
+</div>
+</div>
+<p>As expected, both <code class="docutils literal notranslate"><span class="pre">origin:vs</span></code> and <code class="docutils literal notranslate"><span class="pre">vs</span></code> are the same as the Type I tests, but <code class="docutils literal notranslate"><span class="pre">origin</span></code> is different. Refer back to the Venn diagrams to see why this is the case.</p>
 </section>
-<section id="resolving-the-sums-of-squares-circus">
-<h2>Resolving the Sums-of-squares Circus<a class="headerlink" href="#resolving-the-sums-of-squares-circus" title="Link to this heading">#</a></h2>
+<section id="type-iii-in-r">
+<h3>Type III in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#type-iii-in-r" title="Link to this heading">#</a></h3>
+<p>For Type III, things get trickier. Recall from above that a Type III main effect is making the implicit comparison</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    \mathcal{M}_{0} &amp;: y_{ijk} = \mu + \beta_{k} + (\alpha\beta)_{jk} + \epsilon_{ijk} \\
+    \mathcal{M}_{1} &amp;: y_{ijk} = \mu + \alpha_{j} + \beta_{k} + (\alpha\beta)_{jk} + \epsilon_{ijk} \\
+\end{alignat*}
+\end{split}\]</div>
+<p>So you might think we can compare <code class="docutils literal notranslate"><span class="pre">y</span> <span class="pre">~</span> <span class="pre">A</span> <span class="pre">+</span> <span class="pre">B</span> <span class="pre">+</span> <span class="pre">A:B</span></code> to <code class="docutils literal notranslate"><span class="pre">y</span> <span class="pre">~</span> <span class="pre">B</span> <span class="pre">+</span> <span class="pre">A:B</span></code>. Unfortunately, this will not work. … In fact, not actual model comparison exists that will generate the Type III test for us because the models will not behave in the way the Type III tests require. This in and of itself should indicate why Type III is not doing anything sensible. The approach that <code class="docutils literal notranslate"><span class="pre">Anova()</span></code> uses is based on manipulating the model parameters to create the comparison that the Type III tests imply. However, in order to do this correctly, we need to use a <em>very specific dummy coding scheme</em>. …</p>
+<p>We have two options here. The first is to change the dummy coding <em>globally</em> using</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">options</span><span class="p">(</span><span class="n">contrasts</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&#39;contr.sum&#39;</span><span class="p">,</span><span class="s">&#39;contr.poly&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The disadvantage of doing this is that this will change the interpretation of the parameters in all the model you use after setting this, unless you remember to set it back to normal afterwards. This means you always need to specify models in the following way</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">car</span><span class="p">)</span>
+
+<span class="nf">options</span><span class="p">(</span><span class="n">contrasts</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&#39;contr.sum&#39;</span><span class="p">,</span><span class="s">&#39;contr.poly&#39;</span><span class="p">))</span><span class="w">              </span><span class="c1"># set sum-to-zero coding</span>
+<span class="n">mod.sum</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">vs</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vs</span><span class="o">:</span><span class="n">origin</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span><span class="w">   </span><span class="c1"># fit model</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">Anova</span><span class="p">(</span><span class="n">mod.sum</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&#39;III&#39;</span><span class="p">))</span><span class="w">                           </span><span class="c1"># Type III ANOVA table</span>
+<span class="nf">options</span><span class="p">(</span><span class="n">contrasts</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&#39;contr.treatment&#39;</span><span class="p">,</span><span class="s">&#39;contr.poly&#39;</span><span class="p">))</span><span class="w">        </span><span class="c1"># puting the coding back to default</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading required package: carData
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Anova Table (Type III tests)
+
+Response: mpg
+             Sum Sq Df  F value    Pr(&gt;F)    
+(Intercept) 10488.5  1 609.1096 &lt; 2.2e-16 ***
+vs            251.9  1  14.6285 0.0007372 ***
+origin        166.5  2   4.8354 0.0163901 *  
+vs:origin       2.2  2   0.0641 0.9380730    
+Residuals     447.7 26                       
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+</pre></div>
+</div>
+</div>
+</div>
+<p>The better approach, though the more messy in terms of syntax, is to tell <code class="docutils literal notranslate"><span class="pre">lm()</span></code> how to code each variable explicitly. This can be done using the <code class="docutils literal notranslate"><span class="pre">contrasts=</span></code> argument, which takes a list of each factor alongside how we want them coded. For this example, we will therefore use</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod.sum</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">vs</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vs</span><span class="o">:</span><span class="n">origin</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">,</span><span class="w"> </span>
+<span class="w">              </span><span class="n">contrasts</span><span class="o">=</span><span class="nf">list</span><span class="p">(</span><span class="n">vs</span><span class="o">=</span><span class="n">contr.sum</span><span class="p">,</span><span class="w"> </span><span class="n">origin</span><span class="o">=</span><span class="n">contr.sum</span><span class="p">))</span><span class="w"> </span><span class="c1"># fit model w/specific coding</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">Anova</span><span class="p">(</span><span class="n">mod.sum</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&#39;III&#39;</span><span class="p">))</span><span class="w">                             </span><span class="c1"># Type III ANOVA table</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Anova Table (Type III tests)
+
+Response: mpg
+             Sum Sq Df  F value    Pr(&gt;F)    
+(Intercept) 10488.5  1 609.1096 &lt; 2.2e-16 ***
+vs            251.9  1  14.6285 0.0007372 ***
+origin        166.5  2   4.8354 0.0163901 *  
+vs:origin       2.2  2   0.0641 0.9380730    
+Residuals     447.7 26                       
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+</pre></div>
+</div>
+</div>
+</div>
+<p>This additional hassle and the dependence of the Type III tests on something as arbitrary as the model coding should be enough to dissuade you from this approach. Indeed, this very dependence is the reason why <code class="docutils literal notranslate"><span class="pre">Anova()</span></code> will <em>not</em> refit the model for you and automatically change the coding. John Fox (the author of <code class="docutils literal notranslate"><span class="pre">car</span></code>) wants this dependence to be clear. Type I and Type II effects do not change with the dummy variable scheme. Type III effects <em>do</em> change. This fact needs to be <em>understood</em>, not <em>hidden</em>.</p>
+<p>All that being said, if you want an easier method, there is the <code class="docutils literal notranslate"><span class="pre">ezANOVA()</span></code> function from the <code class="docutils literal notranslate"><span class="pre">ez</span></code> package. This will take care of all the coding mess for you behind the scenes. However, there are some distinct disadvantages here:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ezANOVA</span></code> aims to create output that mimics SPSS. This is not done within the linear models framework, meaning there is not access to residuals, diagnostic plots, parameter estimates or any of the useful output we want. You get an ANOVA table and nothing else<a class="footnote-reference brackets" href="#ez-foot" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a>.</p></li>
+<li><p>By abstracting away the difficulties of Type III tests, <code class="docutils literal notranslate"><span class="pre">ezANOVA</span></code> gives the impression of simplicity and does not engage you with any of the controversy. It prints a generic warning under imbalance, but nothing else.</p></li>
+<li><p>Fundammentally, this package aims to re-express linear models in the language of Psychology and then <em>hide</em> information from you. This is is rarely a good thing. If this is what someone needs in order to use <code class="docutils literal notranslate"><span class="pre">R</span></code>, it is arguable that they should not be using it at all.</p></li>
+</ul>
+<p>Nevertheless, if you want the simplest possible method of generating a Type III table, you can do the following</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">ez</span><span class="p">)</span>
+
+<span class="n">mtcars</span><span class="o">$</span><span class="n">idx</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.factor</span><span class="p">(</span><span class="nf">seq</span><span class="p">(</span><span class="n">from</span><span class="o">=</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">to</span><span class="o">=</span><span class="nf">dim</span><span class="p">(</span><span class="n">mtcars</span><span class="p">)[</span><span class="m">1</span><span class="p">]))</span><span class="w"> </span><span class="c1"># ezANOVA needs subject IDs</span>
+<span class="n">ezAOV</span><span class="w">      </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">ezANOVA</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">,</span><span class="w">          </span><span class="c1"># data</span>
+<span class="w">                      </span><span class="n">dv</span><span class="o">=</span><span class="n">mpg</span><span class="p">,</span><span class="w">               </span><span class="c1"># outcome</span>
+<span class="w">                      </span><span class="n">between</span><span class="o">=</span><span class="nf">.</span><span class="p">(</span><span class="n">vs</span><span class="p">,</span><span class="n">origin</span><span class="p">),</span><span class="w"> </span><span class="c1"># between-subject factors  </span>
+<span class="w">                      </span><span class="n">wid</span><span class="o">=</span><span class="n">idx</span><span class="p">,</span><span class="w">              </span><span class="c1"># subject IDs</span>
+<span class="w">                      </span><span class="n">type</span><span class="o">=</span><span class="m">3</span><span class="p">)</span><span class="w">               </span><span class="c1"># sums-of-squares</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="n">ezAOV</span><span class="o">$</span><span class="n">ANOVA</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Warning message:
+“Data is unbalanced (unequal N per group). Make sure you specified a well-considered value for the type argument to ezANOVA().”
+Coefficient covariances computed by hccm()
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     Effect DFn DFd           F            p p&lt;.05         ges
+2        vs   1  26 14.62853431 0.0007372137     * 0.360055674
+3    origin   2  26  4.83541867 0.0163900610     * 0.271113270
+4 vs:origin   2  26  0.06408491 0.9380730371       0.004905426
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="the-sums-of-squares-circus">
+<h2>The Sums-of-squares Circus<a class="headerlink" href="#the-sums-of-squares-circus" title="Link to this heading">#</a></h2>
 <p>… The truth is that the main reason all this hassle exists is because the neat partition of the ANOVA effects disappears when the data are imbalanced. In order to resolve this, we have to choose a method of partitioning the sums-of-squares. The definitions given above come directly from SAS, who’s aim was not some principled statistical derivation that makes sense, rather it was to give their users what they wanted: identical ANOVA output irrespective of balance. Because the traditional ANOVA was not seen as an exercise in model building, it was not typical to remove terms that appeared redundant. In order to maintain this completeness, SAS wanted ANOVA tables that contained <em>all</em> terms, rather than certain terms disappearing under imbalance. As such, different methods for decomposing these effects were developed and a choice was provided.</p>
 <p>From a modern perspective, all this hassle is unnecessary if we engage with the process of <em>model building</em>. This is something we will discuss in much greater detail in the machine learning module next semester. However, the idea is very simple. If a term adds little predictive utility, remove it and create the simplest model you can. From this perspective, if the highest-order interaction is <em>small</em> it would be removed and then the lower-order terms become interpretable again. No need for Type II tests to make them intepretable <em>despite</em> the presence of the interaction term. However, if an interaction is <em>large</em>, it stays in the model and we only interpret the highest-order term for each factor. Under this scheme, the whole Type I/II/III debate disappears.</p>
 <p>As an example, say we have the model</p>
@@ -485,17 +757,31 @@ Y = A + B + C + AB.
 <p>We would now interpret the 2-way interaction <span class="math notranslate nohighlight">\(AB\)</span> and the main effect <span class="math notranslate nohighlight">\(C\)</span>. Because we have respected marginality here when building these models, all these terms have interpretable effects</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;datarium&#39;</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">data</span><span class="p">(</span><span class="n">mtcars</span><span class="p">)</span>
 
-<span class="nf">print</span><span class="p">(</span><span class="nf">with</span><span class="p">(</span><span class="n">headache</span><span class="p">,</span><span class="w"> </span><span class="nf">table</span><span class="p">(</span><span class="n">risk</span><span class="p">,</span><span class="n">treatment</span><span class="p">)))</span>
+<span class="c1"># Origin factor</span>
+<span class="n">mtcars</span><span class="o">$</span><span class="n">origin</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&#39;Japan&#39;</span><span class="p">,</span><span class="s">&#39;Japan&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span>
+<span class="w">                   </span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span>
+<span class="w">                   </span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Japan&#39;</span><span class="p">,</span><span class="s">&#39;Japan&#39;</span><span class="p">,</span><span class="s">&#39;Japan&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span>
+<span class="w">                   </span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">)</span>
+<span class="n">mtcars</span><span class="o">$</span><span class="n">origin</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.factor</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">origin</span><span class="p">)</span>
+
+<span class="c1"># VS factor</span>
+<span class="n">vs.lab</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rep</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="nf">length</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">vs</span><span class="p">))</span><span class="w"> </span>
+<span class="n">vs.lab</span><span class="p">[</span><span class="n">mtcars</span><span class="o">$</span><span class="n">vs</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">0</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">&quot;V-shaped&quot;</span>
+<span class="n">vs.lab</span><span class="p">[</span><span class="n">mtcars</span><span class="o">$</span><span class="n">vs</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">&quot;Straight&quot;</span>
+<span class="n">mtcars</span><span class="o">$</span><span class="n">vs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.factor</span><span class="p">(</span><span class="n">vs.lab</span><span class="p">)</span>
+
+<span class="nf">with</span><span class="p">(</span><span class="n">mtcars</span><span class="p">,</span><span class="w"> </span><span class="nf">table</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span><span class="n">vs</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>      treatment
-risk    X  Y  Z
-  high 12 12 12
-  low  12 12 12
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>        vs
+origin   Straight V-shaped
+  Europe        8        6
+  Japan         3        2
+  USA           3       10
 </pre></div>
 </div>
 </div>
@@ -514,6 +800,14 @@ risk    X  Y  Z
 <aside class="footnote brackets" id="default-foot" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
 <p>Always be wary of defaults. If there is one way of getting an entire scientific field to adhere to a particular way of doing something without the need for any critical evaluation, simply make it the default in software. Defaults do not automatically hold some higher-level of credibility simply because they were the value that the developer picked. Many times these are well-considered, but this is not a <em>guarantee</em>. We can easily be led astray by default choices because we do not have to justify using them. This does not have an official name, but we could perhaps call it <em>the default authority effect</em>. It is effectively a reversal of the burden of proof: deviating from defaults requires defence, whereas using defaults is treated as neutral. Yet this presupposes that the defaults are normatively sound, which is rarely demonstrated or even documented.</p>
+</aside>
+<aside class="footnote brackets" id="modterms-foot" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
+<p>At least in terms of the sums-of-squares and mean-squares. The <span class="math notranslate nohighlight">\(F\)</span>-statistic and <span class="math notranslate nohighlight">\(p\)</span>-value depend on the error sums-of-squares, which will change depending upon the other terms in the model.</p>
+</aside>
+<aside class="footnote brackets" id="ez-foot" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">3</a><span class="fn-bracket">]</span></span>
+<p>A column of effect sizes will also be given (labelled <code class="docutils literal notranslate"><span class="pre">ges</span></code>). We will discuss the nature of omnibus effect sizes later in this lesson.</p>
 </aside>
 </aside>
 </section>
@@ -592,8 +886,13 @@ risk    X  Y  Z
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-i-sums-of-squares">Type I Sums-of-squares</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-ii-sums-of-squares">Type II Sums-of-squares</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-iii-sums-of-squares">Type III Sums-of-squares</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sums-of-squares-in-r">Sums-of-Squares in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resolving-the-sums-of-squares-circus">Resolving the Sums-of-squares Circus</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#when-do-the-sums-of-squares-not-matter">When Do the Sums-of-squares <em>Not</em> Matter?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sums-of-squares-in-r">Sums-of-Squares in <code class="docutils literal notranslate"><span class="pre">R</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#type-i-and-type-ii-in-r">Type I and Type II in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#type-iii-in-r">Type III in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-sums-of-squares-circus">The Sums-of-squares Circus</a></li>
 </ul>
   </nav></div>
 
