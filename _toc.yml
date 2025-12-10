@@ -7,5 +7,5 @@ chapters:
 - file: 1.unbalanced-ANOVA
 - file: 2.follow-up
 - file: 3.advanced-emmeans
-- file: 4.ANCOVA
+#- file: 4.ANCOVA
 - file: summary

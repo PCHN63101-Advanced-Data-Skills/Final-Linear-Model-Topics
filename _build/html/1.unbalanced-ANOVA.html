@@ -175,7 +175,6 @@
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Unbalanced ANOVA Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2.follow-up.html">Follow-up Tests</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3.advanced-emmeans.html">Advanced Uses of <code class="docutils literal notranslate"><span class="pre">emmeans</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="4.ANCOVA.html">Analysis of Covariance (ANCOVA)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
 </ul>
 
@@ -696,7 +695,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 </div>
 </div>
 </div>
-<p>This additional hassle and the dependence of the Type III tests on something as arbitrary as the model coding should be enough to dissuade you from this approach. Indeed, this very dependence is the reason why <code class="docutils literal notranslate"><span class="pre">Anova()</span></code> will <em>not</em> refit the model for you and automatically change the coding. John Fox (the author of <code class="docutils literal notranslate"><span class="pre">car</span></code>) wants this dependence to be clear. Type I and Type II effects do not change with the dummy variable scheme. Type III effects <em>do</em> change. This fact needs to be <em>understood</em>, not <em>hidden</em>.</p>
+<p>This additional hassle and the dependence of the Type III tests on something as arbitrary as the model coding should be enough to dissuade you from this approach. Indeed, this very dependence is the reason why <code class="docutils literal notranslate"><span class="pre">Anova()</span></code> will <em>not</em> refit the model for you and automatically change the coding. <a class="reference external" href="https://uk.sagepub.com/en-gb/eur/author/john-david-fox">John Fox</a> (the author of <code class="docutils literal notranslate"><span class="pre">car</span></code>) wants this dependence to be clear. Type I and Type II effects do not change with the dummy variable scheme. Type III effects <em>do</em> change. This fact needs to be <em>understood</em>, not <em>hidden</em>.</p>
 <p>All that being said, if you want an easier method, there is the <code class="docutils literal notranslate"><span class="pre">ezANOVA()</span></code> function from the <code class="docutils literal notranslate"><span class="pre">ez</span></code> package. This will take care of all the coding mess for you behind the scenes. However, there are some distinct disadvantages here:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">ezANOVA</span></code> aims to create output that mimics SPSS. This is not done within the linear models framework, meaning there is not access to residuals, diagnostic plots, parameter estimates or any of the useful output we want. You get an ANOVA table and nothing else<a class="footnote-reference brackets" href="#ez-foot" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a>.</p></li>
