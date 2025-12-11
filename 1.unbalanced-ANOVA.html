@@ -376,7 +376,6 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-i-sums-of-squares">Type I Sums-of-squares</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-ii-sums-of-squares">Type II Sums-of-squares</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-iii-sums-of-squares">Type III Sums-of-squares</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#when-do-the-sums-of-squares-not-matter">When Do the Sums-of-squares <em>Not</em> Matter?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sums-of-squares-in-r">Sums-of-Squares in <code class="docutils literal notranslate"><span class="pre">R</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#type-i-and-type-ii-in-r">Type I and Type II in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#type-iii-in-r">Type III in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
@@ -458,7 +457,7 @@ y_{ijk} = \mu + \beta_{k} + (\alpha\beta)_{jk} + \epsilon_{ijk},
 </section>
 <section id="type-i-sums-of-squares">
 <h2>Type I Sums-of-squares<a class="headerlink" href="#type-i-sums-of-squares" title="Link to this heading">#</a></h2>
-<p>As indicated above, the Type I sums-of-squares for factor <span class="math notranslate nohighlight">\(\text{A}\)</span> are calculated based on nothing else being in the model. However, this does not tell the full story. To understand these effects, it is useful to introduce some new notation. In comparing the following two models</p>
+<p>With some intuition about the problem of imbalance, and armed with the principle of marginality, we can now explore our options for deriving sums-of-squares in unbalanced models. We will start with Type I. As indicated above, the Type I sums-of-squares for factor <span class="math notranslate nohighlight">\(\text{A}\)</span> are calculated based on nothing else being in the model. However, this does not tell the full story. To understand the Type I effects more clearly, it is useful to introduce some new notation. In comparing the following two models</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
@@ -466,7 +465,7 @@ y_{ijk} = \mu + \beta_{k} + (\alpha\beta)_{jk} + \epsilon_{ijk},
     \mathcal{M}_{1} &amp;: y_{ijk} = \mu + \alpha_{j} + \beta_{k} + \epsilon_{ijk} \\
 \end{alignat*}
 \end{split}\]</div>
-<p>we can denote the <em>reduction</em> in sums-of-squares as follows</p>
+<p>we can denote the <em>reduction</em> in residual sums-of-squares as follows</p>
 <div class="math notranslate nohighlight">
 \[
 R(\alpha|\beta).
@@ -481,7 +480,27 @@ R(\alpha|\beta).
     SS_{\text{AB}} &amp;: R((\alpha\beta)|\mu, \alpha, \beta)
 \end{alignat*}
 \end{split}\]</div>
-<p>As such, the order of the model equation matters here, as each term is added <em>in turn</em> and then compared to the previous model. So we start with only <span class="math notranslate nohighlight">\(\mu\)</span>, we then add <span class="math notranslate nohighlight">\(\alpha\)</span> and see what the difference is. We then add <span class="math notranslate nohighlight">\(\beta\)</span> and see what the difference is from the model containing both <span class="math notranslate nohighlight">\(\mu\)</span> and <span class="math notranslate nohighlight">\(\alpha\)</span>, and so on.</p>
+<p>As such, the order of the model equation matters here. Each term is added <em>in turn</em> and then compared to the previous model. So we start with only <span class="math notranslate nohighlight">\(\mu\)</span>, we then add <span class="math notranslate nohighlight">\(\alpha\)</span> and see what the difference is. We then add <span class="math notranslate nohighlight">\(\beta\)</span> and see what the difference is from the previous model. Finally, we add the interaction and see what the difference is from the previous model. Written long-hand, this would be:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+SS_{\text{A}}&amp;
+\begin{cases}
+  y_{ijk} = \mu + \epsilon_{ijk} \\
+  y_{ijk} = \mu + \alpha_{j} + \epsilon_{ijk}   
+\end{cases} \\
+SS_{\text{B}}&amp;
+\begin{cases}
+  y_{ijk} = \mu + \alpha_{j} + \epsilon_{ijk} \\
+  y_{ijk} = \mu + \alpha_{j} + \beta_{k} + \epsilon_{ijk}   
+\end{cases} \\
+SS_{\text{AB}}&amp;
+\begin{cases}
+  y_{ijk} = \mu + \alpha_{j} + \beta_{k} + \epsilon_{ijk} \\
+  y_{ijk} = \mu + \alpha_{j} + \beta_{k} + (\alpha\beta)_{jk} + \epsilon_{ijk}
+\end{cases}
+\end{alignat*}
+\end{split}\]</div>
 <p>In terms of the Venn diagram intuition, we can see below what the standard order of terms produces in terms of the Type I tests.</p>
 <figure class="align-center">
 <a class="reference internal image-reference" href="_images/SS-I.png"><img alt="_images/SS-I.png" src="_images/SS-I.png" style="width: 471.5px; height: 210.0px;" /></a>
@@ -494,10 +513,49 @@ R(\alpha|\beta).
 </section>
 <section id="type-ii-sums-of-squares">
 <h2>Type II Sums-of-squares<a class="headerlink" href="#type-ii-sums-of-squares" title="Link to this heading">#</a></h2>
-<p>… In terms of their adherence to marginality, the Type II sums-of-squares are the <em>only</em> method of the 3 that does respect marginality.</p>
+<p>Moving on to Type II, these sums-of-squares have a <em>strict</em> adherence to marginality. Indeed, these are the only tests that do this and is the reason why they are the recommended approach. In brief, each Type II effect is tested based on a model that contains none of its <em>higher-order</em> relatives. We will unpack what this means in more detail in this section.</p>
+<p>As an example, in the 2-way ANOVA we have the effects <span class="math notranslate nohighlight">\(\text{A}\)</span>, <span class="math notranslate nohighlight">\(\text{B}\)</span> and <span class="math notranslate nohighlight">\(\text{AB}\)</span>. If we wanted to test <span class="math notranslate nohighlight">\(\text{A}\)</span> then the Type II tests would include all the <em>lower-order</em> terms and <em>same-order</em> terms, but none of the <em>higher-order</em> terms that involve <span class="math notranslate nohighlight">\(\text{A}\)</span>. This would mean including <span class="math notranslate nohighlight">\(\text{B}\)</span> but <em>not</em> <span class="math notranslate nohighlight">\(\text{AB}\)</span>. Similarly, the Type II test of <span class="math notranslate nohighlight">\(\text{B}\)</span> would include <span class="math notranslate nohighlight">\(\text{A}\)</span>, but <em>not</em> <span class="math notranslate nohighlight">\(\text{AB}\)</span>. Finally, the test of <span class="math notranslate nohighlight">\(\text{AB}\)</span> would include both <span class="math notranslate nohighlight">\(\text{A}\)</span> <em>and</em> <span class="math notranslate nohighlight">\(\text{B}\)</span>. In this scheme, the sums-of-squares would be</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    SS_{\text{A}}  &amp;: R(\alpha|\mu, \beta)        \\
+    SS_{\text{B}}  &amp;: R(\beta|\mu, \alpha) \\
+    SS_{\text{AB}} &amp;: R((\alpha\beta)|\mu, \alpha, \beta)
+\end{alignat*}
+\end{split}\]</div>
+<p>Long-hand, this gives:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+SS_{\text{A}}&amp;
+\begin{cases}
+  y_{ijk} = \mu + \beta_{k} + \epsilon_{ijk} \\
+  y_{ijk} = \mu + \alpha_{j} + \beta_{k} + \epsilon_{ijk}   
+\end{cases} \\
+SS_{\text{B}}&amp;
+\begin{cases}
+  y_{ijk} = \mu + \alpha_{j} + \epsilon_{ijk} \\
+  y_{ijk} = \mu + \alpha_{j} + \beta_{k} + \epsilon_{ijk}   
+\end{cases} \\
+SS_{\text{AB}}&amp;
+\begin{cases}
+  y_{ijk} = \mu + \alpha_{j} + \beta_{k} + \epsilon_{ijk} \\
+  y_{ijk} = \mu + \alpha_{j} + \beta_{k} + (\alpha\beta)_{jk} + \epsilon_{ijk}
+\end{cases}
+\end{alignat*}
+\end{split}\]</div>
+<p>So, notice that the main effects are tested <em>assuming their interaction is 0</em>.</p>
+<p>In general, for a given effect <span class="math notranslate nohighlight">\(T\)</span> the Type II rule is that the model comparison is based on including all lower-order terms, all same-order terms and all higher-order terms that <em>do not</em> contain <span class="math notranslate nohighlight">\(T\)</span>. The reason is that this scheme respects marginality. This is the only way to guarantee that each test is always based on an effect that is <em>interpretable</em>. If we make sure we are only ever testing the highest-order effect for the factor in question, it means the hypothesis always has a clear intepretation.</p>
+<p>However, just because an effect is <em>interpretable</em> does not necessarily mean it is <em>meaningful</em>. Whether the Type II effects have any useful meaning depends upon the other effects in the ANOVA table. We therefore have to interpret Type II effects hierarchically, from highest-order to lowest-order. Each test only makes sense if its highest-order relatives are null. So, in the 2-way example, we would only interpret the main effects of <span class="math notranslate nohighlight">\(\text{A}\)</span> and <span class="math notranslate nohighlight">\(\text{B}\)</span> if the interaction <span class="math notranslate nohighlight">\(\text{AB}\)</span> were null. This makes sense because</p>
+<ul class="simple">
+<li><p>If the interaction was <em>significant</em> then the main effects are not meaningful and we would just interpret the interaction on its own.</p></li>
+<li><p>If the interaction was <em>non-significant</em>, the only way to interpret the main effects sensibly is in a model <em>without</em> an interaction term (i.e. a purely additive model).</p></li>
+</ul>
+<p>In terms of our Venn diagram intuition, the Type II tests in the 2-way ANOVA are shown below.</p>
 <figure class="align-center">
 <a class="reference internal image-reference" href="_images/SS-II.png"><img alt="_images/SS-II.png" src="_images/SS-II.png" style="width: 479.5px; height: 211.5px;" /></a>
 </figure>
+<p>Here we can see that <span class="math notranslate nohighlight">\(\text{A}\)</span> and <span class="math notranslate nohighlight">\(\text{B}\)</span> are tested controlling for each other, but assuming that <span class="math notranslate nohighlight">\(\text{AB} = 0\)</span>. This makes both <span class="math notranslate nohighlight">\(\text{A}\)</span> and <span class="math notranslate nohighlight">\(\text{B}\)</span> interpretable, but only <em>meaningful</em> if the additive model fits. If it does, we ignore <span class="math notranslate nohighlight">\(\text{AB}\)</span>. If it does not, we ignore <span class="math notranslate nohighlight">\(\text{A}\)</span> and <span class="math notranslate nohighlight">\(\text{B}\)</span> and only interpret <span class="math notranslate nohighlight">\(\text{AB}\)</span>.</p>
 </section>
 <section id="type-iii-sums-of-squares">
 <h2>Type III Sums-of-squares<a class="headerlink" href="#type-iii-sums-of-squares" title="Link to this heading">#</a></h2>
@@ -509,18 +567,17 @@ R(\alpha|\beta).
     \mathcal{M}_{1} &amp;: y_{ijk} = \mu + \alpha_{j} + \beta_{k} + (\alpha\beta)_{jk} + \epsilon_{ijk} \\
 \end{alignat*}
 \end{split}\]</div>
-<p>In other words, by considering a model that contains an interaction, without one of the associated main effects. This is arguably a wholly <em>meaningless</em> model, where we simultaneously suggest that there is 0 difference between the levels of a factor, but also that this difference changes depending upon another factor. What this model comparison ends up calculating is the effect of A after removing the effect of B <em>and</em> AB. So a main effect with the interaction <em>removed</em>. So what exactly does this mean? If we pretend that the effect of A does not depend upon B, what would the effect of A be? If there is a meaningful interaction, this is then calculating a fantasy. To bring back the example from last week, if the effectiveness of a treatment depends upon diagnosis, if makes little sense to calculate the effect of treatment <em>ignoring</em> diagnosis. It is like someone asking you whether the treament works, and you ask them what the diagnosis is and they refuse to answer and just ask you again whether the treatment works. From this perspective, Type III sums-of-squares are of little use to us, despite being the default in many statistical packages.</p>
+<p>In other words, by considering a model that contains an interaction, without one of the associated main effects. This is arguably a wholly <em>meaningless</em> model, where we simultaneously suggest that there is 0 difference between the levels of a factor, but also that this difference changes depending upon another factor. What this model comparison ends up calculating is the effect of A after removing the effect of B <em>and</em> AB. So a main effect with the interaction <em>removed</em>. So what exactly does this mean? If we pretend that the effect of A does not depend upon B, what would the effect of A be? If there is a meaningful interaction, this is then calculating a fantasy.</p>
+<p>… The problem with the Type III effects is that they try to create something <em>meaningful</em> for every test, but in doing so specify hypotheses that are <em>uninterpretable</em> in the context of the actual data. Trying to derive a main effect test from a model where the interaction is significant is providing an uninterpretable answer to a meaningless question. To bring back the example from last week, if the effectiveness of a treatment depends upon diagnosis, it makes little sense to calculate the effect of treatment <em>ignoring</em> diagnosis. It is like someone asking you whether the treament works. Quite rightly, you say it depends upon diagnosis, so which diagnosis are we talking about? They then just look at you blankly and ask again whether the treatment works.</p>
+<p>In this situation, the Type II tests would say “ok, if we set the interaction to 0, this is what we get. However, the interaction is not 0 and an additive model does not fit well here, so we need to ignore this and focus on the interaction”. The Type III tests would say, “ok, well let us correct the main effects for the interaction effect and interpret what is left over”. This is effectively <em>averaging-over</em> the interaction, which can be severly misleading. By doing this, we may well conclude “the treatement does not work”. Except that the treatment <em>does</em> work, but only if you give it to the patients and not the healthy controls. The Type III promise of given interpretable main effects in the presence of an interaction is therefore something of a fantasy.</p>
 <figure class="align-center">
 <a class="reference internal image-reference" href="_images/SS-III.png"><img alt="_images/SS-III.png" src="_images/SS-III.png" style="width: 473.5px; height: 207.0px;" /></a>
 </figure>
 </section>
-<section id="when-do-the-sums-of-squares-not-matter">
-<h2>When Do the Sums-of-squares <em>Not</em> Matter?<a class="headerlink" href="#when-do-the-sums-of-squares-not-matter" title="Link to this heading">#</a></h2>
-<p>… Balance, <span class="math notranslate nohighlight">\(t\)</span>-tests, oneway ANOVA and multiple regression with only continuous predictors…</p>
-</section>
 <section id="sums-of-squares-in-r">
 <h2>Sums-of-Squares in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#sums-of-squares-in-r" title="Link to this heading">#</a></h2>
-<p>…</p>
+<p>We will now turn to how to calculate these various types of sums-of-squares in <code class="docutils literal notranslate"><span class="pre">R</span></code>. In general, both Type I and Type III are of little practical use. As such, we would recommend just using <code class="docutils literal notranslate"><span class="pre">Anova()</span></code> for everything, which will default to Type II. However, there may be times where you wish to generate the other types, so we will see how to do this below.</p>
+<p>By way of an example, we will retun the the <span class="math notranslate nohighlight">\(2 \times 3\)</span> ANOVA example from <code class="docutils literal notranslate"><span class="pre">mtcars</span></code>, which we regenerate using the code in the drop-down below.</p>
 <div class="cell tag_hide-input docutils container">
 <details class="hide above-input">
 <summary aria-label="Toggle hidden content">
@@ -547,7 +604,7 @@ R(\alpha|\beta).
 </div>
 </details>
 </div>
-<p>We can examine the degree of imbalance using the <code class="docutils literal notranslate"><span class="pre">tables()</span></code> function to generate a contingency table of the factors</p>
+<p>We can examine the degree of imbalance in these data using the <code class="docutils literal notranslate"><span class="pre">tables()</span></code> function to generate a contingency table of the factors</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">with</span><span class="p">(</span><span class="n">mtcars</span><span class="p">,</span><span class="w"> </span><span class="nf">table</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span><span class="n">vs</span><span class="p">))</span>
@@ -564,6 +621,7 @@ origin   Straight V-shaped
 </div>
 </div>
 </div>
+<p>So we can see that this is <em>severely</em> unbalanced. We fit the model below and will then examine the different types of sums-of-squares.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mpg.mod</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vs</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">origin</span><span class="o">:</span><span class="n">vs</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
@@ -573,7 +631,7 @@ origin   Straight V-shaped
 </div>
 <section id="type-i-and-type-ii-in-r">
 <h3>Type I and Type II in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#type-i-and-type-ii-in-r" title="Link to this heading">#</a></h3>
-<p>Type I and II sums-of-sqaures are simple to produce. For Type I, we simply use the built-in <code class="docutils literal notranslate"><span class="pre">anova()</span></code> function.</p>
+<p>Type I and II sums-of-sqaures are simple to produce. For Type I, we can use the built-in <code class="docutils literal notranslate"><span class="pre">anova()</span></code> function.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="nf">anova</span><span class="p">(</span><span class="n">mpg.mod</span><span class="p">))</span>
@@ -595,15 +653,48 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 </div>
 </div>
 </div>
-<p>Note that whilst we might think we could recreate these through model comparisons, only the sums-of-squares will agree. All these tests use the error term from the model containing <em>all</em> the factors. So we can recreate the <em>numerators</em> of the <span class="math notranslate nohighlight">\(F\)</span>-statistics, but the denominators will not be the same.</p>
-<p>For Type II, we can simply use <code class="docutils literal notranslate"><span class="pre">Anova()</span></code> without any options, as the Type II tests are the default. We can also specify <code class="docutils literal notranslate"><span class="pre">type='II'</span></code>, if we want to be explicit about it.</p>
+<p>These sums-of-squares can be reproduced using model comparisons, based on sequentially adding terms to each model. In the code below, we replicate the values in the <code class="docutils literal notranslate"><span class="pre">Sum</span> <span class="pre">Sq</span></code> column given above. This is just to illustrate the interpretation of the Type I effects.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="nf">Anova</span><span class="p">(</span><span class="n">mpg.mod</span><span class="p">))</span><span class="w"> </span><span class="c1"># or Anova(mpg.mod, type=&quot;II&quot;)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod.0</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w">      </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
+<span class="n">mod.1</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
+<span class="n">SS.origin</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="nf">resid</span><span class="p">(</span><span class="n">mod.0</span><span class="p">)</span><span class="o">^</span><span class="m">2</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="nf">resid</span><span class="p">(</span><span class="n">mod.1</span><span class="p">)</span><span class="o">^</span><span class="m">2</span><span class="p">)</span>
+
+<span class="n">mod.0</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="p">,</span><span class="w">      </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
+<span class="n">mod.1</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vs</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
+<span class="n">SS.vs</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="nf">resid</span><span class="p">(</span><span class="n">mod.0</span><span class="p">)</span><span class="o">^</span><span class="m">2</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="nf">resid</span><span class="p">(</span><span class="n">mod.1</span><span class="p">)</span><span class="o">^</span><span class="m">2</span><span class="p">)</span>
+
+<span class="n">mod.0</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vs</span><span class="p">,</span><span class="w">             </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
+<span class="n">mod.1</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vs</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">origin</span><span class="o">:</span><span class="n">vs</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
+<span class="n">SS.inter</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="nf">resid</span><span class="p">(</span><span class="n">mod.0</span><span class="p">)</span><span class="o">^</span><span class="m">2</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="nf">resid</span><span class="p">(</span><span class="n">mod.1</span><span class="p">)</span><span class="o">^</span><span class="m">2</span><span class="p">)</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="n">SS.origin</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">SS.vs</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">SS.inter</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 393.8751
+[1] 282.2613
+[1] 2.207004
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note that we cannot recreate the Type I test using comparisons within the <code class="docutils literal notranslate"><span class="pre">anova()</span></code> function, as only the sums-of-squares will agree. All these tests use the error term from the model containing <em>all</em> the factors. So we can recreate the <em>numerators</em> of the <span class="math notranslate nohighlight">\(F\)</span>-statistics, but the denominators will be different in all but the final comparison.</p>
+<p>For Type II, we can use <code class="docutils literal notranslate"><span class="pre">Anova()</span></code> from <code class="docutils literal notranslate"><span class="pre">car</span></code> without any options, as the Type II tests are the default. We can also specify <code class="docutils literal notranslate"><span class="pre">type='II'</span></code>, if we want to be explicit about it.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">car</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">Anova</span><span class="p">(</span><span class="n">mpg.mod</span><span class="p">))</span><span class="w"> </span><span class="c1"># or Anova(mpg.mod, type=&quot;II&quot;)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading required package: carData
+</pre></div>
+</div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Anova Table (Type II tests)
 
 Response: mpg
@@ -614,6 +705,35 @@ origin:vs   2.21  2  0.0641 0.9380730
 Residuals 447.70 26                      
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+</pre></div>
+</div>
+</div>
+</div>
+<p>Again, we can recreate the <code class="docutils literal notranslate"><span class="pre">Sum</span> <span class="pre">sq</span></code> column manually, just to make the logic clear.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod.0</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">vs</span><span class="p">,</span><span class="w">          </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
+<span class="n">mod.1</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vs</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
+<span class="n">SS.origin</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="nf">resid</span><span class="p">(</span><span class="n">mod.0</span><span class="p">)</span><span class="o">^</span><span class="m">2</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="nf">resid</span><span class="p">(</span><span class="n">mod.1</span><span class="p">)</span><span class="o">^</span><span class="m">2</span><span class="p">)</span>
+
+<span class="n">mod.0</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="p">,</span><span class="w">      </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
+<span class="n">mod.1</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vs</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
+<span class="n">SS.vs</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="nf">resid</span><span class="p">(</span><span class="n">mod.0</span><span class="p">)</span><span class="o">^</span><span class="m">2</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="nf">resid</span><span class="p">(</span><span class="n">mod.1</span><span class="p">)</span><span class="o">^</span><span class="m">2</span><span class="p">)</span>
+
+<span class="n">mod.0</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vs</span><span class="p">,</span><span class="w">             </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
+<span class="n">mod.1</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vs</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">origin</span><span class="o">:</span><span class="n">vs</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
+<span class="n">SS.inter</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="nf">resid</span><span class="p">(</span><span class="n">mod.0</span><span class="p">)</span><span class="o">^</span><span class="m">2</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="nf">resid</span><span class="p">(</span><span class="n">mod.1</span><span class="p">)</span><span class="o">^</span><span class="m">2</span><span class="p">)</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="n">SS.origin</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">SS.vs</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">SS.inter</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 179.6085
+[1] 282.2613
+[1] 2.207004
 </pre></div>
 </div>
 </div>
@@ -652,9 +772,6 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading required package: carData
-</pre></div>
-</div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Anova Table (Type III tests)
 
 Response: mpg
@@ -885,7 +1002,6 @@ origin   Straight V-shaped
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-i-sums-of-squares">Type I Sums-of-squares</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-ii-sums-of-squares">Type II Sums-of-squares</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-iii-sums-of-squares">Type III Sums-of-squares</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#when-do-the-sums-of-squares-not-matter">When Do the Sums-of-squares <em>Not</em> Matter?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sums-of-squares-in-r">Sums-of-Squares in <code class="docutils literal notranslate"><span class="pre">R</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#type-i-and-type-ii-in-r">Type I and Type II in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#type-iii-in-r">Type III in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
