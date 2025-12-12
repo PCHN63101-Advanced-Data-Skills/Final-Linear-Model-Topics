@@ -16,22 +16,20 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!--
-    this give us a css class that will be invisible only if js is disabled
-  -->
-  <noscript>
-    <style>
-      .pst-js-only { display: none !important; }
-
-    </style>
-  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b76e3c8a" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -39,11 +37,10 @@
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="_static/test.css?v=90b7ad94" />
   
-  <!-- So that users can add custom icons -->
-  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
@@ -70,7 +67,6 @@
     <link rel="prev" title="Introduction" href="0.intro.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -86,8 +82,19 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <dialog id="pst-search-dialog">
-    
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
       action="search.html"
       method="get">
@@ -95,6 +102,7 @@
   <input type="search"
          class="form-control"
          name="q"
+         id="search-input"
          placeholder="Search this book..."
          aria-label="Search this book..."
          autocomplete="off"
@@ -102,8 +110,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
+</form></div>
+  </div>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -119,8 +127,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -150,17 +157,21 @@
     
     
     <img src="_static/logo.png" class="logo__image only-light" alt="Linear Models V: Advanced ANOVA Topics - Home"/>
-    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="Linear Models V: Advanced ANOVA Topics - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Linear Models V: Advanced ANOVA Topics - Home"/>`);</script>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button></div>
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
@@ -184,14 +195,9 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
-      <div class="sidebar-primary-item">
-<div id="ethical-ad-placement"
-      class="flat"
-      data-ea-publisher="readthedocs"
-      data-ea-type="readthedocs-sidebar"
-      data-ea-manual="true">
-</div></div>
   </div>
+  
+  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -335,16 +341,24 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
 
 
-<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-</button>
+  </button>
+`);
+</script>
 <button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
@@ -381,7 +395,7 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#type-iii-in-r">Type III in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-sums-of-squares-circus">The Sums-of-squares Circus</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reassessing-the-sums-of-squares-circus">Reassessing the Sums-of-squares Circus</a></li>
 </ul>
             </nav>
         </div>
@@ -587,7 +601,7 @@ SS_{\text{AB}}&amp;
 <li><p>What is the average effect of brakes on stopping a car, adjusting for whether the car is moving?</p></li>
 <li><p>What is the average effect of an umbrella on keeping you dry, adjusting for whether it is raining?</p></li>
 <li><p>What is the average effect of an antibiotic for treatment, adjusting for whether there is an infection present?</p></li>
-<li><p>What is the average effect of sunscreen on preventing sunburn, adjusting for whether you are indoors or outside?</p></li>
+<li><p>What is the average effect of suncream on preventing sunburn, adjusting for whether you are indoors or outside?</p></li>
 </ul>
 <p>Hopefully it is clear in all these cases that the context provided by the interaction is <em>essential</em> for interpretation and that simply adjusting that context away leaves you with something entirely meaningless.</p>
 </section>
@@ -648,7 +662,7 @@ origin   Straight V-shaped
 </div>
 <section id="type-i-and-type-ii-in-r">
 <h3>Type I and Type II in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#type-i-and-type-ii-in-r" title="Link to this heading">#</a></h3>
-<p>Type I and II sums-of-sqaures are simple to produce. For Type I, we can use the built-in <code class="docutils literal notranslate"><span class="pre">anova()</span></code> function.</p>
+<p>Type I and II sums-of-squares are simple to produce. For Type I, we can use the built-in <code class="docutils literal notranslate"><span class="pre">anova()</span></code> function.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="nf">anova</span><span class="p">(</span><span class="n">mpg.mod</span><span class="p">))</span>
@@ -709,9 +723,6 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading required package: carData
-</pre></div>
-</div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Anova Table (Type II tests)
 
 Response: mpg
@@ -759,7 +770,8 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 </section>
 <section id="type-iii-in-r">
 <h3>Type III in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#type-iii-in-r" title="Link to this heading">#</a></h3>
-<p>For Type III, things get trickier. Recall from above that a Type III main effect is making the implicit comparison</p>
+<p>For Type III, things get trickier. We might think that we can simply specify <code class="docutils literal notranslate"><span class="pre">type='III'</span></code> in the call to <code class="docutils literal notranslate"><span class="pre">Anova()</span></code> and be done. This will produce numbers, but unfortuantely these will only correspond to the Type III effects after we have made a further change to the model.</p>
+<p>Recall from above that a Type III main effect is making the implicit comparison</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
@@ -767,8 +779,25 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
     \mathcal{M}_{1} &amp;: y_{ijk} = \mu + \alpha_{j} + \beta_{k} + (\alpha\beta)_{jk} + \epsilon_{ijk} \\
 \end{alignat*}
 \end{split}\]</div>
-<p>So you might think we can compare <code class="docutils literal notranslate"><span class="pre">y</span> <span class="pre">~</span> <span class="pre">A</span> <span class="pre">+</span> <span class="pre">B</span> <span class="pre">+</span> <span class="pre">A:B</span></code> to <code class="docutils literal notranslate"><span class="pre">y</span> <span class="pre">~</span> <span class="pre">B</span> <span class="pre">+</span> <span class="pre">A:B</span></code>. Unfortunately, this will not work. … In fact, not actual model comparison exists that will generate the Type III test for us because the models will not behave in the way the Type III tests require. This in and of itself should indicate why Type III is not doing anything sensible. The approach that <code class="docutils literal notranslate"><span class="pre">Anova()</span></code> uses is based on manipulating the model parameters to create the comparison that the Type III tests imply. However, in order to do this correctly, we need to use a <em>very specific dummy coding scheme</em>. …</p>
-<p>We have two options here. The first is to change the dummy coding <em>globally</em> using</p>
+<p>If we try this in <code class="docutils literal notranslate"><span class="pre">R</span></code>, it will not work</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod.0</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w">          </span><span class="n">vs</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">origin</span><span class="o">:</span><span class="n">vs</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
+<span class="n">mod.1</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vs</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">origin</span><span class="o">:</span><span class="n">vs</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
+<span class="n">SS.origin</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="nf">resid</span><span class="p">(</span><span class="n">mod.0</span><span class="p">)</span><span class="o">^</span><span class="m">2</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="nf">resid</span><span class="p">(</span><span class="n">mod.1</span><span class="p">)</span><span class="o">^</span><span class="m">2</span><span class="p">)</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="n">SS.origin</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 1.136868e-13
+</pre></div>
+</div>
+</div>
+</div>
+<p>This value is effectively <code class="docutils literal notranslate"><span class="pre">0</span></code>. Why? As stated earlier, in the model that omits <code class="docutils literal notranslate"><span class="pre">origin</span></code> the main effect will simply get absorbed into the interaction term and the model fit will be identical. As such, in order to calculate the Type III effects, the <code class="docutils literal notranslate"><span class="pre">Anova()</span></code> function has to take a different approach. We do not need to understand the details of this. The main practical point is that in order to force the Type III effects without relying on model comparisons, the effects need to be coded using a very specific dummy variable scheme. In <code class="docutils literal notranslate"><span class="pre">R</span></code>, this alternative scheme is known as <em>sum-to-zero</em> coding, as it forces the sum of each parameter associated with a given term to sum to zero (i.e. <span class="math notranslate nohighlight">\(\sum{\alpha_{j}} = 0\)</span>, <span class="math notranslate nohighlight">\(\sum{\beta_{k}} = 0\)</span> and <span class="math notranslate nohighlight">\(\sum{(\alpha\beta)_{jk}} = 0\)</span>). The impact of doing this and the reasoning behind it are beyond our current scope. The main take-away here is that, when using the <code class="docutils literal notranslate"><span class="pre">Anova()</span></code> function, the Type III tests rely on this one specific constraint in order to be correct.</p>
+<p>In order to change the contrast scheme in <code class="docutils literal notranslate"><span class="pre">R</span></code>, we have two options. The first, but <em>not recommended</em>, approach is to set the coding globally using</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">options</span><span class="p">(</span><span class="n">contrasts</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&#39;contr.sum&#39;</span><span class="p">,</span><span class="s">&#39;contr.poly&#39;</span><span class="p">))</span>
@@ -776,7 +805,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 </div>
 </div>
 </div>
-<p>The disadvantage of doing this is that this will change the interpretation of the parameters in all the model you use after setting this, unless you remember to set it back to normal afterwards. This means you always need to specify models in the following way</p>
+<p>The two options are for <em>unordered</em> and <em>ordered</em> factors. Do not worry about the second option here, it is the first option that is relevant to us. The main disadvantage of doing this is that it will change the interpretation of the parameters in all the model you use after setting this, unless you remember to set it back to normal afterwards. This means you always need to specify models in the following way</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">car</span><span class="p">)</span>
@@ -784,7 +813,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 <span class="nf">options</span><span class="p">(</span><span class="n">contrasts</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&#39;contr.sum&#39;</span><span class="p">,</span><span class="s">&#39;contr.poly&#39;</span><span class="p">))</span><span class="w">              </span><span class="c1"># set sum-to-zero coding</span>
 <span class="n">mod.sum</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">vs</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vs</span><span class="o">:</span><span class="n">origin</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span><span class="w">   </span><span class="c1"># fit model</span>
 <span class="nf">print</span><span class="p">(</span><span class="nf">Anova</span><span class="p">(</span><span class="n">mod.sum</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&#39;III&#39;</span><span class="p">))</span><span class="w">                           </span><span class="c1"># Type III ANOVA table</span>
-<span class="nf">options</span><span class="p">(</span><span class="n">contrasts</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&#39;contr.treatment&#39;</span><span class="p">,</span><span class="s">&#39;contr.poly&#39;</span><span class="p">))</span><span class="w">        </span><span class="c1"># puting the coding back to default</span>
+<span class="nf">options</span><span class="p">(</span><span class="n">contrasts</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&#39;contr.treatment&#39;</span><span class="p">,</span><span class="s">&#39;contr.poly&#39;</span><span class="p">))</span><span class="w">        </span><span class="c1"># put the coding back</span>
 </pre></div>
 </div>
 </div>
@@ -807,8 +836,9 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 <p>The better approach, though the more messy in terms of syntax, is to tell <code class="docutils literal notranslate"><span class="pre">lm()</span></code> how to code each variable explicitly. This can be done using the <code class="docutils literal notranslate"><span class="pre">contrasts=</span></code> argument, which takes a list of each factor alongside how we want them coded. For this example, we will therefore use</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod.sum</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">vs</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vs</span><span class="o">:</span><span class="n">origin</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">,</span><span class="w"> </span>
-<span class="w">              </span><span class="n">contrasts</span><span class="o">=</span><span class="nf">list</span><span class="p">(</span><span class="n">vs</span><span class="o">=</span><span class="n">contr.sum</span><span class="p">,</span><span class="w"> </span><span class="n">origin</span><span class="o">=</span><span class="n">contr.sum</span><span class="p">))</span><span class="w"> </span><span class="c1"># fit model w/specific coding</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod.sum</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">vs</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vs</span><span class="o">:</span><span class="n">origin</span><span class="p">,</span><span class="w"> </span>
+<span class="w">              </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">,</span><span class="w"> </span>
+<span class="w">              </span><span class="n">contrasts</span><span class="o">=</span><span class="nf">list</span><span class="p">(</span><span class="n">vs</span><span class="o">=</span><span class="n">contr.sum</span><span class="p">,</span><span class="w"> </span><span class="n">origin</span><span class="o">=</span><span class="n">contr.sum</span><span class="p">))</span><span class="w"> </span><span class="c1"># fit model w/sum coding</span>
 <span class="nf">print</span><span class="p">(</span><span class="nf">Anova</span><span class="p">(</span><span class="n">mod.sum</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&#39;III&#39;</span><span class="p">))</span><span class="w">                             </span><span class="c1"># Type III ANOVA table</span>
 </pre></div>
 </div>
@@ -829,14 +859,14 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 </div>
 </div>
 </div>
-<p>This additional hassle and the dependence of the Type III tests on something as arbitrary as the model coding should be enough to dissuade you from this approach. Indeed, this very dependence is the reason why <code class="docutils literal notranslate"><span class="pre">Anova()</span></code> will <em>not</em> refit the model for you and automatically change the coding. <a class="reference external" href="https://uk.sagepub.com/en-gb/eur/author/john-david-fox">John Fox</a> (the author of <code class="docutils literal notranslate"><span class="pre">car</span></code>) wants this dependence to be clear. Type I and Type II effects do not change with the dummy variable scheme. Type III effects <em>do</em> change. This fact needs to be <em>understood</em>, not <em>hidden</em>.</p>
-<p>All that being said, if you want an easier method, there is the <code class="docutils literal notranslate"><span class="pre">ezANOVA()</span></code> function from the <code class="docutils literal notranslate"><span class="pre">ez</span></code> package. This will take care of all the coding mess for you behind the scenes. However, there are some distinct disadvantages here:</p>
+<p>As we can see, this is a hassle. Now, there are deeper reasons why <code class="docutils literal notranslate"><span class="pre">car</span></code> chooses to do things this way, even though it may appear an <em>oversight</em>. However, we will not dig into this any further or dwell on it. The important point is that you need to be sure that you are using <code class="docutils literal notranslate"><span class="pre">contr.sum</span></code> with <code class="docutils literal notranslate"><span class="pre">Anova()</span></code> if you want Type III tests that are testing what you are expecting. All that being said, if you want an easier method, there is the <code class="docutils literal notranslate"><span class="pre">ezANOVA()</span></code> function from the <code class="docutils literal notranslate"><span class="pre">ez</span></code> package. This will take care of all the coding mess for you behind the scenes. However, there are some disadvantages here:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">ezANOVA</span></code> aims to create output that mimics SPSS. This is not done within the linear models framework, meaning there is not access to residuals, diagnostic plots, parameter estimates or any of the useful output we want. You get an ANOVA table and nothing else<a class="footnote-reference brackets" href="#ez-foot" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ezANOVA</span></code> requires an index variable indicating which rows correspond to individual subjects, which is a little bit of a hassle.</p></li>
 <li><p>By abstracting away the difficulties of Type III tests, <code class="docutils literal notranslate"><span class="pre">ezANOVA</span></code> gives the impression of simplicity and does not engage you with any of the controversy. It prints a generic warning under imbalance, but nothing else.</p></li>
-<li><p>Fundammentally, this package aims to re-express linear models in the language of Psychology and then <em>hide</em> information from you. This is is rarely a good thing. If this is what someone needs in order to use <code class="docutils literal notranslate"><span class="pre">R</span></code>, it is arguable that they should not be using it at all.</p></li>
+<li><p>Fundammentally, the <code class="docutils literal notranslate"><span class="pre">ez</span></code> package aims to re-express linear models in the language of Psychology and then <em>hide</em> information from you. This is rarely a good thing.</p></li>
 </ul>
-<p>Nevertheless, if you want the simplest possible method of generating a Type III table, you can do the following</p>
+<p>Nevertheless, if you want the simplest possible method of generating a Type III table that you <em>know</em> is correct, you can do the following</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">ez</span><span class="p">)</span>
@@ -868,10 +898,15 @@ Coefficient covariances computed by hccm()
 </div>
 </section>
 </section>
-<section id="the-sums-of-squares-circus">
-<h2>The Sums-of-squares Circus<a class="headerlink" href="#the-sums-of-squares-circus" title="Link to this heading">#</a></h2>
-<p>… The truth is that the main reason all this hassle exists is because the neat partition of the ANOVA effects disappears when the data are imbalanced. In order to resolve this, we have to choose a method of partitioning the sums-of-squares. The definitions given above come directly from SAS, who’s aim was not some principled statistical derivation that makes sense, rather it was to give their users what they wanted: identical ANOVA output irrespective of balance. Because the traditional ANOVA was not seen as an exercise in model building, it was not typical to remove terms that appeared redundant. In order to maintain this completeness, SAS wanted ANOVA tables that contained <em>all</em> terms, rather than certain terms disappearing under imbalance. As such, different methods for decomposing these effects were developed and a choice was provided.</p>
-<p>From a modern perspective, all this hassle is unnecessary if we engage with the process of <em>model building</em>. This is something we will discuss in much greater detail in the machine learning module next semester. However, the idea is very simple. If a term adds little predictive utility, remove it and create the simplest model you can. From this perspective, if the highest-order interaction is <em>small</em> it would be removed and then the lower-order terms become interpretable again. No need for Type II tests to make them intepretable <em>despite</em> the presence of the interaction term. However, if an interaction is <em>large</em>, it stays in the model and we only interpret the highest-order term for each factor. Under this scheme, the whole Type I/II/III debate disappears.</p>
+<section id="reassessing-the-sums-of-squares-circus">
+<h2>Reassessing the Sums-of-squares Circus<a class="headerlink" href="#reassessing-the-sums-of-squares-circus" title="Link to this heading">#</a></h2>
+<p>By this point, you probably have the impression that all this sums-of-squares business is a bit of a mess. You would not be wrong. However, we can resolve it quite easily by saying</p>
+<ul class="simple">
+<li><p>Always use <code class="docutils literal notranslate"><span class="pre">Anova()</span></code> with <code class="docutils literal notranslate"><span class="pre">type='II'</span></code></p></li>
+<li><p>Use the principle of marginality to guide interpretation</p></li>
+</ul>
+<p>This gets around most of the mess and also guarantees that the hypotheses are always interpretable and are based on actual model comparisons that you can recreate for yourself.</p>
+<p>The bigger picture here is one of sensible model building. The ANOVA exists primarily as a way of performing hypothesis tests on models that contain <em>all</em> the factorial terms. The Type II tests then have to derive hypotheses that ask questions based on what the results would be if certain terms were 0, even in models where they may not be 0. This is quite complex to do. In general, we are much better served by building models that <em>remove</em> null terms. If we do this and then use marginality, we can side-step a lot of this hassle.</p>
 <p>As an example, say we have the model</p>
 <div class="math notranslate nohighlight">
 \[
@@ -882,12 +917,50 @@ Y = A + B + C + AB + AC + BC + ABC.
 \[
 Y = A + B + C + AB + AC + BC.
 \]</div>
-<p>Now, say that <span class="math notranslate nohighlight">\(AC\)</span> and <span class="math notranslate nohighlight">\(BC\)</span> are also uninteresting, we can settle on</p>
+<p>Now, say that <span class="math notranslate nohighlight">\(AB\)</span> and <span class="math notranslate nohighlight">\(AC\)</span> are also uninteresting, we can settle on</p>
 <div class="math notranslate nohighlight">
 \[
-Y = A + B + C + AB.
+Y = A + B + C + BC.
 \]</div>
-<p>We would now interpret the 2-way interaction <span class="math notranslate nohighlight">\(AB\)</span> and the main effect <span class="math notranslate nohighlight">\(C\)</span>. Because we have respected marginality here when building these models, all these terms have interpretable effects</p>
+<p>We would now interpret the 2-way interaction <span class="math notranslate nohighlight">\(BC\)</span> and the main effect <span class="math notranslate nohighlight">\(A\)</span>. Because we have respected marginality here when building these models, both these terms have interpretable effects and the Type II and Type III distinction disappears. Indeed, we can easily produce these tests using model comparisons and they will be easily interpretable, as each effect is the highest-order term for each factor in the model. For instance, using a simulated unbalanced dataset for demonstration, we have:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># Effect of A</span>
+<span class="n">null.mod</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="o">~</span><span class="w">     </span><span class="n">B</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">B</span><span class="o">:</span><span class="n">C</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">dat</span><span class="p">)</span>
+<span class="n">full.mod</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">B</span><span class="o">:</span><span class="n">C</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">dat</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">anova</span><span class="p">(</span><span class="n">null.mod</span><span class="p">,</span><span class="n">full.mod</span><span class="p">))</span>
+
+<span class="c1"># Effect of BC</span>
+<span class="n">null.mod</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">C</span><span class="p">,</span><span class="w">       </span><span class="n">data</span><span class="o">=</span><span class="n">dat</span><span class="p">)</span>
+<span class="n">full.mod</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">B</span><span class="o">:</span><span class="n">C</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">dat</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">anova</span><span class="p">(</span><span class="n">null.mod</span><span class="p">,</span><span class="n">full.mod</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Analysis of Variance Table
+
+Model 1: y ~ B + C + B:C
+Model 2: y ~ A + B + C + B:C
+  Res.Df    RSS Df Sum of Sq      F    Pr(&gt;F)    
+1    115 427.91                                  
+2    114 368.48  1     59.43 18.386 3.793e-05 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Analysis of Variance Table
+
+Model 1: y ~ A + B + C
+Model 2: y ~ A + B + C + B:C
+  Res.Df    RSS Df Sum of Sq      F    Pr(&gt;F)    
+1    116 461.62                                  
+2    114 368.48  2    93.139 14.408 2.639e-06 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note that this is <em>not</em> the approach you will find in the mainstream Psychology literature. However, it is the most coherent and cohesive method of getting around all the sums-of-squares hassle that agrees directly with the ideas of model comparisons <em>and</em> respects marginality. Each effect is therefore <em>interpretable</em> and comes from the most parsimonious and best-fitting model for our data.</p>
 <aside class="topic">
 <p class="topic-title">What do you now know?</p>
 <p>In this section, we have explored … After reading this section, you should have a good sense of:</p>
@@ -901,7 +974,7 @@ Y = A + B + C + AB.
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="default-foot" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
-<p>Always be wary of defaults. If there is one way of getting an entire scientific field to adhere to a particular way of doing something without the need for any critical evaluation, simply make it the default in software. Defaults do not automatically hold some higher-level of credibility simply because they were the value that the developer picked. Many times these are well-considered, but this is not a <em>guarantee</em>. We can easily be led astray by default choices because we do not have to justify using them. This does not have an official name, but we could perhaps call it <em>the default authority effect</em>. It is effectively a reversal of the burden of proof: deviating from defaults requires defence, whereas using defaults is treated as neutral. Yet this presupposes that the defaults are normatively sound, which is rarely demonstrated or even documented.</p>
+<p>Always be wary of defaults. If there is one way of getting an entire scientific field to adhere to a particular way of doing something without the need for any critical evaluation, simply make it the default in software. Defaults do not automatically hold some higher-level of credibility simply because they were the value that the developer picked. Many times these are well-considered, but this is not a <em>guarantee</em>.</p>
 </aside>
 <aside class="footnote brackets" id="modterms-foot" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
@@ -970,8 +1043,7 @@ Y = A + B + C + AB.
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
-                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -993,7 +1065,7 @@ Y = A + B + C + AB.
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#type-iii-in-r">Type III in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-sums-of-squares-circus">The Sums-of-squares Circus</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reassessing-the-sums-of-squares-circus">Reassessing the Sums-of-squares Circus</a></li>
 </ul>
   </nav></div>
 
@@ -1042,8 +1114,8 @@ By Dr Martyn McFarquhar & Dr George Farmer
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>
