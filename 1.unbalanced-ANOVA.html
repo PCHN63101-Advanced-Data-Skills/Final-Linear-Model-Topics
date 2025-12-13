@@ -16,20 +16,22 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-  
-  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
-
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b76e3c8a" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -37,10 +39,11 @@
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="_static/test.css?v=90b7ad94" />
   
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
@@ -67,6 +70,7 @@
     <link rel="prev" title="Introduction" href="0.intro.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -82,19 +86,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="search.html"
       method="get">
@@ -102,7 +95,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search this book..."
          aria-label="Search this book..."
          autocomplete="off"
@@ -110,8 +102,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -127,7 +119,8 @@
       
       
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -157,21 +150,17 @@
     
     
     <img src="_static/logo.png" class="logo__image only-light" alt="Linear Models V: Advanced ANOVA Topics - Home"/>
-    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Linear Models V: Advanced ANOVA Topics - Home"/>`);</script>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="Linear Models V: Advanced ANOVA Topics - Home"/>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
@@ -195,9 +184,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -341,24 +335,16 @@
 
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-  </button>
-`);
-</script>
+</button>
 <button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
@@ -382,14 +368,14 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-problem-of-imbalance">The Problem of Imbalance</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-problem-of-unbalance">The Problem of Unbalance</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#venn-diagram-intuition">Venn Diagram Intuition</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-principle-of-marginality">The Principle of Marginality</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-i-sums-of-squares">Type I Sums-of-squares</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-ii-sums-of-squares">Type II Sums-of-squares</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-iii-sums-of-squares">Type III Sums-of-squares</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-i-sums-of-squares">Type I Sums-of-Squares</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-ii-sums-of-squares">Type II Sums-of-Squares</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-iii-sums-of-squares">Type III Sums-of-Squares</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sums-of-squares-in-r">Sums-of-Squares in <code class="docutils literal notranslate"><span class="pre">R</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#type-i-and-type-ii-in-r">Type I and Type II in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#type-iii-in-r">Type III in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
@@ -409,19 +395,20 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="unbalanced-anova-models">
 <h1>Unbalanced ANOVA Models<a class="headerlink" href="#unbalanced-anova-models" title="Link to this heading">#</a></h1>
+<p>The classical ANOVA was developed under the assumption that the number of data points in each cell was <em>identical</em>. This is a condition known as <em>balance</em>. This was done because, in a time before computers, the arithmetic needed to be tractable and simple to apply by hand. When Fisher first developed the ANOVA, he was working on agricultural experiments where you could easily control the number of crops planted within a certain number of fields (for example). In those situations you could design an experiment to be balanced so that the analysis would work. Unfortunately, beyond areas of science where exactact control over sampling is possible, the application of the ANOVA becomes a bit of a problem. In fields such as Psychology and Cognitve Neuroscience, a lack of balance is often the <em>rule</em> rather than the <em>exception</em>. It is easy to see why this is the case, if you have engaged in Psychological research before. Humans are notoriously unreliable and it is possible that certain groups are simply rarer to recruit than others. Removal of bad data will also upset any balance that was achieved when the data was collected. However, because the ANOVA is the <em>de facto</em> method for analysing factorial experiments, these areas of science still desire the use of the ANOVA, despite the problems this causes.</p>
 <figure class="align-right">
 <a class="reference internal image-reference" href="_images/unbalanced-text.webp"><img alt="_images/unbalanced-text.webp" src="_images/unbalanced-text.webp" style="width: 240.0px; height: 360.8px;" /></a>
 </figure>
-<p>… Indeed, whole textbooks were written about unbalanced data (as can be seen on the <em>right</em>). So this is a topic that deserves some attention, even if it is largely <em>ignored</em> by modern teaching in Psychology. There is something of an assumption that the issues of balance have been <em>solved</em> and thus do not need considering anymore. However, this is not really true. The “solution” implemented by SAS and SPSS is the Type III sums-of-squares, which researchers continue to use because it is the default<a class="footnote-reference brackets" href="#default-foot" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. However, as discussed briefly last week, this approach is highly flawed.</p>
-<p>In this part of the lesson, we will dig deeper into the Type I/II/III debate so that you understand what each type of sums-of-squares means, when they are most appropriate to use and what the various arguments are for/against them. In general, we will be recommending Type II for 95% of all use-cases. However, it is important not to just take our word for it. Instead, it is important that you <em>understand</em> the difference and can make your own informed judgement.</p>
-<section id="the-problem-of-imbalance">
-<h2>The Problem of Imbalance<a class="headerlink" href="#the-problem-of-imbalance" title="Link to this heading">#</a></h2>
-<p>The arithmetic behind the traditional ANOVA relates to a simple decomposition of the sums-of-squares. When there are an equal number of data points in each cell (using a 2-way ANOVA as an example), we simply have</p>
+<p>Such is this desire that whole textbooks have been written about unbalanced data (as can be seen on the <em>right</em>). So this is a topic that deserves some attention, even if it is often <em>ignored</em> by modern teaching in Psychology. There is something of an assumption that the issues of balance have been <em>solved</em> and thus do not need considering anymore. However, this is not really true. The “solution” implemented by SAS and SPSS is the Type III sums-of-squares, which researchers continue to use because it is the default<a class="footnote-reference brackets" href="#default-foot" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. However, as discussed briefly last week, this approach is highly flawed.</p>
+<p>In this part of the lesson, we will dig deeper into the Type I/II/III debate so that you understand what each type of sums-of-squares means, when they are most appropriate to use and what the various arguments are for/against them. In general, we will be recommending Type II for all use cases. However, it is important not to just take our word for it. Instead, it is important that you <em>understand</em> the differences and can make your own informed judgement.</p>
+<section id="the-problem-of-unbalance">
+<h2>The Problem of Unbalance<a class="headerlink" href="#the-problem-of-unbalance" title="Link to this heading">#</a></h2>
+<p>The arithmetic behind the traditional ANOVA relates to a simple decomposition of the sums-of-squares. Using a balanced 2-way ANOVA as an example, we simply have</p>
 <div class="math notranslate nohighlight">
 \[
 SS_{\text{A}} + SS_{\text{B}} + SS_{\text{AB}} = SS_{\text{Model}}.
 \]</div>
-<p>So, the total amount of variance explained by the model can be neatly decomposed into several chunks. These decompositions are said to be <em>orthogonal</em>, which you can take to mean <em>independant</em>. The value of each sum-of-squares is not affected by any of the others and they represent a neat and simple partition of the amount explained by the model. Together, we then have</p>
+<p>So, the total amount of variance explained by the model can be neatly decomposed into several chunks. These decompositions are said to be <em>orthogonal</em>, meaning that they are <em>independant</em>. The value of each sum-of-squares is not affected by any of the others and they represent a neat and simple partition of the amount explained by the model. Together, we then have</p>
 <div class="math notranslate nohighlight">
 \[
 SS_{\text{Total}} = SS_{\text{Model}} + SS_{\text{Error}}.
@@ -431,8 +418,8 @@ SS_{\text{Total}} = SS_{\text{Model}} + SS_{\text{Error}}.
 \[
 SS_{\text{A}} + SS_{\text{B}} + SS_{\text{AB}} &gt; SS_{\text{Model}}.
 \]</div>
-<p>Adding these decompositions together is now <em>not</em> the same as the amount of variance explained by the model. What happens is that the effects “bleed” into each other. They no longer represent an independent partition of the variance. A lack of balance kills the symmetry that allows the ANOVA to neatly decompose the variance. What this means practically is that each effect now contains some element of the other effects and adding them together means we double-count some chunks of variance. This leads to a larger sum <span class="math notranslate nohighlight">\(\left(SS_{\text{A}} + SS_{\text{B}} + SS_{\text{AB}}\right)\)</span> than the model actually explains.</p>
-<p>What does this mean in terms of applying an ANOVA model to unbalanced data? It means that each sums-of-squares we calculate is influenced <em>by the other terms in the model</em>. This means we have several options when we decompose the sums-of-squares related to what else is in the model at the time. Each chunk that gets calculated will represent the variance associated with a given effect <em>minus</em> the overlap with anything else in the model. Unfortunately, wherever there is choice, there is also disagreement. For an unbalance ANOVA, this disagreement surrounds three possible ways of decomposing the sums-of-squares in an unbalanced ANOVA model. These are known as Type I, Type II and Type III sums-of-squares and will be the focus of this part of the lesson.</p>
+<p>Adding these decompositions together is now <em>not</em> the same as the total amount of variance explained by the model. What happens is that the effects “bleed” into each other. They no longer represent an independent partition of the variance. A lack of balance kills the symmetry that allows the ANOVA to neatly decompose the variance. What this means practically is that each effect now contains some element of the other effects. Adding them together means we double-count some chunks of variance. This leads to a sum of effects that is <em>larger</em> than the amoung the model actually explains.</p>
+<p>What does this mean in terms of applying an ANOVA model to unbalanced data? It means that each sums-of-squares we calculate is influenced <em>by the other terms in the model</em>. This means we have several options when we decompose the sums-of-squares related to what else is in the model at the time. Each chunk that gets calculated will represent the variance associated with a given effect <em>minus</em> the overlap with anything else in the model. Unfortunately, wherever there is choice, there is also disagreement. For an unbalance ANOVA, this disagreement surrounds three possible ways of decomposing the sums-of-squares in an unbalanced ANOVA model. These are known as Type I, Type II and Type III, and will be the focus of this part of the lesson.</p>
 <section id="venn-diagram-intuition">
 <h3>Venn Diagram Intuition<a class="headerlink" href="#venn-diagram-intuition" title="Link to this heading">#</a></h3>
 <p>Perhaps the simplest way to gain intuition about what happens in an unbalanced ANOVA is to return to the Venn diagram visualisation we saw previously in multiple regression. Here, each circle represents the sum-of-squares associated with each main effect <span class="math notranslate nohighlight">\(\text{A}\)</span> and <span class="math notranslate nohighlight">\(\text{B}\)</span>, along with their interaction <span class="math notranslate nohighlight">\(\text{AB}\)</span>.</p>
@@ -440,19 +427,18 @@ SS_{\text{A}} + SS_{\text{B}} + SS_{\text{AB}} &gt; SS_{\text{Model}}.
 <figure class="align-center">
 <a class="reference internal image-reference" href="_images/orthog-ANOVA.png"><img alt="_images/orthog-ANOVA.png" src="_images/orthog-ANOVA.png" style="width: 342.1px; height: 326.15000000000003px;" /></a>
 </figure>
-<p>Here, there is no overlap between the circles. Each effect is completely independant and it does not mater what else is in the model at the point where we calculate its sum-of-squares. We could entirely remove <span class="math notranslate nohighlight">\(\text{B}\)</span> and <span class="math notranslate nohighlight">\(\text{AB}\)</span> when calculating <span class="math notranslate nohighlight">\(SS_{\text{A}}\)</span> and it would not make any difference. The other model terms therefore do not matter<a class="footnote-reference brackets" href="#modterms-foot" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p>
+<p>Here, there is no overlap between the circles. Each effect is completely independant and it does not mater what else is in the model at the point where we calculate its sum-of-squares. We could entirely remove <span class="math notranslate nohighlight">\(\text{B}\)</span> and <span class="math notranslate nohighlight">\(\text{AB}\)</span> when calculating <span class="math notranslate nohighlight">\(SS_{\text{A}}\)</span> and it would not make any difference. The other model terms therefore <em>do not matter</em>, so far as the sums-of-squares are concerned.</p>
 <p>When the ANOVA is <em>unbalanced</em>, the situation is as shown below</p>
 <figure class="align-center">
 <a class="reference internal image-reference" href="_images/unbalanced-ANOVA.png"><img alt="_images/unbalanced-ANOVA.png" src="_images/unbalanced-ANOVA.png" style="width: 272.25px; height: 266.75px;" /></a>
 </figure>
-<p>Here, the effects now <em>overlap</em>. This means there is some element of both <span class="math notranslate nohighlight">\(\text{B}\)</span> and <span class="math notranslate nohighlight">\(\text{AB}\)</span> inside the sum-of-squares for <span class="math notranslate nohighlight">\(\text{A}\)</span>. This tells us why the sum of these terms is too big. If we sum the area of the <span class="math notranslate nohighlight">\(\text{A}\)</span> circle, <span class="math notranslate nohighlight">\(\text{B}\)</span> circle and <span class="math notranslate nohighlight">\(\text{C}\)</span> circle we will double-count the areas of overlap. This will be larger than the total area of all the circles (the <span class="math notranslate nohighlight">\(SS_{\text{Model}}\)</span>). Furthermore, because each sum-of-squares will now depend upon the other terms in the model, we now have several options when it comes to calculating them.</p>
-<p>Using <span class="math notranslate nohighlight">\(SS_{\text{A}}\)</span> as an examples, we could</p>
+<p>Here, the effects now <em>overlap</em>. This means there is some element of both <span class="math notranslate nohighlight">\(\text{B}\)</span> and <span class="math notranslate nohighlight">\(\text{AB}\)</span> inside the sum-of-squares for <span class="math notranslate nohighlight">\(\text{A}\)</span>. This tells us why the sum of these terms is too big. If we sum the area of the <span class="math notranslate nohighlight">\(\text{A}\)</span> circle, <span class="math notranslate nohighlight">\(\text{B}\)</span> circle and <span class="math notranslate nohighlight">\(\text{C}\)</span> circle we will double-count the areas of overlap. This will be larger than the total area of all the circles (the <span class="math notranslate nohighlight">\(SS_{\text{Model}}\)</span>). Furthermore, because each sum-of-squares will now depend upon the other terms in the model, we now have several options when it comes to calculating them. Using <span class="math notranslate nohighlight">\(SS_{\text{A}}\)</span> as an examples, we could:</p>
 <ul class="simple">
 <li><p>Calculate <span class="math notranslate nohighlight">\(SS_{\text{A}}\)</span> with nothing else in the model</p></li>
 <li><p>Calculate <span class="math notranslate nohighlight">\(SS_{\text{A}}\)</span> with <span class="math notranslate nohighlight">\(\text{B}\)</span> in the model, but no <span class="math notranslate nohighlight">\(\text{AB}\)</span>.</p></li>
 <li><p>Calculate <span class="math notranslate nohighlight">\(SS_{\text{A}}\)</span> with <em>both</em> <span class="math notranslate nohighlight">\(\text{B}\)</span> and <span class="math notranslate nohighlight">\(\text{AB}\)</span> in the model.</p></li>
 </ul>
-<p>In each case, the <span class="math notranslate nohighlight">\(SS_{\text{A}}\)</span> will represent only the <em>unique</em> portion of the cicle, with the overlaps removed. These options are illustrated below and correspond to the Type I, Type II and Type III sums-of-squares.</p>
+<p>In each case, the <span class="math notranslate nohighlight">\(SS_{\text{A}}\)</span> will represent only the <em>unique</em> portion of the cicle, with the overlaps removed. These options are illustrated below and correspond directly to the Type I, Type II and Type III sums-of-squares for factor A</p>
 <figure class="align-center">
 <a class="reference internal image-reference" href="_images/SS-Types.png"><img alt="_images/SS-Types.png" src="_images/SS-Types.png" style="width: 515.9000000000001px; height: 221.10000000000002px;" /></a>
 </figure>
@@ -461,17 +447,17 @@ SS_{\text{A}} + SS_{\text{B}} + SS_{\text{AB}} &gt; SS_{\text{Model}}.
 <section id="the-principle-of-marginality">
 <h2>The Principle of Marginality<a class="headerlink" href="#the-principle-of-marginality" title="Link to this heading">#</a></h2>
 <p>In trying to determine which of the sums-of-squares to choose, we can be guided by the idea of building <em>meaningful</em> models. This is encapsulated by the <em>principle of marginality</em>, which was laid out by <a class="reference external" href="https://www.jstor.org/stable/2344517">Nelder (1977)</a> as a response to his dissatisfaction with the way that linear models were being applied in statistics. In brief, this principle states that <em>if an interaction is in the model, all the constituent lower-order terms must also be in the model</em>.</p>
-<p>For example, if we include <span class="math notranslate nohighlight">\(\text{AB}\)</span>, we must also include <span class="math notranslate nohighlight">\(\text{A}\)</span> and <span class="math notranslate nohighlight">\(\text{B}\)</span>. If we include <span class="math notranslate nohighlight">\(\text{ABC}\)</span> we must also include <span class="math notranslate nohighlight">\(\text{A}\)</span>, <span class="math notranslate nohighlight">\(\text{B}\)</span>, <span class="math notranslate nohighlight">\(\text{C}\)</span>, <span class="math notranslate nohighlight">\(\text{AB}\)</span>, <span class="math notranslate nohighlight">\(\text{AC}\)</span>, <span class="math notranslate nohighlight">\(\text{BC}\)</span>. From this perspective, interpretation flows <em>downwards</em>. We interpret the highest-order significant terms and ignore any lower-order terms that are nested inside it. We must start at the <em>bottom</em> of the ANOVA table and work our way up, respecting marginality along the way. This reflects the fact that removing a lower-order term destroys the meaning of the interaction term. Remember, an interaction is defined as a <em>departure from additivity</em>. Without the additive components present in the model, this deviation has no meaning.</p>
-<p>For instance, if we fit the model</p>
+<p>As an example, if we include <span class="math notranslate nohighlight">\(\text{AB}\)</span> in our model, <em>marginality</em> tells us that we must also include <span class="math notranslate nohighlight">\(\text{A}\)</span> and <span class="math notranslate nohighlight">\(\text{B}\)</span>, if we want the model parameters to be interpretable. Similarly, if we include <span class="math notranslate nohighlight">\(\text{ABC}\)</span> we must also include <span class="math notranslate nohighlight">\(\text{A}\)</span>, <span class="math notranslate nohighlight">\(\text{B}\)</span>, <span class="math notranslate nohighlight">\(\text{C}\)</span>, <span class="math notranslate nohighlight">\(\text{AB}\)</span>, <span class="math notranslate nohighlight">\(\text{AC}\)</span> and <span class="math notranslate nohighlight">\(\text{BC}\)</span>. Interpretation must then flow from the <em>highest-order</em> effects to the <em>lowest-order</em> effects. We start at the highest interactions and work our way towards the main effects. So, we must start at the <em>bottom</em> of the ANOVA table and work our way up, respecting marginality along the way. This reflects the fact that removing a lower-order term destroys the meaning of a higher-order term that contains it. For instance, removing a <em>main effect</em> ruins our ability to interpret the associated <em>interaction</em>. Remember, an interaction is defined as a <em>departure from additivity</em>. Without the additive components in the model, this deviation has no meaning.</p>
+<p>As an example, if we fit the model</p>
 <div class="math notranslate nohighlight">
 \[
 y_{ijk} = \mu + \beta_{k} + (\alpha\beta)_{jk} + \epsilon_{ijk},
 \]</div>
-<p>then there is no main effect of <span class="math notranslate nohighlight">\(\text{A}\)</span>, there is only the main effect of <span class="math notranslate nohighlight">\(\text{B}\)</span> and the <span class="math notranslate nohighlight">\(\text{AB}\)</span> interaction. However, the interaction term <span class="math notranslate nohighlight">\((\alpha\beta)_{jk}\)</span> will no longer behave as a “deviation from additivity”. Instead, it will need to soak-up both the main effect of <span class="math notranslate nohighlight">\(\text{A}\)</span> and the <span class="math notranslate nohighlight">\(\text{AB}\)</span> interaction. So the value of this term will be a combination of the main effect and the interaction, which is uninterpretable. This is all because this model does not respect the principle of marginality and thus the clean interpretation of each term is destroyed. Although the model above does not seem sensible, we will see below that the Type III sums-of-squares actually make <em>implicit</em> comparisons with these forms of models.</p>
+<p>then there is no main effect of <span class="math notranslate nohighlight">\(\text{A}\)</span>, there is only the main effect of <span class="math notranslate nohighlight">\(\text{B}\)</span> and the <span class="math notranslate nohighlight">\(\text{AB}\)</span> interaction. However, the interaction term <span class="math notranslate nohighlight">\((\alpha\beta)_{jk}\)</span> will no longer behave as a “deviation from additivity”. Instead, it will need to soak-up both the main effect of <span class="math notranslate nohighlight">\(\text{A}\)</span> and the <span class="math notranslate nohighlight">\(\text{AB}\)</span> interaction. So the value of this term will be a combination of the main effect and the interaction, which is uninterpretable. This is because this model <em>does not respect the principle of marginality</em> and thus the clean interpretation of each term is destroyed. Although the model above does not seem very sensible, we will see below that the Type III sums-of-squares actually make <em>implicit</em> comparisons with these forms of models.</p>
 </section>
 <section id="type-i-sums-of-squares">
-<h2>Type I Sums-of-squares<a class="headerlink" href="#type-i-sums-of-squares" title="Link to this heading">#</a></h2>
-<p>With some intuition about the problem of imbalance, and armed with the principle of marginality, we can now explore our options for deriving sums-of-squares in unbalanced models. We will start with Type I. As indicated above, the Type I sums-of-squares for factor <span class="math notranslate nohighlight">\(\text{A}\)</span> are calculated based on nothing else being in the model. However, this does not tell the full story. To understand the Type I effects more clearly, it is useful to introduce some new notation. In comparing the following two models</p>
+<h2>Type I Sums-of-Squares<a class="headerlink" href="#type-i-sums-of-squares" title="Link to this heading">#</a></h2>
+<p>With some intuition about the problem of unbalanced data, and armed with the principle of marginality, we can now explore our options for deriving sums-of-squares in unbalanced models. We will start with Type I. As indicated above, the Type I sums-of-squares for factor <span class="math notranslate nohighlight">\(\text{A}\)</span> are calculated based on nothing else being in the model. However, this does not tell the full story. To understand the Type I effects more clearly, it is useful to introduce some new notation. In comparing the following two models</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
@@ -494,7 +480,7 @@ R(\alpha|\beta).
     SS_{\text{AB}} &amp;: R((\alpha\beta)|\mu, \alpha, \beta)
 \end{alignat*}
 \end{split}\]</div>
-<p>As such, the order of the model equation matters here. Each term is added <em>in turn</em> and then compared to the previous model. So we start with only <span class="math notranslate nohighlight">\(\mu\)</span>, we then add <span class="math notranslate nohighlight">\(\alpha\)</span> and see what the difference is. We then add <span class="math notranslate nohighlight">\(\beta\)</span> and see what the difference is from the previous model. Finally, we add the interaction and see what the difference is from the previous model. Written long-hand, this would be:</p>
+<p>As such, the order of the model equation matters here. Each term is added <em>in turn</em> and then compared to the previous model. So we start with only <span class="math notranslate nohighlight">\(\mu\)</span>, we then add <span class="math notranslate nohighlight">\(\alpha\)</span> and see what the difference is. We then add <span class="math notranslate nohighlight">\(\beta\)</span> and see what the difference is, and then add the interaction and see what the difference is. Written long-hand, this would be:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
@@ -515,19 +501,19 @@ SS_{\text{AB}}&amp;
 \end{cases}
 \end{alignat*}
 \end{split}\]</div>
-<p>In terms of the Venn diagram intuition, we can see below what the standard order of terms produces in terms of the Type I tests.</p>
+<p>In terms of the Venn diagram intuition, we can see below what the standard order of terms produces when using the Type I tests.</p>
 <figure class="align-center">
 <a class="reference internal image-reference" href="_images/SS-I.png"><img alt="_images/SS-I.png" src="_images/SS-I.png" style="width: 471.5px; height: 210.0px;" /></a>
 </figure>
-<p>Of these, the test of <span class="math notranslate nohighlight">\(\text{B}\)</span> and <span class="math notranslate nohighlight">\(\text{AB}\)</span> are useful because they take other terms into account. However, the test of <span class="math notranslate nohighlight">\(\text{A}\)</span> is less useful, because it does not take the effect of <span class="math notranslate nohighlight">\(\text{B}\)</span> into account. Importantly, however, this will change entirely if the model is specified in a <em>different</em> order. This reliance on order makes the Type I sums-of-squares dubious in their usefulness. Unfortunately, this is exactly what the <code class="docutils literal notranslate"><span class="pre">anova()</span></code> function from base <code class="docutils literal notranslate"><span class="pre">R</span></code> produces and why this method is not really suitable for <em>unbalanced</em> data. Here, the adherence to marginality depends entirely upon the order in which the terms enter the model and will only produce <em>some</em> useful tests, but not necessarily all.</p>
+<p>Of these, the test of <span class="math notranslate nohighlight">\(\text{B}\)</span> and <span class="math notranslate nohighlight">\(\text{AB}\)</span> are useful because they take other terms into account. However, the test of <span class="math notranslate nohighlight">\(\text{A}\)</span> is less useful, because it does not take the effect of <span class="math notranslate nohighlight">\(\text{B}\)</span> into account. Importantly, however, this will change entirely if the model is specified in a <em>different</em> order. This reliance on order makes the Type I sums-of-squares dubious in their usefulness. Unfortunately, this is exactly what the <code class="docutils literal notranslate"><span class="pre">anova()</span></code> function from base <code class="docutils literal notranslate"><span class="pre">R</span></code> produces and why this method is not suitable for <em>unbalanced</em> data. Here, the adherence to marginality depends entirely upon the order in which the terms enter the model and will only produce <em>some</em> useful tests, but not necessarily all.</p>
 <div class="info admonition">
 <p class="admonition-title">Why does R default to Type I sums-of-squares?</p>
 <p>It may seem strange that the <code class="docutils literal notranslate"><span class="pre">anova()</span></code> function would choose to use the Type I sums-of-squares. However, we need to understand that <code class="docutils literal notranslate"><span class="pre">anova()</span></code> is only designed for use on <em>balanced</em> data. With this in mind, the choice of decomposition technique is entirely due to computational ease. The Type I effects are easy to calculate because we simply loop through each term, comparing the change in residual sums-of-squares to the previous model. Under balance, this is identical to the traditional ANOVA decompositon and is also identical to Type II and Type III tests. From this perspective, it is easy to see why <code class="docutils literal notranslate"><span class="pre">anova()</span></code> does things this way. However, it is important to understand that this should not be used with <em>unbalanced</em> data. At least, not without understanding what the tests actually mean.</p>
 </div>
 </section>
 <section id="type-ii-sums-of-squares">
-<h2>Type II Sums-of-squares<a class="headerlink" href="#type-ii-sums-of-squares" title="Link to this heading">#</a></h2>
-<p>Moving on to Type II, these sums-of-squares have a <em>strict</em> adherence to marginality. Indeed, these are the only tests that do this and is the reason why they are the recommended approach. In brief, each Type II effect is tested based on a model that contains none of its <em>higher-order</em> relatives. We will unpack what this means in more detail in this section.</p>
+<h2>Type II Sums-of-Squares<a class="headerlink" href="#type-ii-sums-of-squares" title="Link to this heading">#</a></h2>
+<p>Moving on to Type II, these sums-of-squares have a <em>strict</em> adherence to marginality. Indeed, these are the only tests that do this and is the reason why they are the recommended approach. In brief, each Type II effect is tested based on a model that contains none of its <em>higher-order</em> relatives. We will unpack what this means in more detail below.</p>
 <p>As an example, in the 2-way ANOVA we have the effects <span class="math notranslate nohighlight">\(\text{A}\)</span>, <span class="math notranslate nohighlight">\(\text{B}\)</span> and <span class="math notranslate nohighlight">\(\text{AB}\)</span>. If we wanted to test <span class="math notranslate nohighlight">\(\text{A}\)</span> then the Type II tests would include all the <em>lower-order</em> terms and <em>same-order</em> terms, but none of the <em>higher-order</em> terms that involve <span class="math notranslate nohighlight">\(\text{A}\)</span>. This would mean including <span class="math notranslate nohighlight">\(\text{B}\)</span> but <em>not</em> <span class="math notranslate nohighlight">\(\text{AB}\)</span>. Similarly, the Type II test of <span class="math notranslate nohighlight">\(\text{B}\)</span> would include <span class="math notranslate nohighlight">\(\text{A}\)</span>, but <em>not</em> <span class="math notranslate nohighlight">\(\text{AB}\)</span>. Finally, the test of <span class="math notranslate nohighlight">\(\text{AB}\)</span> would include both <span class="math notranslate nohighlight">\(\text{A}\)</span> <em>and</em> <span class="math notranslate nohighlight">\(\text{B}\)</span>. In this scheme, the sums-of-squares would be</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -558,9 +544,8 @@ SS_{\text{AB}}&amp;
 \end{cases}
 \end{alignat*}
 \end{split}\]</div>
-<p>So, notice that the main effects are tested <em>assuming their interaction is 0</em>.</p>
-<p>In general, for a given effect <span class="math notranslate nohighlight">\(T\)</span> the Type II rule is that the model comparison is based on including all lower-order terms, all same-order terms and all higher-order terms that <em>do not</em> contain <span class="math notranslate nohighlight">\(T\)</span>. The reason is that this scheme respects marginality. This is the only way to guarantee that each test is always based on an effect that is <em>interpretable</em>. If we make sure we are only ever testing the highest-order effect for the factor in question, it means the hypothesis always has a clear intepretation.</p>
-<p>However, just because an effect is <em>interpretable</em> does not necessarily mean it is <em>meaningful</em>. Whether the Type II effects have any useful meaning depends upon the other effects in the ANOVA table. We therefore have to interpret Type II effects hierarchically, from highest-order to lowest-order. Each test only makes sense if its highest-order relatives are null. So, in the 2-way example, we would only interpret the main effects of <span class="math notranslate nohighlight">\(\text{A}\)</span> and <span class="math notranslate nohighlight">\(\text{B}\)</span> if the interaction <span class="math notranslate nohighlight">\(\text{AB}\)</span> were null. This makes sense because</p>
+<p>So, notice that the main effects are tested <em>assuming their interaction is 0</em>. The reason is that this scheme respects marginality. This is the only way to guarantee that each test is based on an effect that is <em>interpretable</em>. If we make sure we are only ever testing the highest-order effect for the factor in question, it means the hypothesis always has a clear intepretation. For instance, the Type II test on <span class="math notranslate nohighlight">\(\text{A}\)</span> means that <span class="math notranslate nohighlight">\(\text{A}\)</span> is the highest-order term in the model (so there is no <span class="math notranslate nohighlight">\(\text{AB}\)</span> interaction), but will always takes all the same-order and lower-order relatives into account.</p>
+<p>However, just because an effect is <em>interpretable</em> does not necessarily mean it is <em>meaningful</em>. Whether the Type II effects have any useful meaning depends upon the other effects in the ANOVA table. We therefore have to interpret Type II effects hierarchically, from highest-order to lowest-order. Each test only makes sense if its highest-order relatives are null. So, in the 2-way example, we would only interpret the main effects of <span class="math notranslate nohighlight">\(\text{A}\)</span> and <span class="math notranslate nohighlight">\(\text{B}\)</span> if the interaction <span class="math notranslate nohighlight">\(\text{AB}\)</span> were null. This is because:</p>
 <ul class="simple">
 <li><p>If the interaction was <em>significant</em> then the main effects are not meaningful and we would just interpret the interaction on its own.</p></li>
 <li><p>If the interaction was <em>non-significant</em>, the only way to interpret the main effects sensibly is in a model <em>without</em> an interaction term (i.e. a purely additive model).</p></li>
@@ -569,11 +554,11 @@ SS_{\text{AB}}&amp;
 <figure class="align-center">
 <a class="reference internal image-reference" href="_images/SS-II.png"><img alt="_images/SS-II.png" src="_images/SS-II.png" style="width: 479.5px; height: 211.5px;" /></a>
 </figure>
-<p>Here we can see that <span class="math notranslate nohighlight">\(\text{A}\)</span> and <span class="math notranslate nohighlight">\(\text{B}\)</span> are tested controlling for each other, but assuming that <span class="math notranslate nohighlight">\(\text{AB} = 0\)</span>. This makes both <span class="math notranslate nohighlight">\(\text{A}\)</span> and <span class="math notranslate nohighlight">\(\text{B}\)</span> interpretable, but only <em>meaningful</em> if the additive model fits. If it does, we ignore <span class="math notranslate nohighlight">\(\text{AB}\)</span>. If it does not, we ignore <span class="math notranslate nohighlight">\(\text{A}\)</span> and <span class="math notranslate nohighlight">\(\text{B}\)</span> and only interpret <span class="math notranslate nohighlight">\(\text{AB}\)</span>.</p>
+<p>Here we can see that <span class="math notranslate nohighlight">\(\text{A}\)</span> and <span class="math notranslate nohighlight">\(\text{B}\)</span> are tested controlling for each other, but assuming that <span class="math notranslate nohighlight">\(\text{AB} = 0\)</span>. This makes both <span class="math notranslate nohighlight">\(\text{A}\)</span> and <span class="math notranslate nohighlight">\(\text{B}\)</span> interpretable, but only <em>meaningful</em> if the additive model is suitable. If the additive model <em>is</em> suitable, we would ignore <span class="math notranslate nohighlight">\(\text{AB}\)</span> anyway and so the tests on <span class="math notranslate nohighlight">\(\text{A}\)</span> and <span class="math notranslate nohighlight">\(\text{B}\)</span> make sense. If the additive model is <em>not</em> suitable, we would ignore <span class="math notranslate nohighlight">\(\text{A}\)</span> and <span class="math notranslate nohighlight">\(\text{B}\)</span> anyway and only interpret <span class="math notranslate nohighlight">\(\text{AB}\)</span>. The Type II tests create this interpretational guarantee <em>without</em> us having to explicitly specify different models.</p>
 </section>
 <section id="type-iii-sums-of-squares">
-<h2>Type III Sums-of-squares<a class="headerlink" href="#type-iii-sums-of-squares" title="Link to this heading">#</a></h2>
-<p>Finally, moving on to Type III, these sums-of-squares <em>ignore</em> marginality. In the presence of an interaction, the Type III tests of main effects do not assume that that interaction is 0 (as Type II does). Instead, these tests retain the interaction in the model and make a comparison of the form</p>
+<h2>Type III Sums-of-Squares<a class="headerlink" href="#type-iii-sums-of-squares" title="Link to this heading">#</a></h2>
+<p>Finally, moving on to Type III, these sums-of-squares <em>ignore</em> marginality. In the presence of an interaction, the Type III tests of main effects do not assume that that interaction is 0. Instead, these tests retain the interaction in the model and make a comparison of the form</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
@@ -581,7 +566,7 @@ SS_{\text{AB}}&amp;
     \mathcal{M}_{1} &amp;: y_{ijk} = \mu + \alpha_{j} + \beta_{k} + (\alpha\beta)_{jk} + \epsilon_{ijk} \\
 \end{alignat*}
 \end{split}\]</div>
-<p>In other words, the Type III logic implies testing a model that contains an interaction, without one of the associated main effects. In this way, the effect of <span class="math notranslate nohighlight">\(\text{A}\)</span> would be conducted after correcting for both <span class="math notranslate nohighlight">\(\text{B}\)</span> <em>and</em> <span class="math notranslate nohighlight">\(\text{AB}\)</span>. In terms of the <span class="math notranslate nohighlight">\(R\)</span> notation, this would be</p>
+<p>In other words, the Type III logic implies consideration of a model that contains an interaction, <em>without</em> one of the associated main effects. In this way, the effect of <span class="math notranslate nohighlight">\(\text{A}\)</span> is conceptualised as a main effect after <em>correcting</em> for both <span class="math notranslate nohighlight">\(\text{B}\)</span> and <span class="math notranslate nohighlight">\(\text{AB}\)</span>. In terms of the <span class="math notranslate nohighlight">\(R\)</span> notation, this would be</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
@@ -590,9 +575,19 @@ SS_{\text{AB}}&amp;
     SS_{\text{AB}} &amp;: R((\alpha\beta)|\mu, \alpha, \beta)
 \end{alignat*}
 \end{split}\]</div>
-<p>We can see that the test of the interaction agrees with both Type I and Type II, but the main effects do not. Now, as we argued above, a comparison such as <span class="math notranslate nohighlight">\(R(\alpha|\mu, \beta, (\alpha\beta))\)</span> is not particularly meaningful because the model will simply absorb the main effects into the interaction term. This makes the interaction parameters difficult to interpret, but it keeps the model fit <em>identical</em>. In fact, you cannot create the Type III tests from model comparisons alone. If you tried, the model fit would be the same and you would have nothing. This is already a hint that Type III tests are not asking a sensible question. In fact, Type III tests are generated using an entirely different approach to model comparisons which, as we will see further below, requires further technical changes to our model in order to generate them correctly.</p>
-<p>Even beyond the technical elements, conceptually the model comparison that Type III tests imply is wholly <em>meaningless</em>, as it suggests a situation where there is 0 difference between the levels of a factor (<span class="math notranslate nohighlight">\(\alpha_{j} = 0\)</span>), but also that this difference changes depending upon another factor (<span class="math notranslate nohighlight">\((\alpha\beta)_{jk} \neq 0\)</span>). To bring back the example from last week, if the effectiveness of a treatment depends upon diagnosis, it makes little sense to calculate the effect of treatment <em>averaging over</em> diagnosis. It is like someone asking you whether the treament works. Quite rightly, you say it depends upon diagnosis. So, which diagnosis are we talking about? They then just look at you blankly and ask again whether the treatment works. In this situation, the Type II tests would say “ok, if we set the interaction to 0, this is what we get. However, the interaction is not 0 and an additive model does not fit well here”. The Type III tests would say, “ok, well let us correct the main effects for the interaction effect and interpret what is left over”. This can be severly misleading. In this situation we could easily conclude “the treatement does not work”. Except that the treatment <em>does</em> work, but only if you give it to the patients and not the healthy controls.</p>
-<p>In terms of the Venn diagram intuition, we can see below that the Type III main effects have the overlap with the interaction term removed. The problem is that this remaining chunk is <em>uninterpretable</em>. Yes, a number can be calculated, but conceptually it is problematic. This is most easily seen when we have a significant interaction and a non-significant main effect. The Type III claim is that these are both interpretable, but clearly this situation creates a contradiction. A treatment cannot simultaneously work and not work. We cannot conclude “When taking diagnosis into account, the treatment is effective. However, ignoring diagnosis the treatment does nothing.”</p>
+<p>We can see that the test of the interaction agrees with both Type I and Type II, but the main effects do not. Now, as we argued above, a comparison such as <span class="math notranslate nohighlight">\(R(\alpha|\mu, \beta, (\alpha\beta))\)</span> is not particularly meaningful because the model will simply absorb the main effects into the interaction term. This makes the interaction parameters difficult to interpret, but it keeps the model fit <em>identical</em>. In fact, you cannot create the Type III tests from model comparisons alone (as we will demonstrate in <code class="docutils literal notranslate"><span class="pre">R</span></code> further below). This is already a hint that Type III tests are not asking a sensible question.</p>
+<p>Conceptually, the model comparison that Type III tests imply is very dubious, as it suggests a situation where there is 0 difference between the levels of a factor (<span class="math notranslate nohighlight">\(\alpha_{j} = 0\)</span>), but also that this difference changes depending upon another factor (<span class="math notranslate nohighlight">\((\alpha\beta)_{jk} \neq 0\)</span>). To bring back the example from last week, if the effectiveness of a treatment depends upon diagnosis, it makes little sense to calculate the effect of treatment <em>correcting for</em> diagnosis. It is like having the following converastion:</p>
+<ul class="simple">
+<li><p>Dr. Type III: “So, based on your analysis, does the treament work?”</p></li>
+<li><p>You: “Well, whether it works or not depends upon diagnosis. So, which diagnosis are we talking about?”</p></li>
+<li><p>Dr. Type III: “…”</p></li>
+<li><p>You: “…Are you ok, doctor?”</p></li>
+<li><p>Dr. Type III: “Does the treatment work?”</p></li>
+<li><p>You: “Again, it depends upon diagnosis, So, you need to tell me…”</p></li>
+<li><p>Dr. Tupe III: “No, <em>ignore</em> diagnosis. Just tell me whether the treament works!”</p></li>
+</ul>
+<p>In this situation, the Type II tests would say “ok, if we set the interaction to 0, this is what we get. However, the interaction is not 0 and an additive model does not fit well here”. The Type III tests would say, “ok, well let us <em>correct</em> the main effects for the interaction effect and interpret what is left over”. This can be severely misleading. In this situation, we could easily conclude “the treatement does not work”. Except that the treatment <em>does</em> work, but only if you give it to the patients.</p>
+<p>In terms of the Venn diagram intuition, we can see below that the Type III main effects have the overlap with the interaction term removed. The problem is that this remaining chunk is <em>uninterpretable</em>. Yes, a number can be calculated, but conceptually it is problematic. This is most easily seen when we have a significant interaction and a non-significant main effect. The Type III claim is that these are both interpretable, but clearly this situation creates a contradiction. A treatment cannot simultaneously work and not work. We cannot conclude “When taking diagnosis into account, the treatment is effective. However, ignoring diagnosis the treatment does nothing.” Averaging across patients and controls is <em>only</em> meaningful under an additive model. Otherwise, we get some ficticious half-way group that is nearly a patient, but not quite, and for whom the treatment does nothing.</p>
 <figure class="align-center">
 <a class="reference internal image-reference" href="_images/SS-III.png"><img alt="_images/SS-III.png" src="_images/SS-III.png" style="width: 473.5px; height: 207.0px;" /></a>
 </figure>
@@ -608,34 +603,7 @@ SS_{\text{AB}}&amp;
 <section id="sums-of-squares-in-r">
 <h2>Sums-of-Squares in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#sums-of-squares-in-r" title="Link to this heading">#</a></h2>
 <p>We will now turn to how to calculate these various types of sums-of-squares in <code class="docutils literal notranslate"><span class="pre">R</span></code>. In general, both Type I and Type III are of little practical use. As such, we would recommend just using <code class="docutils literal notranslate"><span class="pre">Anova()</span></code> for everything, which will default to Type II. However, there may be times where you wish to generate the other types (if only to placate colleagues who are more used to SPSS), so we will see how to do this below.</p>
-<p>By way of an example, we will retun the the <span class="math notranslate nohighlight">\(2 \times 3\)</span> ANOVA example from <code class="docutils literal notranslate"><span class="pre">mtcars</span></code>, which we regenerate using the code in the drop-down below.</p>
-<div class="cell tag_hide-input docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">data</span><span class="p">(</span><span class="n">mtcars</span><span class="p">)</span>
-
-<span class="c1"># Origin factor</span>
-<span class="n">mtcars</span><span class="o">$</span><span class="n">origin</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&#39;Japan&#39;</span><span class="p">,</span><span class="s">&#39;Japan&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span>
-<span class="w">                   </span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span>
-<span class="w">                   </span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Japan&#39;</span><span class="p">,</span><span class="s">&#39;Japan&#39;</span><span class="p">,</span><span class="s">&#39;Japan&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span>
-<span class="w">                   </span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;USA&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">,</span><span class="s">&#39;Europe&#39;</span><span class="p">)</span>
-<span class="n">mtcars</span><span class="o">$</span><span class="n">origin</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.factor</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">origin</span><span class="p">)</span>
-
-<span class="c1"># VS factor</span>
-<span class="n">vs.lab</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rep</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="nf">length</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">vs</span><span class="p">))</span><span class="w"> </span>
-<span class="n">vs.lab</span><span class="p">[</span><span class="n">mtcars</span><span class="o">$</span><span class="n">vs</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">0</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">&quot;V-shaped&quot;</span>
-<span class="n">vs.lab</span><span class="p">[</span><span class="n">mtcars</span><span class="o">$</span><span class="n">vs</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">&quot;Straight&quot;</span>
-<span class="n">mtcars</span><span class="o">$</span><span class="n">vs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.factor</span><span class="p">(</span><span class="n">vs.lab</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</details>
-</div>
-<p>We can examine the degree of imbalance in these data using the <code class="docutils literal notranslate"><span class="pre">tables()</span></code> function to generate a contingency table of the factors</p>
+<p>By way of an example, we will retun the the <span class="math notranslate nohighlight">\(2 \times 3\)</span> ANOVA example from <code class="docutils literal notranslate"><span class="pre">mtcars</span></code>. We can examine the degree of unbalance in these data using the <code class="docutils literal notranslate"><span class="pre">tables()</span></code> function to generate a contingency table of the factors</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">with</span><span class="p">(</span><span class="n">mtcars</span><span class="p">,</span><span class="w"> </span><span class="nf">table</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span><span class="n">vs</span><span class="p">))</span>
@@ -652,10 +620,10 @@ origin   Straight V-shaped
 </div>
 </div>
 </div>
-<p>So we can see that this is <em>severely</em> unbalanced. We fit the model below and will then examine the different types of sums-of-squares.</p>
+<p>So we can see that this is <em>severely</em> unbalanced data. We fit the model below and will then examine the different types of sums-of-squares.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mpg.mod</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vs</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">origin</span><span class="o">:</span><span class="n">vs</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mpg.mod</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="o">*</span><span class="n">vs</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -713,12 +681,11 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 </div>
 </div>
 </div>
-<p>Note that we cannot recreate the Type I test using comparisons within the <code class="docutils literal notranslate"><span class="pre">anova()</span></code> function, as only the sums-of-squares will agree. All these tests use the error term from the model containing <em>all</em> the factors. So we can recreate the <em>numerators</em> of the <span class="math notranslate nohighlight">\(F\)</span>-statistics, but the denominators will be different in all but the final comparison.</p>
 <p>For Type II, we can use <code class="docutils literal notranslate"><span class="pre">Anova()</span></code> from <code class="docutils literal notranslate"><span class="pre">car</span></code> without any options, as the Type II tests are the default. We can also specify <code class="docutils literal notranslate"><span class="pre">type='II'</span></code>, if we want to be explicit about it.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">car</span><span class="p">)</span>
-<span class="nf">print</span><span class="p">(</span><span class="nf">Anova</span><span class="p">(</span><span class="n">mpg.mod</span><span class="p">))</span><span class="w"> </span><span class="c1"># or Anova(mpg.mod, type=&quot;II&quot;)</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">Anova</span><span class="p">(</span><span class="n">mpg.mod</span><span class="p">))</span><span class="w"> </span><span class="c1"># or Anova(mpg.mod, type=&#39;II&#39;)</span>
 </pre></div>
 </div>
 </div>
@@ -791,7 +758,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 1.136868e-13
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] -5.684342e-14
 </pre></div>
 </div>
 </div>
@@ -836,8 +803,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 <p>The better approach, though the more messy in terms of syntax, is to tell <code class="docutils literal notranslate"><span class="pre">lm()</span></code> how to code each variable explicitly. This can be done using the <code class="docutils literal notranslate"><span class="pre">contrasts=</span></code> argument, which takes a list of each factor alongside how we want them coded. For this example, we will therefore use</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod.sum</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">vs</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vs</span><span class="o">:</span><span class="n">origin</span><span class="p">,</span><span class="w"> </span>
-<span class="w">              </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">,</span><span class="w"> </span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod.sum</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">vs</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vs</span><span class="o">:</span><span class="n">origin</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">,</span><span class="w"> </span>
 <span class="w">              </span><span class="n">contrasts</span><span class="o">=</span><span class="nf">list</span><span class="p">(</span><span class="n">vs</span><span class="o">=</span><span class="n">contr.sum</span><span class="p">,</span><span class="w"> </span><span class="n">origin</span><span class="o">=</span><span class="n">contr.sum</span><span class="p">))</span><span class="w"> </span><span class="c1"># fit model w/sum coding</span>
 <span class="nf">print</span><span class="p">(</span><span class="nf">Anova</span><span class="p">(</span><span class="n">mod.sum</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&#39;III&#39;</span><span class="p">))</span><span class="w">                             </span><span class="c1"># Type III ANOVA table</span>
 </pre></div>
@@ -859,11 +825,20 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 </div>
 </div>
 </div>
-<p>As we can see, this is a hassle. Now, there are deeper reasons why <code class="docutils literal notranslate"><span class="pre">car</span></code> chooses to do things this way, even though it may appear an <em>oversight</em>. However, we will not dig into this any further or dwell on it. The important point is that you need to be sure that you are using <code class="docutils literal notranslate"><span class="pre">contr.sum</span></code> with <code class="docutils literal notranslate"><span class="pre">Anova()</span></code> if you want Type III tests that are testing what you are expecting. All that being said, if you want an easier method, there is the <code class="docutils literal notranslate"><span class="pre">ezANOVA()</span></code> function from the <code class="docutils literal notranslate"><span class="pre">ez</span></code> package. This will take care of all the coding mess for you behind the scenes. However, there are some disadvantages here:</p>
+<p>Notice that the Type III ANOVA table also includes a test on the intercept. This is basically meaningless, but is there because the Type III logic is to test every term in the model, adjusting for everything else. So, the intercept test is comparing</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    \mathcal{M}_{0} &amp;: y_{ijk} = \alpha_{j} + \beta_{k} + (\alpha\beta)_{jk} + \epsilon_{ijk} \\
+    \mathcal{M}_{1} &amp;: y_{ijk} = \mu + \alpha_{j} + \beta_{k} + (\alpha\beta)_{jk} + \epsilon_{ijk} \\
+\end{alignat*}
+\end{split}\]</div>
+<p>Under sum-to-zero coding, this is asking whether the grand mean is 0, after adjusting for everything else in the model. This is almost never a meaningful question, yet the Type III tests ask it anyway. Notice that neither Type I or Type II do this.</p>
+<p>As we can see, the Type III tests are a hassle. Now, there are deeper reasons why <code class="docutils literal notranslate"><span class="pre">car</span></code> chooses to do things this way, even though it may appear an <em>oversight</em>. However, we will not dig into this any further or dwell on it. The important point is that you need to be sure that you are using <code class="docutils literal notranslate"><span class="pre">contr.sum</span></code> with <code class="docutils literal notranslate"><span class="pre">Anova()</span></code> if you want Type III tests that are testing what you are expecting. If you want an easier method, there is the <code class="docutils literal notranslate"><span class="pre">ezANOVA()</span></code> function from the <code class="docutils literal notranslate"><span class="pre">ez</span></code> package. This will take care of all the coding mess for you behind the scenes. However, there are some disadvantages here:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">ezANOVA</span></code> aims to create output that mimics SPSS. This is not done within the linear models framework, meaning there is not access to residuals, diagnostic plots, parameter estimates or any of the useful output we want. You get an ANOVA table and nothing else<a class="footnote-reference brackets" href="#ez-foot" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ezANOVA</span></code> aims to create output that mimics SPSS. This is not done within the linear models framework, meaning there is no access to residuals, diagnostic plots, parameter estimates or any of the useful output we want. You get an ANOVA table and nothing else<a class="footnote-reference brackets" href="#ez-foot" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">ezANOVA</span></code> requires an index variable indicating which rows correspond to individual subjects, which is a little bit of a hassle.</p></li>
-<li><p>By abstracting away the difficulties of Type III tests, <code class="docutils literal notranslate"><span class="pre">ezANOVA</span></code> gives the impression of simplicity and does not engage you with any of the controversy. It prints a generic warning under imbalance, but nothing else.</p></li>
+<li><p>By abstracting away the difficulties of Type III tests, <code class="docutils literal notranslate"><span class="pre">ezANOVA</span></code> gives the impression of simplicity and does not engage you with any of the controversy. It prints a generic warning under unbalanced data, but nothing else.</p></li>
 <li><p>Fundammentally, the <code class="docutils literal notranslate"><span class="pre">ez</span></code> package aims to re-express linear models in the language of Psychology and then <em>hide</em> information from you. This is rarely a good thing.</p></li>
 </ul>
 <p>Nevertheless, if you want the simplest possible method of generating a Type III table that you <em>know</em> is correct, you can do the following</p>
@@ -960,14 +935,18 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 </div>
 </div>
 </div>
-<p>Note that this is <em>not</em> the approach you will find in the mainstream Psychology literature. However, it is the most coherent and cohesive method of getting around all the sums-of-squares hassle that agrees directly with the ideas of model comparisons <em>and</em> respects marginality. Each effect is therefore <em>interpretable</em> and comes from the most parsimonious and best-fitting model for our data.</p>
+<p>Note that this is <em>not</em> the approach you will find in the mainstream Psychology literature. However, it is the most coherent and cohesive method of getting around all the sums-of-squares hassle that agrees directly with the ideas of model comparisons <em>and</em> respects marginality. Each effect is therefore <em>interpretable</em> and comes from the most parsimonious and best-fitting model for our data. We will discuss much more about model comparisons and model building in the Machine Learning module, so do not worry about this too much for now. Just know that there <em>is</em> an alternative to the ANOVA table in these types of models that retains the spirit of model comparisons, but without all the hassle of answering ill-defined questions under unbalance.</p>
 <aside class="topic">
 <p class="topic-title">What do you now know?</p>
-<p>In this section, we have explored … After reading this section, you should have a good sense of:</p>
+<p>In this section, we have explored unbalanced ANOVA models and the choice of sums-of-squares. After reading this section, you should have a good sense of:</p>
 <ul class="simple">
-<li><p>…</p></li>
-<li><p>…</p></li>
-<li><p>…</p></li>
+<li><p>What unbalance means and why it is a problem.</p></li>
+<li><p>The idea that when the data are unbalanced, the sums-of-squares depend upon what other terms are in the model.</p></li>
+<li><p>The principle of marginality as a guideline for always considering models with interpretable effects.</p></li>
+<li><p>What the Type I sums-of-squares are and why they are often less interesting.</p></li>
+<li><p>What the Type II sums-of-squares are and why they are recommended as a default.</p></li>
+<li><p>What the Type III sums-of-squares are and why they are <em>not</em> recommended, despite being the default in other software.</p></li>
+<li><p>How to correctly generate Type I/II/III ANOVA tables in <code class="docutils literal notranslate"><span class="pre">R</span></code></p></li>
 </ul>
 </aside>
 <hr class="footnotes docutils" />
@@ -976,12 +955,8 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
 <p>Always be wary of defaults. If there is one way of getting an entire scientific field to adhere to a particular way of doing something without the need for any critical evaluation, simply make it the default in software. Defaults do not automatically hold some higher-level of credibility simply because they were the value that the developer picked. Many times these are well-considered, but this is not a <em>guarantee</em>.</p>
 </aside>
-<aside class="footnote brackets" id="modterms-foot" role="note">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
-<p>At least in terms of the sums-of-squares and mean-squares. The <span class="math notranslate nohighlight">\(F\)</span>-statistic and <span class="math notranslate nohighlight">\(p\)</span>-value depend on the error sums-of-squares, which will change depending upon the other terms in the model.</p>
-</aside>
 <aside class="footnote brackets" id="ez-foot" role="note">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">3</a><span class="fn-bracket">]</span></span>
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
 <p>A column of effect sizes will also be given (labelled <code class="docutils literal notranslate"><span class="pre">ges</span></code>). We will discuss the nature of omnibus effect sizes later in this lesson.</p>
 </aside>
 </aside>
@@ -1043,7 +1018,8 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -1052,14 +1028,14 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-problem-of-imbalance">The Problem of Imbalance</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-problem-of-unbalance">The Problem of Unbalance</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#venn-diagram-intuition">Venn Diagram Intuition</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-principle-of-marginality">The Principle of Marginality</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-i-sums-of-squares">Type I Sums-of-squares</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-ii-sums-of-squares">Type II Sums-of-squares</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-iii-sums-of-squares">Type III Sums-of-squares</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-i-sums-of-squares">Type I Sums-of-Squares</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-ii-sums-of-squares">Type II Sums-of-Squares</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-iii-sums-of-squares">Type III Sums-of-Squares</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sums-of-squares-in-r">Sums-of-Squares in <code class="docutils literal notranslate"><span class="pre">R</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#type-i-and-type-ii-in-r">Type I and Type II in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#type-iii-in-r">Type III in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
@@ -1114,8 +1090,8 @@ By Dr Martyn McFarquhar & Dr George Farmer
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
   </footer>
