@@ -174,7 +174,8 @@
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Unbalanced ANOVA Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2.follow-up.html">Follow-up Tests</a></li>
-<li class="toctree-l1"><a class="reference internal" href="3.advanced-emmeans.html">Advanced Uses of <code class="docutils literal notranslate"><span class="pre">emmeans</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="3.multiple-tests-effect-sizes.html">Multiple Comparisons and Effect Sizes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4.advanced-emmeans.html">Advanced Uses of <code class="docutils literal notranslate"><span class="pre">emmeans</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
 </ul>
 
@@ -581,12 +582,12 @@ SS_{\text{AB}}&amp;
 <li><p>Dr. Type III: “So, based on your analysis, does the treament work?”</p></li>
 <li><p>You: “Well, whether it works or not depends upon diagnosis. So, which diagnosis are we talking about?”</p></li>
 <li><p>Dr. Type III: “…”</p></li>
-<li><p>You: “…Are you ok, doctor?”</p></li>
+<li><p>You: “…doctor?”</p></li>
 <li><p>Dr. Type III: “Does the treatment work?”</p></li>
 <li><p>You: “Again, it depends upon diagnosis, So, you need to tell me…”</p></li>
-<li><p>Dr. Tupe III: “No, <em>ignore</em> diagnosis. Just tell me whether the treament works!”</p></li>
+<li><p>Dr. Type III: “No, <em>ignore</em> diagnosis. Just tell me whether the treament works!”</p></li>
 </ul>
-<p>In this situation, the Type II tests would say “ok, if we set the interaction to 0, this is what we get. However, the interaction is not 0 and an additive model does not fit well here”. The Type III tests would say, “ok, well let us <em>correct</em> the main effects for the interaction effect and interpret what is left over”. This can be severely misleading. In this situation, we could easily conclude “the treatement does not work”. Except that the treatment <em>does</em> work, but only if you give it to the patients.</p>
+<p>In this situation, the Type II tests would say “ok, if we set the interaction to 0, this is what we get. However, the interaction is not 0 and an additive model does not fit well here, so we cannot do this”. The Type III tests would say, “ok, well let us <em>correct</em> the main effects for the interaction effect and interpret what is left over”. This can be severely misleading. In this situation, we could easily conclude “the treatement does not work”. Except that the treatment <em>does</em> work, but only if you give it to the patients.</p>
 <p>In terms of the Venn diagram intuition, we can see below that the Type III main effects have the overlap with the interaction term removed. The problem is that this remaining chunk is <em>uninterpretable</em>. Yes, a number can be calculated, but conceptually it is problematic. This is most easily seen when we have a significant interaction and a non-significant main effect. The Type III claim is that these are both interpretable, but clearly this situation creates a contradiction. A treatment cannot simultaneously work and not work. We cannot conclude “When taking diagnosis into account, the treatment is effective. However, ignoring diagnosis the treatment does nothing.” Averaging across patients and controls is <em>only</em> meaningful under an additive model. Otherwise, we get some ficticious half-way group that is nearly a patient, but not quite, and for whom the treatment does nothing.</p>
 <figure class="align-center">
 <a class="reference internal image-reference" href="_images/SS-III.png"><img alt="_images/SS-III.png" src="_images/SS-III.png" style="width: 473.5px; height: 207.0px;" /></a>
@@ -772,7 +773,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 </div>
 </div>
 </div>
-<p>The two options are for <em>unordered</em> and <em>ordered</em> factors. Do not worry about the second option here, it is the first option that is relevant to us. The main disadvantage of doing this is that it will change the interpretation of the parameters in all the model you use after setting this, unless you remember to set it back to normal afterwards. This means you always need to specify models in the following way</p>
+<p>The two options are for <em>unordered</em> and <em>ordered</em> factors. Do not worry about the second option here, it is the first option that is relevant to us. The main disadvantage of doing this is that it will change the interpretation of the parameters in all the models you specify after chaging this setting, unless you remember to put it back. This means you always need to specify models in the following way</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">car</span><span class="p">)</span>
@@ -800,7 +801,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 </div>
 </div>
 </div>
-<p>The better approach, though the more messy in terms of syntax, is to tell <code class="docutils literal notranslate"><span class="pre">lm()</span></code> how to code each variable explicitly. This can be done using the <code class="docutils literal notranslate"><span class="pre">contrasts=</span></code> argument, which takes a list of each factor alongside how we want them coded. For this example, we will therefore use</p>
+<p>The better approach, though the more messy in terms of syntax, is to tell <code class="docutils literal notranslate"><span class="pre">lm()</span></code> how to code each variable explicitly. This can be done using the <code class="docutils literal notranslate"><span class="pre">contrasts=</span></code> argument, which takes a list of each factor name, alongside how we want them coded. For this example, it would be</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod.sum</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">vs</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vs</span><span class="o">:</span><span class="n">origin</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">,</span><span class="w"> </span>

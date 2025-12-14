@@ -64,7 +64,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'summary';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Advanced Uses of emmeans" href="3.advanced-emmeans.html" />
+    <link rel="prev" title="Advanced Uses of emmeans" href="4.advanced-emmeans.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -171,7 +171,8 @@
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="1.unbalanced-ANOVA.html">Unbalanced ANOVA Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2.follow-up.html">Follow-up Tests</a></li>
-<li class="toctree-l1"><a class="reference internal" href="3.advanced-emmeans.html">Advanced Uses of <code class="docutils literal notranslate"><span class="pre">emmeans</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="3.multiple-tests-effect-sizes.html">Multiple Comparisons and Effect Sizes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4.advanced-emmeans.html">Advanced Uses of <code class="docutils literal notranslate"><span class="pre">emmeans</span></code></a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Summary</a></li>
 </ul>
 
@@ -369,7 +370,16 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="summary">
 <h1>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h1>
-<p>This lesson brings to a close the PCHN63101 unit …</p>
+<p>This lesson brings to a close the PCHN63101 unit. We have now completed our journey from first principles of a statistical model through linear regression and ANOVA models, culminating in discussions of unbalanced ANOVA and follow-up tests within this lesson. We have covered a lot of theoretical and practical ground across the last few weeks. Although your head may still be spinning from all this, it is worthwhile taking a step back and thinking about what we have achieved. Taking everything together, we now have a singular and generic framework for analysing <em>any</em> dataset where the outcome can be treated as a continuous random variable. This is no small feat. We know exactly how to include continuous predictor variable and categorical predictor variables. We know how to deal with categorical predictor variables with multiple levels and with interactions. We have seen how to generate visualisations of the assumptions as well as alternative methods when those assumptions seem violated. Indeed, no matter the data, our steps are as follows:</p>
+<ol class="arabic simple">
+<li><p>Fit a model using <code class="docutils literal notranslate"><span class="pre">lm()</span></code>.</p></li>
+<li><p>Assess the assumptions using <code class="docutils literal notranslate"><span class="pre">plot(mod)</span></code>.</p></li>
+<li><p>Make adjustments and corrections if needed until we are satisfied.</p></li>
+<li><p>Call <code class="docutils literal notranslate"><span class="pre">summary(mod)</span></code> and interpret the output.</p></li>
+<li><p>Call <code class="docutils literal notranslate"><span class="pre">Anova(mod)</span></code> and interpret the output.</p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">emmeans()</span></code> to generate follow-up tests.</p></li>
+</ol>
+<p>Not all these steps are always relevant. For instance, in a regression model both <code class="docutils literal notranslate"><span class="pre">Anova()</span></code> and <code class="docutils literal notranslate"><span class="pre">emmeans()</span></code> will be redundant, whereas for an ANOVA model it may not be useful to interpret the results from <code class="docutils literal notranslate"><span class="pre">summary()</span></code>. However, each step remains an option that your should now understand in the wider context of linear models. This means we do not have to think in terms of flow-charts, different analyses or tests, or any of the other piecemeal approaches to statistics. All we think about is <em>the model</em>, nothing more. We have our model and we want to ask that model questions using its estimates. Steps 1-3 correspond to making sure we can trust the model estimates. Steps 4-6 correspond to asking questions about those estimates. The only differences between steps 4, 5 and 6 is how those questions are asked. This is the real <em>big idea</em> behind all statistics. The parameters are everything, we just have choices around how we use those parameters to reach conclusions. This is not a perspective limited to regression and ANOVA. This is, in a very general sense, <em>all</em> of inferential statistics, Bayesian and Frequentist included. Once you have this perspective, everything else falls into place.</p>
 </section>
 
     <script type="text/x-thebe-config">
@@ -403,7 +413,7 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="3.advanced-emmeans.html"
+       href="4.advanced-emmeans.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">

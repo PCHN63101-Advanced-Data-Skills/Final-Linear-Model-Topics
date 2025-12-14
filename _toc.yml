@@ -6,6 +6,7 @@ root: 0.intro
 chapters:
 - file: 1.unbalanced-ANOVA
 - file: 2.follow-up
-- file: 3.advanced-emmeans
+- file: 3.multiple-tests-effect-sizes
+- file: 4.advanced-emmeans
 #- file: 4.ANCOVA
 - file: summary

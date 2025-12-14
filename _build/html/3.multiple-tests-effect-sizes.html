@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Advanced Uses of emmeans &#8212; Linear Models V: Advanced ANOVA Topics</title>
+    <title>Multiple Comparisons and Effect Sizes &#8212; Linear Models V: Advanced ANOVA Topics</title>
   
   
   
@@ -63,10 +63,10 @@
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '3.advanced-emmeans';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '3.multiple-tests-effect-sizes';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Summary" href="summary.html" />
+    <link rel="next" title="Advanced Uses of emmeans" href="4.advanced-emmeans.html" />
     <link rel="prev" title="Follow-up Tests" href="2.follow-up.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -174,7 +174,8 @@
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="1.unbalanced-ANOVA.html">Unbalanced ANOVA Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2.follow-up.html">Follow-up Tests</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Advanced Uses of <code class="docutils literal notranslate"><span class="pre">emmeans</span></code></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Multiple Comparisons and Effect Sizes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4.advanced-emmeans.html">Advanced Uses of <code class="docutils literal notranslate"><span class="pre">emmeans</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
 </ul>
 
@@ -252,7 +253,7 @@
       
       
       
-      <li><a href="https://github.com/PCHN63101-Advanced-Data-Skills/Final-Linear-Model-Topics/issues/new?title=Issue%20on%20page%20%2F3.advanced-emmeans.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/PCHN63101-Advanced-Data-Skills/Final-Linear-Model-Topics/issues/new?title=Issue%20on%20page%20%2F3.multiple-tests-effect-sizes.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -282,7 +283,7 @@
       
       
       
-      <li><a href="_sources/3.advanced-emmeans.ipynb" target="_blank"
+      <li><a href="_sources/3.multiple-tests-effect-sizes.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -358,7 +359,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Advanced Uses of emmeans</h1>
+    <h1>Multiple Comparisons and Effect Sizes</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -379,8 +380,6 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#effect-sizes-from-emmeans">Effect Sizes from <code class="docutils literal notranslate"><span class="pre">emmeans</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-ii-follow-up-tests">Type II Follow-up Tests</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#higher-order-interactions">Higher-order Interactions</a></li>
 </ul>
             </nav>
         </div>
@@ -392,9 +391,9 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="advanced-uses-of-emmeans">
-<h1>Advanced Uses of <code class="docutils literal notranslate"><span class="pre">emmeans</span></code><a class="headerlink" href="#advanced-uses-of-emmeans" title="Link to this heading">#</a></h1>
-<p>In this section of the lesson, we will examine more advanced ways we can use <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>. Specifically, we will see how to implement multiple comparisons correct, how to calculate effect sizes and confidence intervals, how to make sure the follow-up tests match the Type II ANOVA tests and how to use <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> to break-down more complex higher-order ANOVA effects.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="multiple-comparisons-and-effect-sizes">
+<h1>Multiple Comparisons and Effect Sizes<a class="headerlink" href="#multiple-comparisons-and-effect-sizes" title="Link to this heading">#</a></h1>
+<p>In this section of the lesson, we will examine two important topics around the concept of follow-up tests. Specifically, we need to discuss <em>multiple comparisons correction</em> as well as <em>effect sizes</em>. For both these topics, we will see how they are integrated within <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>.</p>
 <section id="multiple-comparison-correction">
 <h2>Multiple Comparison Correction<a class="headerlink" href="#multiple-comparison-correction" title="Link to this heading">#</a></h2>
 <p>To begin with, we will focus on the topic of multiple comparison correction. This was mentioned in the previous lesson as a justification for omnibus tests. However, even if we have filtered our comparisons by first using an omnibus test, the issue of multiple testing does not go away. As such, it becomes necessary to implement some form of correction when calculating any follow-up tests.</p>
@@ -679,277 +678,20 @@ Confidence level used: 0.95
 <a class="reference internal image-reference" href="_images/647ba11a64e23591c2aba9306142afdce6742aebde0dd1b69c454328ed186ba7.png"><img alt="_images/647ba11a64e23591c2aba9306142afdce6742aebde0dd1b69c454328ed186ba7.png" src="_images/647ba11a64e23591c2aba9306142afdce6742aebde0dd1b69c454328ed186ba7.png" style="width: 420px; height: 420px;" /></a>
 </div>
 </div>
-<p>So, in all cases, this is potentially an interesting effect. However, we also need to consider the precision. For he <code class="docutils literal notranslate"><span class="pre">Europe</span></code> comparison, the 95% CI is <span class="math notranslate nohighlight">\([0.30,2.68]\)</span>, which is reasonably uncertain. It suggests that the true effect could be as small as <span class="math notranslate nohighlight">\(d=0.3\)</span> (a tiny mean shift) or as large as <span class="math notranslate nohighlight">\(d=2.68\)</span> (quite a large mean shift). So whilst this is at least indicative of a <em>positive</em> effect, its exact magnitude remains a bit uncertain. Similarly, the 95% CI for <code class="docutils literal notranslate"><span class="pre">USA</span></code> is <span class="math notranslate nohighlight">\([0.04,2.87]\)</span>, which is even wider and thus even more uncertain. Finally, the interval for <code class="docutils literal notranslate"><span class="pre">Japan</span></code> is <span class="math notranslate nohighlight">\([-3.73,0.16]\)</span>, which is even more uncertain, especially as it includes both 0 and a reversal of the direction of the effect. So, based on this, we are most confident about the estimate for <code class="docutils literal notranslate"><span class="pre">Europe</span></code>, less so about the estimate for <code class="docutils literal notranslate"><span class="pre">USA</span></code> and even less so about the estimate for <code class="docutils literal notranslate"><span class="pre">Japan</span></code>.</p>
-</section>
-</section>
-<section id="type-ii-follow-up-tests">
-<h2>Type II Follow-up Tests<a class="headerlink" href="#type-ii-follow-up-tests" title="Link to this heading">#</a></h2>
-<p>Returning back to the concept of omnibus tests, there is an important detail that we need to understand about the means generated by <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>. To see this, let us go back to our original (non-fake) <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> data where there is <em>no</em> 2-way interaction.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vs</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">origin</span><span class="o">:</span><span class="n">vs</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
-<span class="nf">print</span><span class="p">(</span><span class="nf">Anova</span><span class="p">(</span><span class="n">mod</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Anova Table (Type II tests)
-
-Response: mpg
-          Sum Sq Df F value    Pr(&gt;F)    
-origin    179.61  2  5.2153 0.0124621 *  
-vs        282.26  1 16.3921 0.0004117 ***
-origin:vs   2.21  2  0.0641 0.9380730    
-Residuals 447.70 26                      
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-</pre></div>
-</div>
-</div>
-</div>
-<p>On this basis, we may wish to follow-up the main effects using <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>. Let us see what happens if we do this for <code class="docutils literal notranslate"><span class="pre">vs</span></code></p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">vs</span><span class="p">)</span>
-<span class="nf">print</span><span class="p">(</span><span class="n">emm</span><span class="o">$</span><span class="n">contrasts</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NOTE: Results may be misleading due to involvement in interactions
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> contrast              estimate   SE df t.ratio p.value
- Straight - (V-shaped)      6.6 1.73 26   3.825  0.0007
-
-Results are averaged over the levels of: origin 
-</pre></div>
-</div>
-</div>
-</div>
-<p>Can you see a problem here? Given that <code class="docutils literal notranslate"><span class="pre">vs</span></code> only has 2 levels, the follow-up test should be <em>identical</em> to the ANOVA test. However, the <span class="math notranslate nohighlight">\(p\)</span>-values are different. We should also have <span class="math notranslate nohighlight">\(t^2 = F\)</span>, but</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">t</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.data.frame</span><span class="p">(</span><span class="n">emm</span><span class="o">$</span><span class="n">contrasts</span><span class="p">)</span><span class="o">$</span><span class="n">t.ratio</span><span class="p">[</span><span class="m">1</span><span class="p">]</span>
-<span class="nf">print</span><span class="p">(</span><span class="n">t</span><span class="o">^</span><span class="m">2</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 14.62853
-</pre></div>
-</div>
-</div>
-</div>
-<p>So what is going on? The answer is that, in the presence of an interaction term, the means used by <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> correspond to the Type III tests rather than the Type II. We can see this if we generate the Type III ANOVA table</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod.sum</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vs</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">origin</span><span class="o">:</span><span class="n">vs</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">,</span><span class="w"> </span>
-<span class="w">              </span><span class="n">contrasts</span><span class="o">=</span><span class="nf">list</span><span class="p">(</span><span class="n">origin</span><span class="o">=</span><span class="n">contr.sum</span><span class="p">,</span><span class="w"> </span>
-<span class="w">                             </span><span class="n">vs</span><span class="o">=</span><span class="n">contr.sum</span><span class="p">))</span>
-
-<span class="c1"># Type III ANOVA table</span>
-<span class="nf">print</span><span class="p">(</span><span class="nf">Anova</span><span class="p">(</span><span class="n">mod.sum</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&quot;III&quot;</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Anova Table (Type III tests)
-
-Response: mpg
-             Sum Sq Df  F value    Pr(&gt;F)    
-(Intercept) 10488.5  1 609.1096 &lt; 2.2e-16 ***
-origin        166.5  2   4.8354 0.0163901 *  
-vs            251.9  1  14.6285 0.0007372 ***
-origin:vs       2.2  2   0.0641 0.9380730    
-Residuals     447.7 26                       
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-</pre></div>
-</div>
-</div>
-</div>
-<p>where we can see that the effect for <code class="docutils literal notranslate"><span class="pre">vs</span></code> now matches the result from <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>.</p>
-<p>In order to get main effect follow-up tests that match the Type II tests, we need to provide the <code class="docutils literal notranslate"><span class="pre">submodel=&quot;type2&quot;</span></code> argument.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">vs</span><span class="p">,</span><span class="w"> </span><span class="n">submodel</span><span class="o">=</span><span class="s">&quot;type2&quot;</span><span class="p">)</span>
-<span class="nf">print</span><span class="p">(</span><span class="n">emm</span><span class="o">$</span><span class="n">contrasts</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NOTE: Results may be misleading due to involvement in interactions
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> contrast              estimate   SE df t.ratio p.value
- Straight - (V-shaped)     6.38 1.58 26   4.049  0.0004
-
-Results are averaged over the levels of: origin 
-</pre></div>
-</div>
-</div>
-</div>
-<p>Now the results match and the follow-up tests are calculated from a model where the interaction effect is assumed to be 0. We can do the same with <code class="docutils literal notranslate"><span class="pre">origin</span></code></p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="p">,</span><span class="w"> </span><span class="n">submodel</span><span class="o">=</span><span class="s">&quot;type2&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">adjust</span><span class="o">=</span><span class="s">&quot;holm&quot;</span><span class="p">)</span>
-<span class="nf">print</span><span class="p">(</span><span class="n">emm</span><span class="o">$</span><span class="n">contrasts</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NOTE: Results may be misleading due to involvement in interactions
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> contrast       estimate   SE df t.ratio p.value
- Europe - Japan    -3.57 2.16 26  -1.651  0.1107
- Europe - USA       3.50 1.69 26   2.073  0.0964
- Japan - USA        7.07 2.26 26   3.127  0.0129
-
-Results are averaged over the levels of: vs 
-P value adjustment: holm method for 3 tests 
-</pre></div>
-</div>
-</div>
-</div>
-<p>So just remember, when following-up main effects we need to provide this argument for consistency of inference.</p>
-</section>
-<section id="higher-order-interactions">
-<h2>Higher-order Interactions<a class="headerlink" href="#higher-order-interactions" title="Link to this heading">#</a></h2>
-<p>Although we have now seen how to follow-up a 2-way interaction with <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>, things get more complex when we have even higher-order interactions in the model. In general, it is not recommended to go beyond a 3-way interaction due to the complexities that come with interpretation. You can, if you wish, but things start getting difficult very quickly. Here, we will demonstrate using <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> to break-down a 3-way interaction.</p>
-<p>For this demonstration, we will need a different dataset. Within the <code class="docutils literal notranslate"><span class="pre">datarium</span></code> package there is a dataset called <code class="docutils literal notranslate"><span class="pre">headache</span></code> that gives results from a clinical trial of 3 treatments for headaches. The factors available are <code class="docutils literal notranslate"><span class="pre">gender</span></code>, <code class="docutils literal notranslate"><span class="pre">risk</span></code> and <code class="docutils literal notranslate"><span class="pre">treatment</span></code>. The outcome variable is <code class="docutils literal notranslate"><span class="pre">pain_score</span></code>. For instance, the first 6 entries are given by</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;datarium&#39;</span><span class="p">)</span>
-<span class="nf">data</span><span class="p">(</span><span class="n">headache</span><span class="p">)</span>
-<span class="nf">print</span><span class="p">(</span><span class="nf">head</span><span class="p">(</span><span class="n">headache</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span># A data frame: 6 × 5
-     id gender risk  treatment pain_score
-* &lt;int&gt; &lt;fct&gt;  &lt;fct&gt; &lt;fct&gt;          &lt;dbl&gt;
-1     1 male   low   X               79.3
-2     2 male   low   X               76.8
-3     3 male   low   X               70.8
-4     4 male   low   X               81.2
-5     5 male   low   X               75.1
-6     6 male   low   X               73.1
-</pre></div>
-</div>
-</div>
-</div>
-<p>We can proceed using our usual approach, though we will skip the call to <code class="docutils literal notranslate"><span class="pre">summary()</span></code> and the checking of assumptions (only in the interests of saving space).</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">pain_score</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">gender</span><span class="o">*</span><span class="n">risk</span><span class="o">*</span><span class="n">treatment</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">headache</span><span class="p">)</span>
-<span class="nf">print</span><span class="p">(</span><span class="nf">Anova</span><span class="p">(</span><span class="n">mod</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Anova Table (Type II tests)
-
-Response: pain_score
-                       Sum Sq Df F value    Pr(&gt;F)    
-gender                 313.36  1 16.1957 0.0001625 ***
-risk                  1793.56  1 92.6988   8.8e-14 ***
-treatment              283.17  2  7.3177 0.0014328 ** 
-gender:risk              2.73  1  0.1411 0.7084867    
-gender:treatment       129.18  2  3.3384 0.0422001 *  
-risk:treatment          27.60  2  0.7131 0.4942214    
-gender:risk:treatment  286.60  2  7.4063 0.0013345 ** 
-Residuals             1160.89 60                      
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-</pre></div>
-</div>
-</div>
-</div>
-<p>So we can see that there is a significant 3-way interaction. How do we follow this up? We could adapt the <code class="docutils literal notranslate"><span class="pre">pairwise</span> <span class="pre">~</span></code> syntax we used earlier to give</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">gender</span><span class="o">:</span><span class="n">risk</span><span class="o">|</span><span class="n">treatment</span><span class="p">,</span><span class="w"> </span><span class="n">adjust</span><span class="o">=</span><span class="s">&quot;holm&quot;</span><span class="p">)</span>
-<span class="nf">print</span><span class="p">(</span><span class="n">emm</span><span class="o">$</span><span class="n">contrasts</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>treatment = X:
- contrast                 estimate   SE df t.ratio p.value
- male high - female high     13.87 2.54 60   5.463  &lt;.0001
- male high - male low        16.69 2.54 60   6.571  &lt;.0001
- male high - female low      18.58 2.54 60   7.317  &lt;.0001
- female high - male low       2.81 2.54 60   1.108  0.5448
- female high - female low     4.71 2.54 60   1.854  0.2059
- male low - female low        1.90 2.54 60   0.746  0.5448
-
-treatment = Y:
- contrast                 estimate   SE df t.ratio p.value
- male high - female high      1.17 2.54 60   0.459  0.6477
- male high - male low         9.20 2.54 60   3.624  0.0024
- male high - female low      13.98 2.54 60   5.505  &lt;.0001
- female high - male low       8.04 2.54 60   3.165  0.0073
- female high - female low    12.81 2.54 60   5.045  &lt;.0001
- male low - female low        4.78 2.54 60   1.881  0.1297
-
-treatment = Z:
- contrast                 estimate   SE df t.ratio p.value
- male high - female high     -1.35 2.54 60  -0.533  0.5958
- male high - male low         5.22 2.54 60   2.057  0.1320
- male high - female low       9.90 2.54 60   3.899  0.0012
- female high - male low       6.58 2.54 60   2.591  0.0480
- female high - female low    11.26 2.54 60   4.432  0.0002
- male low - female low        4.68 2.54 60   1.841  0.1410
-
-P value adjustment: holm method for 6 tests 
-</pre></div>
-</div>
-</div>
-</div>
-<p>However, the problem here is that the <code class="docutils literal notranslate"><span class="pre">gender</span></code> and <code class="docutils literal notranslate"><span class="pre">risk</span></code> factors have been collapsed, leading to some comparisons that keep one factor constant (e.g. <code class="docutils literal notranslate"><span class="pre">male</span> <span class="pre">high</span> <span class="pre">-</span> <span class="pre">female</span> <span class="pre">high</span></code>) whereas others that change both factors (e.g. <code class="docutils literal notranslate"><span class="pre">male</span> <span class="pre">high</span> <span class="pre">-</span> <span class="pre">female</span> <span class="pre">low</span></code>).</p>
-<p>A better approach is to get <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> to more sensibly combine the levels of the various factors. One approach is to use the <code class="docutils literal notranslate"><span class="pre">contrast()</span></code> function with the <code class="docutils literal notranslate"><span class="pre">interaction</span></code> and <code class="docutils literal notranslate"><span class="pre">by</span></code> options. For instance, setting one factor to <code class="docutils literal notranslate"><span class="pre">&quot;pairwise&quot;</span></code> and the other to <code class="docutils literal notranslate"><span class="pre">&quot;identity&quot;</span></code> results in the following</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">gender</span><span class="o">*</span><span class="n">risk</span><span class="o">*</span><span class="n">treatment</span><span class="p">)</span><span class="w">            </span><span class="c1"># generate all cell means</span>
-<span class="nf">contrast</span><span class="p">(</span><span class="n">emm</span><span class="p">,</span><span class="w"> </span><span class="n">interaction</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="n">gender</span><span class="o">=</span><span class="s">&quot;pairwise&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">risk</span><span class="o">=</span><span class="s">&quot;identity&quot;</span><span class="p">),</span><span class="w"> </span>
-<span class="w">         </span><span class="n">by</span><span class="o">=</span><span class="s">&quot;treatment&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">adjust</span><span class="o">=</span><span class="s">&quot;holm&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>treatment = X:
- gender_pairwise risk_identity estimate   SE df t.ratio p.value
- male - female   high             13.87 2.54 60   5.463  &lt;.0001
- male - female   low               1.90 2.54 60   0.746  0.4583
-
-treatment = Y:
- gender_pairwise risk_identity estimate   SE df t.ratio p.value
- male - female   high              1.17 2.54 60   0.459  0.6477
- male - female   low               4.78 2.54 60   1.881  0.1297
-
-treatment = Z:
- gender_pairwise risk_identity estimate   SE df t.ratio p.value
- male - female   high             -1.35 2.54 60  -0.533  0.5958
- male - female   low               4.68 2.54 60   1.841  0.1410
-
-P value adjustment: holm method for 2 tests 
-</pre></div>
-</div>
-</div>
-</div>
-<p>So we can see that there is a significant <code class="docutils literal notranslate"><span class="pre">gender</span></code> effect for treatment <code class="docutils literal notranslate"><span class="pre">X</span></code>, but only within the <code class="docutils literal notranslate"><span class="pre">high</span></code> risk group and not the <code class="docutils literal notranslate"><span class="pre">low</span></code> risk group.</p>
+<p>So, in all cases, this is potentially an interesting effect. However, we also need to consider the precision. For the <code class="docutils literal notranslate"><span class="pre">Europe</span></code> comparison, the 95% CI is <span class="math notranslate nohighlight">\([0.30,2.68]\)</span>, which is reasonably uncertain. It suggests that the true effect could be as small as <span class="math notranslate nohighlight">\(d=0.3\)</span> (a tiny mean shift) or as large as <span class="math notranslate nohighlight">\(d=2.68\)</span> (quite a large mean shift). So whilst this is at least indicative of a <em>positive</em> effect, its exact magnitude remains a bit uncertain. Similarly, the 95% CI for <code class="docutils literal notranslate"><span class="pre">USA</span></code> is <span class="math notranslate nohighlight">\([0.04,2.87]\)</span>, which is even wider and thus even more uncertain. Finally, the interval for <code class="docutils literal notranslate"><span class="pre">Japan</span></code> is <span class="math notranslate nohighlight">\([-3.73,0.16]\)</span>, which is even more uncertain, especially as it includes both 0 and a reversal of the direction of the effect. So, based on this, we are most confident about the estimate for <code class="docutils literal notranslate"><span class="pre">Europe</span></code>, less so about the estimate for <code class="docutils literal notranslate"><span class="pre">USA</span></code> and even less so about the estimate for <code class="docutils literal notranslate"><span class="pre">Japan</span></code>.</p>
 <aside class="topic">
 <p class="topic-title">What do you now know?</p>
-<p>In this section, we have explored … After reading this section, you should have a good sense of:</p>
+<p>In this section, we have explored the topics of multiple comparisons correction and the generation of effect sizes/CIs, both within the context of using <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> to follow-up ANOVA models. After reading this section, you should have a good sense of:</p>
 <ul class="simple">
-<li><p>…</p></li>
-<li><p>…</p></li>
-<li><p>…</p></li>
+<li><p>Why multiple comparisons correction is needed, even after running omnibus tests.</p></li>
+<li><p>How to correct a vector of raw <span class="math notranslate nohighlight">\(p\)</span>-values using base <code class="docutils literal notranslate"><span class="pre">R</span></code>.</p></li>
+<li><p>How these corrections are integrated into <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>, particularly in relation to <em>families</em> of tests.</p></li>
+<li><p>How to generate effect sizes and CIs for omnibus tests, but why this is not often a useful approach.</p></li>
+<li><p>How to generate effect sizes and CIs for individual mean comparisons in <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>.</p></li>
+<li><p>How to interpret Cohen’s <span class="math notranslate nohighlight">\(d\)</span>.</p></li>
 </ul>
 </aside>
+</section>
 </section>
 </section>
 
@@ -993,11 +735,11 @@ P value adjustment: holm method for 2 tests
       </div>
     </a>
     <a class="right-next"
-       href="summary.html"
+       href="4.advanced-emmeans.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Summary</p>
+        <p class="prev-next-title">Advanced Uses of <code class="docutils literal notranslate"><span class="pre">emmeans</span></code></p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -1029,8 +771,6 @@ P value adjustment: holm method for 2 tests
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#effect-sizes-from-emmeans">Effect Sizes from <code class="docutils literal notranslate"><span class="pre">emmeans</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-ii-follow-up-tests">Type II Follow-up Tests</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#higher-order-interactions">Higher-order Interactions</a></li>
 </ul>
   </nav></div>
 

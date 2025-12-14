@@ -66,7 +66,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = '2.follow-up';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Advanced Uses of emmeans" href="3.advanced-emmeans.html" />
+    <link rel="next" title="Multiple Comparisons and Effect Sizes" href="3.multiple-tests-effect-sizes.html" />
     <link rel="prev" title="Unbalanced ANOVA Models" href="1.unbalanced-ANOVA.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -174,7 +174,8 @@
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="1.unbalanced-ANOVA.html">Unbalanced ANOVA Models</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Follow-up Tests</a></li>
-<li class="toctree-l1"><a class="reference internal" href="3.advanced-emmeans.html">Advanced Uses of <code class="docutils literal notranslate"><span class="pre">emmeans</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="3.multiple-tests-effect-sizes.html">Multiple Comparisons and Effect Sizes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4.advanced-emmeans.html">Advanced Uses of <code class="docutils literal notranslate"><span class="pre">emmeans</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
 </ul>
 
@@ -388,7 +389,7 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="follow-up-tests">
 <h1>Follow-up Tests<a class="headerlink" href="#follow-up-tests" title="Link to this heading">#</a></h1>
-<p>In our previous lesson, we ran through all the main steps needed the fit and interpet an ANOVA, using the linear models framework. Unfortunately, this may still not have told us everything we wanted to know about our data. Although we began by justifying omnbius tests on the grounds of multiple comparisons, if an omnibus tests points towards an interesting effect we still want to know exactly <em>which</em> means are driving it. This is the realm of <em>follow-up tests</em>, which will be our focus in this section and which will complete the steps needed for a complete ANOVA-style analysis.</p>
+<p>In our previous lesson, we ran through all the main steps needed the fit and interpet an ANOVA, using the linear models framework. Putting aside all the debate about how to form the omnibus test, let us say that we have settled on a single approach (hopefully Type II). Unfortunately, these tests may still not have told us everything we wanted to know about our data. Although we began by justifying omnbius tests on the grounds of multiple comparisons, if an omnibus tests points towards an interesting effect we still want to know exactly <em>which</em> means are driving it. This is the realm of <em>follow-up tests</em>, which will be our focus in this section and which will finalise the steps needed for a complete ANOVA-style analysis.</p>
 <section id="motivating-example">
 <h2>Motivating Example<a class="headerlink" href="#motivating-example" title="Link to this heading">#</a></h2>
 <p>To start with, let us see an example of the situation where follow-up tests are desired. To do so, we will follow the typical analysis steps of:</p>
@@ -499,7 +500,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 </div>
 </div>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="_images/cbe8c129965e47be7ed524eede5f916afb735cc4e7b3005da57ab960fa2f6b50.png"><img alt="_images/cbe8c129965e47be7ed524eede5f916afb735cc4e7b3005da57ab960fa2f6b50.png" src="_images/cbe8c129965e47be7ed524eede5f916afb735cc4e7b3005da57ab960fa2f6b50.png" style="width: 420px; height: 420px;" /></a>
+<a class="reference internal image-reference" href="_images/f32ddbfdea17566a04d121a477be6610f74360dc68688911f4acc3ff22ed3ec9.png"><img alt="_images/f32ddbfdea17566a04d121a477be6610f74360dc68688911f4acc3ff22ed3ec9.png" src="_images/f32ddbfdea17566a04d121a477be6610f74360dc68688911f4acc3ff22ed3ec9.png" style="width: 420px; height: 420px;" /></a>
 </div>
 </div>
 <p>We can clearly see that there is a much larger difference between <code class="docutils literal notranslate"><span class="pre">Straight</span></code> and <code class="docutils literal notranslate"><span class="pre">V-Shaped</span></code> engines for <code class="docutils literal notranslate"><span class="pre">Japan</span></code> compared to either <code class="docutils literal notranslate"><span class="pre">Europe</span></code> or <code class="docutils literal notranslate"><span class="pre">USA</span></code>. However, we cannot tell whether the differences for either <code class="docutils literal notranslate"><span class="pre">Europe</span></code> or <code class="docutils literal notranslate"><span class="pre">USA</span></code> are meaningful. This is important because it implies that there is something about Japanese manufacturing and engineering that makes V-shaped engines more efficient<a class="footnote-reference brackets" href="#fake-foot" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>. However, we cannot tell whether V-shaped engines in <code class="docutils literal notranslate"><span class="pre">Europe</span></code> and <code class="docutils literal notranslate"><span class="pre">USA</span></code> are actually <em>less efficient</em>, or have practically the <em>same</em> efficiency as straight engines. The only way to get that information is to perform some <em>follow-up tests</em>.</p>
@@ -568,26 +569,31 @@ V-shaped        1
 <span class="expanded">Hide code cell source</span>
 </summary>
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">X</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># dummies for just the factors (and the intercept)</span>
+<span class="n">X</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span>
 <span class="w">              </span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">,</span>
 <span class="w">              </span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span>
 <span class="w">              </span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">,</span>
 <span class="w">              </span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">,</span>
 <span class="w">              </span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">),</span><span class="w"> </span><span class="n">nrow</span><span class="o">=</span><span class="m">6</span><span class="p">,</span><span class="w"> </span><span class="n">byrow</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
 
-<span class="c1"># interaction columns from multiplying the main effect dummy variables</span>
+<span class="c1"># interaction columns from multiplying the factor dummies</span>
 <span class="n">interact.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">X</span><span class="p">[,</span><span class="m">2</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">X</span><span class="p">[,</span><span class="m">4</span><span class="p">]</span><span class="w"> </span>
 <span class="n">interact.2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">X</span><span class="p">[,</span><span class="m">3</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">X</span><span class="p">[,</span><span class="m">4</span><span class="p">]</span>
 
-<span class="c1"># add the interaction columns on</span>
-<span class="n">X</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">cbind</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">interact.1</span><span class="p">,</span><span class="n">interact.2</span><span class="p">)</span>
+<span class="c1"># add the interaction columns to X</span>
+<span class="n">X</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">cbind</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="n">interact.1</span><span class="p">,</span><span class="w"> </span><span class="n">interact.2</span><span class="p">)</span>
 
+<span class="c1"># name the rows</span>
 <span class="nf">rownames</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;Europe Straight&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Europe V-Shaped&quot;</span><span class="p">,</span>
-<span class="w">                  </span><span class="s">&quot;Japan Straight&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Japan V-Shaped&quot;</span><span class="p">,</span>
-<span class="w">                  </span><span class="s">&quot;USA Straight&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;USA V-Shaped&quot;</span><span class="p">)</span>
+<span class="w">                 </span><span class="s">&quot;Japan Straight&quot;</span><span class="p">,</span><span class="w">  </span><span class="s">&quot;Japan V-Shaped&quot;</span><span class="p">,</span>
+<span class="w">                 </span><span class="s">&quot;USA Straight&quot;</span><span class="p">,</span><span class="w">    </span><span class="s">&quot;USA V-Shaped&quot;</span><span class="p">)</span>
 
-<span class="nf">colnames</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;beta.0&quot;</span><span class="p">,</span><span class="s">&quot;beta.1&quot;</span><span class="p">,</span><span class="s">&quot;beta.2&quot;</span><span class="p">,</span><span class="s">&quot;beta.3&quot;</span><span class="p">,</span><span class="s">&quot;beta.4&quot;</span><span class="p">,</span><span class="s">&quot;beta.5&quot;</span><span class="p">)</span>
-<span class="nf">colnames</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;(Intercept)&quot;</span><span class="p">,</span><span class="s">&quot;Japan&quot;</span><span class="p">,</span><span class="s">&quot;USA&quot;</span><span class="p">,</span><span class="s">&quot;V-shaped&quot;</span><span class="p">,</span><span class="s">&quot;Japan:V-shaped&quot;</span><span class="p">,</span><span class="s">&quot;USA:V-shaped&quot;</span><span class="p">)</span><span class="w"> </span><span class="c1"># names from lm(), if you prefer</span>
+<span class="c1"># names the columns (comment out the one you don&#39;t want)</span>
+<span class="nf">colnames</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;beta.0&quot;</span><span class="p">,</span><span class="s">&quot;beta.1&quot;</span><span class="p">,</span><span class="s">&quot;beta.2&quot;</span><span class="p">,</span><span class="s">&quot;beta.3&quot;</span><span class="p">,</span><span class="s">&quot;beta.4&quot;</span><span class="p">,</span><span class="s">&quot;beta.5&quot;</span><span class="p">)</span><span class="w">                  </span><span class="c1"># names from equation</span>
+<span class="nf">colnames</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;(Intercept)&quot;</span><span class="p">,</span><span class="s">&quot;Japan&quot;</span><span class="p">,</span><span class="s">&quot;USA&quot;</span><span class="p">,</span><span class="s">&quot;V-shaped&quot;</span><span class="p">,</span><span class="s">&quot;Japan:V-shaped&quot;</span><span class="p">,</span><span class="s">&quot;USA:V-shaped&quot;</span><span class="p">)</span><span class="w"> </span><span class="c1"># names from lm()</span>
+
+<span class="c1"># print result</span>
 <span class="nf">print</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -692,7 +698,7 @@ originUSA:vsV-shaped    0.1791667  0.1791667
 <p>So, we now know that the interpretation in the table above is correct. <em>However</em>, the question is whether any of these comparisons are actually <em>useful</em> for us in terms of follow-up tests? Unfortunately, the answer is largely “not really”. The only parameter that is close to interesting is the estimate for <code class="docutils literal notranslate"><span class="pre">vsV-shaped</span></code>, because this is a test of the effect of <code class="docutils literal notranslate"><span class="pre">vs</span></code> for <code class="docutils literal notranslate"><span class="pre">Europe</span></code> only. However, we also want to know the effects of <code class="docutils literal notranslate"><span class="pre">vs</span></code> for <code class="docutils literal notranslate"><span class="pre">Japan</span></code> and the effect of <code class="docutils literal notranslate"><span class="pre">vs</span></code> for <code class="docutils literal notranslate"><span class="pre">USA</span></code>, both of which are absent. So while it took some effort to get here, we are not actually any closer to answering our questions about the differences between <code class="docutils literal notranslate"><span class="pre">straight</span></code> and <code class="docutils literal notranslate"><span class="pre">v-shaped</span></code> engines within each country.</p>
 <div class="danger admonition">
 <p class="admonition-title">Do not worry about the regression tests in an ANOVA!</p>
-<p>The main point of this demonstration was not to suggest that you should always spend time trying to interpret what the parameter estimates mean in complex ANOVA models. You can, if you want. However, this interpretation always depends on the precise form of dummy coding used, as well as the cell that is coded as the reference. As such, this is a slightly <em>arbitrary</em> element of the model. Indeed, what this demonstrates is that you probably should <em>not</em> worry about the precise meaning of the parameter estimates, unless the model is very simple. Because of this, you should also not worry about the meaning of the tests of the parameters. It would be tempting to look at the test for the coefficient <code class="docutils literal notranslate"><span class="pre">vsV-shaped</span></code> and think this indicates the main effect of <code class="docutils literal notranslate"><span class="pre">vs</span></code>. Indeed, this is a very common mistake. But we now know that it does not. It indicates the effect of <code class="docutils literal notranslate"><span class="pre">vs</span></code> <em>for European cars only</em>. This is why we rely on the omnibus tests (because they do not depend upon the coding), but also why we need to find some other method of generating follow-up tests that actually test the comparisons we want.</p>
+<p>The main point of this demonstration was not to suggest that you should always spend time trying to interpret what the parameter estimates mean in complex ANOVA models. You can, if you want. However, this interpretation always depends on the precise form of dummy coding used, as well as the cell that is coded as the reference. As such, this is a slightly <em>arbitrary</em> element of the model. Indeed, what this demonstrates is that you probably should <em>not</em> worry about the precise meaning of the parameter estimates, unless the model is very simple. Because of this, you should also not worry about the meaning of the tests of the parameters. It would be tempting to look at the test for the coefficient <code class="docutils literal notranslate"><span class="pre">vsV-shaped</span></code> and think this indicates the main effect of <code class="docutils literal notranslate"><span class="pre">vs</span></code>. Indeed, this is a very common mistake. But we now know that it does not. It indicates the effect of <code class="docutils literal notranslate"><span class="pre">vs</span></code> <em>for European cars only</em>. This is why we need to find some other method of generating follow-up tests that actually address the comparisons we want.</p>
 </div>
 </section>
 <section id="using-linear-contrasts">
@@ -733,8 +739,17 @@ originUSA:vsV-shaped    0.1791667  0.1791667
 <p>For our example, let us work on extracting the difference <code class="docutils literal notranslate"><span class="pre">(Japan,Straight)</span> <span class="pre">-</span> <span class="pre">(Japan,V-shaped)</span></code> (simple effect number 2). Remember, this is not directly coded by any of the parameters, so we need to derive it from the quantities that we do have. First, we need to go back to the dummy variables from earlier and find the row that codes for <code class="docutils literal notranslate"><span class="pre">(Japan,Straight)</span></code> and the row that codes for <code class="docutils literal notranslate"><span class="pre">(Japan,V-shaped)</span></code>. We will save these weights to two new variables.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">JAP.Str</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">)</span><span class="w"> </span><span class="c1"># row 3 from earlier</span>
-<span class="n">JAP.V</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">)</span><span class="w"> </span><span class="c1"># row 4 from earlier</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">JAP.Str.c</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">)</span><span class="w"> </span><span class="c1"># row 3 from earlier</span>
+<span class="n">JAP.V</span><span class="w"> </span><span class="n">.c</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">)</span><span class="w"> </span><span class="c1"># row 4 from earlier</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="n">Error</span> <span class="ow">in</span> <span class="n">parse</span><span class="p">(</span><span class="n">text</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span> <span class="n">srcfile</span> <span class="o">=</span> <span class="n">src</span><span class="p">):</span> <span class="o">&lt;</span><span class="n">text</span><span class="o">&gt;</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mi">7</span><span class="p">:</span> <span class="n">unexpected</span> <span class="n">symbol</span>
+<span class="mi">1</span><span class="p">:</span> <span class="n">JAP</span><span class="o">.</span><span class="n">Str</span><span class="o">.</span><span class="n">c</span> <span class="o">&lt;-</span> <span class="n">c</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="c1"># row 3 from earlier</span>
+<span class="mi">2</span><span class="p">:</span> <span class="n">JAP</span><span class="o">.</span><span class="n">V</span> <span class="o">.</span><span class="n">c</span>
+         <span class="o">^</span>
+<span class="ne">Traceback</span>:
 </pre></div>
 </div>
 </div>
@@ -750,7 +765,7 @@ originUSA:vsV-shaped    0.1791667  0.1791667
 <p>So how do we find the difference? We simply subtract the weights.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="n">JAP.Str</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">JAP.V</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="n">JAP.Str.c</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">JAP.V.c</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -773,7 +788,7 @@ originUSA:vsV-shaped    0.1791667  0.1791667
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">b</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">coef</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
-<span class="n">c</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="o">*</span><span class="w"> </span><span class="m">0</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="o">*</span><span class="w"> </span><span class="m">0</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="m">3</span><span class="p">]</span><span class="o">*</span><span class="m">0</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="m">4</span><span class="p">]</span><span class="o">*</span><span class="m">-1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="m">5</span><span class="p">]</span><span class="o">*</span><span class="m">-1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="m">6</span><span class="p">]</span><span class="o">*</span><span class="m">0</span><span class="p">)</span>
+<span class="n">c</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="o">*</span><span class="w"> </span><span class="m">0</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="o">*</span><span class="w"> </span><span class="m">0</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="m">3</span><span class="p">]</span><span class="o">*</span><span class="m">0</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="m">4</span><span class="p">]</span><span class="o">*</span><span class="m">-1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="m">5</span><span class="p">]</span><span class="o">*</span><span class="m">-1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="m">6</span><span class="p">]</span><span class="o">*</span><span class="m">0</span><span class="p">)</span>
 <span class="nf">print</span><span class="p">(</span><span class="nf">unname</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -784,45 +799,8 @@ originUSA:vsV-shaped    0.1791667  0.1791667
 </div>
 </div>
 </div>
-<p>Which we can also get directly from the <code class="docutils literal notranslate"><span class="pre">summary()</span></code> table, where <span class="math notranslate nohighlight">\(\beta_{3} = -6.1958\)</span> and <span class="math notranslate nohighlight">\(\beta_{4} = 13.5958\)</span>. Giving <span class="math notranslate nohighlight">\(c = (-1 \times 6.1958) + (-1 \times 13.5958) = 6.1958 - 13.5958 = -7.4\)</span>. So, the difference between <code class="docutils literal notranslate"><span class="pre">Straight</span></code> and <code class="docutils literal notranslate"><span class="pre">V-shaped</span></code> engines for cars from <code class="docutils literal notranslate"><span class="pre">Japan</span></code> is -7.4 MPG.</p>
-<p>This method of forming a value of interest by a weighted sum of the parameter estimates is known as a <em>linear contrast</em>. Although this may seem a rather complicated way of simply subtracting two cell means, the utility of doing it this way is twofold. Firstly, it is incredibly flexible because we can use any weights we like to derive a wide variety of quantities that answer different questions about the model. Secondly, and perhaps most importantly, the weights that code the comparison can also be used to find the <em>standard error</em> of the comparisons and thus form a test statistic. This gets a little more complex and so we will not dwell on the details. However, we can show this works using a function that we have written called <code class="docutils literal notranslate"><span class="pre">contrast.se()</span></code> (defined in the drop-down below). Passing this the contrast weights and the model will produce the standard error of the comparison defined by the weights</p>
-<div class="cell tag_hide-input docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">contrast.se</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span><span class="w"> </span><span class="n">mod</span><span class="p">){</span>
-<span class="w">    </span><span class="n">L</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.matrix</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
-<span class="w">    </span><span class="kr">if</span><span class="w"> </span><span class="p">(</span><span class="nf">nrow</span><span class="p">(</span><span class="n">L</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">1</span><span class="p">){</span>
-<span class="w">        </span><span class="n">L</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">t</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="n">V</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">vcov</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
-<span class="w">    </span><span class="n">se</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sqrt</span><span class="p">(</span><span class="nf">t</span><span class="p">(</span><span class="n">L</span><span class="p">)</span><span class="w"> </span><span class="o">%*%</span><span class="w"> </span><span class="n">V</span><span class="w"> </span><span class="o">%*%</span><span class="w"> </span><span class="n">L</span><span class="p">)</span>
-<span class="w">    </span><span class="kr">return</span><span class="p">(</span><span class="n">se</span><span class="p">)</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</div>
-</details>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">weights</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">JAP.Str</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">JAP.V</span>
-<span class="n">con.se</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">contrast.se</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span><span class="n">mod</span><span class="p">)</span>
-<span class="nf">print</span><span class="p">(</span><span class="n">con.se</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>         [,1]
-[1,] 3.788071
-</pre></div>
-</div>
-</div>
-</div>
-<p>The point of this is to show that we now have a way of defining a test statistic for this comparison, as <span class="math notranslate nohighlight">\(t = \frac{-7.4}{3.79} = -1.95\)</span>. So we can now also generate a <span class="math notranslate nohighlight">\(p\)</span>-value. In general, this means we can derive a hypothesis test for <em>any comparison between the cell means</em>, so long as we can express it using contrast weights.</p>
+<p>So, the difference between <code class="docutils literal notranslate"><span class="pre">Straight</span></code> and <code class="docutils literal notranslate"><span class="pre">V-shaped</span></code> engines for cars from <code class="docutils literal notranslate"><span class="pre">Japan</span></code> is -7.4 MPG.</p>
+<p>This method of forming a value of interest by a weighted sum of the parameter estimates is known as a <em>linear contrast</em>. Although this may seem a rather complicated way of simply subtracting two cell means, the utility of doing it this way is twofold. Firstly, it is incredibly flexible because we can use any weights we like to derive a wide variety of quantities that answer different questions about the model. Secondly, and perhaps most importantly, the weights that code the comparison can also be used to find the <em>standard error</em> of the comparisons and thus form a test statistic. This gets a little more complex and so we will not dwell on the details. The point is that the contrasts framework provides a way of not only extracting the value of any effect, it also provides a way of defining a test statistic and thus a way of generating a <span class="math notranslate nohighlight">\(p\)</span>-value. In general, this means we can derive a hypothesis test for <em>any comparison between the cell means</em>, so long as we can express it using contrast weights.</p>
 </section>
 <section id="the-emmeans-package">
 <h3>The <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> Package<a class="headerlink" href="#the-emmeans-package" title="Link to this heading">#</a></h3>
@@ -902,14 +880,16 @@ P value adjustment: tukey method for comparing a family of 3 estimates
 </div>
 </div>
 </div>
-<p>Notice the printed message at the bottom about <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">value</span> <span class="pre">adjustment</span></code>. This is something we will come back to in the next section.</p>
+<p>Notice the printed message at the bottom about <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">value</span> <span class="pre">adjustment</span></code>. This is something we will come back to in the next part of this lesson.</p>
 <aside class="topic">
 <p class="topic-title">What do you now know?</p>
-<p>In this section, we have explored … After reading this section, you should have a good sense of:</p>
+<p>In this section, we have explored methods for following-up omnibus effects from ANOVA models. After reading this section, you should have a good sense of:</p>
 <ul class="simple">
-<li><p>…</p></li>
-<li><p>…</p></li>
-<li><p>…</p></li>
+<li><p>The motivation for follow-up tests, particularly in relation to why simply visualising the omnibus effects may not tell us the full story.</p></li>
+<li><p>Why it is generally <em>not</em> advisable to use the tests in the regression summary table to follow-up these effects.</p></li>
+<li><p>What is meant by a <em>simple main effect</em>, as a follow-up to an interaction.</p></li>
+<li><p>How the framework of <em>linear contrasts</em> allows a variety of effects to be derived from the parameter estimates using <em>contrast weights</em>.</p></li>
+<li><p>How the contrast framework can be leveraged, and largely automated, using <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>.</p></li>
 </ul>
 </aside>
 <hr class="footnotes docutils" />
@@ -979,11 +959,11 @@ P value adjustment: tukey method for comparing a family of 3 estimates
       </div>
     </a>
     <a class="right-next"
-       href="3.advanced-emmeans.html"
+       href="3.multiple-tests-effect-sizes.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Advanced Uses of <code class="docutils literal notranslate"><span class="pre">emmeans</span></code></p>
+        <p class="prev-next-title">Multiple Comparisons and Effect Sizes</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

@@ -1,0 +1,910 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Advanced Uses of emmeans &#8212; Linear Models V: Advanced ANOVA Topics</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/test.css?v=90b7ad94" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '4.advanced-emmeans';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Summary" href="summary.html" />
+    <link rel="prev" title="Multiple Comparisons and Effect Sizes" href="3.multiple-tests-effect-sizes.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="0.intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Linear Models V: Advanced ANOVA Topics - Home"/>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="Linear Models V: Advanced ANOVA Topics - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="0.intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="1.unbalanced-ANOVA.html">Unbalanced ANOVA Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2.follow-up.html">Follow-up Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3.multiple-tests-effect-sizes.html">Multiple Comparisons and Effect Sizes</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Advanced Uses of <code class="docutils literal notranslate"><span class="pre">emmeans</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/PCHN63101-Advanced-Data-Skills/Final-Linear-Model-Topics" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/PCHN63101-Advanced-Data-Skills/Final-Linear-Model-Topics/issues/new?title=Issue%20on%20page%20%2F4.advanced-emmeans.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/4.advanced-emmeans.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Advanced Uses of emmeans</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-ii-follow-up-tests">Type II Follow-up Tests</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#higher-order-interactions">Higher-order Interactions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-contrast-weights">Custom Contrast Weights</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-for-a-2-way-interaction">Example for a 2-way Interaction</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="advanced-uses-of-emmeans">
+<h1>Advanced Uses of <code class="docutils literal notranslate"><span class="pre">emmeans</span></code><a class="headerlink" href="#advanced-uses-of-emmeans" title="Link to this heading">#</a></h1>
+<p>In this final section of the lesson, we will examine more advanced ways we can use <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>. Specifically, we will see how to make sure the follow-up tests match the Type II ANOVA tests, how to use <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> to break-down more complex higher-order ANOVA effects and how to specify custom hypothesis tests within <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> using our own contrast weights.</p>
+<section id="type-ii-follow-up-tests">
+<h2>Type II Follow-up Tests<a class="headerlink" href="#type-ii-follow-up-tests" title="Link to this heading">#</a></h2>
+<p>Returning back to the concept of omnibus tests, there is an important detail that we need to understand about the means generated by <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>. To see this, let us go back to our original (non-fake) <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> data where there is <em>no</em> 2-way interaction.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vs</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">origin</span><span class="o">:</span><span class="n">vs</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">Anova</span><span class="p">(</span><span class="n">mod</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Anova Table (Type II tests)
+
+Response: mpg
+          Sum Sq Df F value    Pr(&gt;F)    
+origin    179.61  2  5.2153 0.0124621 *  
+vs        282.26  1 16.3921 0.0004117 ***
+origin:vs   2.21  2  0.0641 0.9380730    
+Residuals 447.70 26                      
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+</pre></div>
+</div>
+</div>
+</div>
+<p>On this basis, we may wish to follow-up the main effects using <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>. Let us see what happens if we do this for <code class="docutils literal notranslate"><span class="pre">vs</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">vs</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">emm</span><span class="o">$</span><span class="n">contrasts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NOTE: Results may be misleading due to involvement in interactions
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> contrast              estimate   SE df t.ratio p.value
+ Straight - (V-shaped)      6.6 1.73 26   3.825  0.0007
+
+Results are averaged over the levels of: origin 
+</pre></div>
+</div>
+</div>
+</div>
+<p>Can you see a problem here? Given that <code class="docutils literal notranslate"><span class="pre">vs</span></code> only has 2 levels, the follow-up test should be <em>identical</em> to the ANOVA test. However, the <span class="math notranslate nohighlight">\(p\)</span>-values are different. We should also have <span class="math notranslate nohighlight">\(t^2 = F\)</span>, but</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">t</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.data.frame</span><span class="p">(</span><span class="n">emm</span><span class="o">$</span><span class="n">contrasts</span><span class="p">)</span><span class="o">$</span><span class="n">t.ratio</span><span class="p">[</span><span class="m">1</span><span class="p">]</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">t</span><span class="o">^</span><span class="m">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 14.62853
+</pre></div>
+</div>
+</div>
+</div>
+<p>So what is going on? The answer is that, in the presence of an interaction term, the means used by <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> correspond to the Type III tests rather than the Type II. We can see this if we generate the Type III ANOVA table</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod.sum</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vs</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">origin</span><span class="o">:</span><span class="n">vs</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">,</span><span class="w"> </span>
+<span class="w">              </span><span class="n">contrasts</span><span class="o">=</span><span class="nf">list</span><span class="p">(</span><span class="n">origin</span><span class="o">=</span><span class="n">contr.sum</span><span class="p">,</span><span class="n">vs</span><span class="o">=</span><span class="n">contr.sum</span><span class="p">))</span>
+
+<span class="c1"># Type III ANOVA table</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">Anova</span><span class="p">(</span><span class="n">mod.sum</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&quot;III&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Anova Table (Type III tests)
+
+Response: mpg
+             Sum Sq Df  F value    Pr(&gt;F)    
+(Intercept) 10488.5  1 609.1096 &lt; 2.2e-16 ***
+origin        166.5  2   4.8354 0.0163901 *  
+vs            251.9  1  14.6285 0.0007372 ***
+origin:vs       2.2  2   0.0641 0.9380730    
+Residuals     447.7 26                       
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+</pre></div>
+</div>
+</div>
+</div>
+<p>where we can see that the effect for <code class="docutils literal notranslate"><span class="pre">vs</span></code> now matches the result from <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>.</p>
+<p>In order to get main effect follow-up tests that match the Type II tests, we need to provide the <code class="docutils literal notranslate"><span class="pre">submodel=&quot;type2&quot;</span></code> argument.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">vs</span><span class="p">,</span><span class="w"> </span><span class="n">submodel</span><span class="o">=</span><span class="s">&quot;type2&quot;</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">emm</span><span class="o">$</span><span class="n">contrasts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NOTE: Results may be misleading due to involvement in interactions
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> contrast              estimate   SE df t.ratio p.value
+ Straight - (V-shaped)     6.38 1.58 26   4.049  0.0004
+
+Results are averaged over the levels of: origin 
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now the results match and the follow-up tests are calculated from a model where the interaction effect is assumed to be 0. We can do the same with <code class="docutils literal notranslate"><span class="pre">origin</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="p">,</span><span class="w"> </span><span class="n">submodel</span><span class="o">=</span><span class="s">&quot;type2&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">adjust</span><span class="o">=</span><span class="s">&quot;holm&quot;</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">emm</span><span class="o">$</span><span class="n">contrasts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NOTE: Results may be misleading due to involvement in interactions
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> contrast       estimate   SE df t.ratio p.value
+ Europe - Japan    -3.57 2.16 26  -1.651  0.1107
+ Europe - USA       3.50 1.69 26   2.073  0.0964
+ Japan - USA        7.07 2.26 26   3.127  0.0129
+
+Results are averaged over the levels of: vs 
+P value adjustment: holm method for 3 tests 
+</pre></div>
+</div>
+</div>
+</div>
+<p>So just remember, when following-up main effects we need to provide this argument for consistency of inference. Of course, we could also just specify an additive model and pass it to <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> and this would not be an issue</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod.add</span><span class="w">    </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vs</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
+<span class="n">emm.vs</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod.add</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">vs</span><span class="p">,</span><span class="w">     </span><span class="n">adjust</span><span class="o">=</span><span class="s">&#39;holm&#39;</span><span class="p">)</span>
+<span class="n">emm.origin</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod.add</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="p">,</span><span class="w"> </span><span class="n">adjust</span><span class="o">=</span><span class="s">&#39;holm&#39;</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">emm.vs</span><span class="o">$</span><span class="n">contrasts</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">emm.origin</span><span class="o">$</span><span class="n">contrasts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> contrast              estimate   SE df t.ratio p.value
+ Straight - (V-shaped)     6.38 1.52 28   4.191  0.0003
+
+Results are averaged over the levels of: origin 
+ contrast       estimate   SE df t.ratio p.value
+ Europe - Japan    -3.57 2.09 28  -1.709  0.0984
+ Europe - USA       3.50 1.63 28   2.146  0.0813
+ Japan - USA        7.07 2.18 28   3.237  0.0093
+
+Results are averaged over the levels of: vs 
+P value adjustment: holm method for 3 tests 
+</pre></div>
+</div>
+</div>
+</div>
+<p>Here, the values in the <code class="docutils literal notranslate"><span class="pre">estimate</span></code> column are the same, but the tests will be subtly different. The Type II tests use the error term from the full factorial model, whereas the error term from the additive model will be different. Neither has ultimate authority here and an argument can be made either way.</p>
+</section>
+<section id="higher-order-interactions">
+<h2>Higher-order Interactions<a class="headerlink" href="#higher-order-interactions" title="Link to this heading">#</a></h2>
+<p>Although we have now seen how to follow-up a 2-way interaction with <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>, things get more complex when we have even higher-order interactions in the model. In general, it is not recommended to go beyond a 3-way interaction due to the complexities that come with interpretation. You can, if you wish, but things start getting difficult very quickly. Here, we will demonstrate using <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> to break-down a 3-way interaction.</p>
+<p>For this demonstration, we will return to the <code class="docutils literal notranslate"><span class="pre">headache</span></code> dataset from the <code class="docutils literal notranslate"><span class="pre">datarium</span></code> package, as introduced in the workshop last week.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;datarium&#39;</span><span class="p">)</span>
+<span class="nf">data</span><span class="p">(</span><span class="n">headache</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">head</span><span class="p">(</span><span class="n">headache</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span># A data frame: 6 × 5
+     id gender risk  treatment pain_score
+* &lt;int&gt; &lt;fct&gt;  &lt;fct&gt; &lt;fct&gt;          &lt;dbl&gt;
+1     1 male   low   X               79.3
+2     2 male   low   X               76.8
+3     3 male   low   X               70.8
+4     4 male   low   X               81.2
+5     5 male   low   X               75.1
+6     6 male   low   X               73.1
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can proceed using our usual approach, though we will skip the call to <code class="docutils literal notranslate"><span class="pre">summary()</span></code> and the checking of assumptions (in the interests of saving space). This dataset is <em>balanced</em>, so the choice of sums-of-squares is immaterial.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">pain_score</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">gender</span><span class="o">*</span><span class="n">risk</span><span class="o">*</span><span class="n">treatment</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">headache</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">Anova</span><span class="p">(</span><span class="n">mod</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Anova Table (Type II tests)
+
+Response: pain_score
+                       Sum Sq Df F value    Pr(&gt;F)    
+gender                 313.36  1 16.1957 0.0001625 ***
+risk                  1793.56  1 92.6988   8.8e-14 ***
+treatment              283.17  2  7.3177 0.0014328 ** 
+gender:risk              2.73  1  0.1411 0.7084867    
+gender:treatment       129.18  2  3.3384 0.0422001 *  
+risk:treatment          27.60  2  0.7131 0.4942214    
+gender:risk:treatment  286.60  2  7.4063 0.0013345 ** 
+Residuals             1160.89 60                      
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can see that there is a significant 3-way interaction. How do we follow this up? We could adapt the <code class="docutils literal notranslate"><span class="pre">pairwise</span> <span class="pre">~</span></code> syntax we used earlier to give</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">gender</span><span class="o">:</span><span class="n">risk</span><span class="o">|</span><span class="n">treatment</span><span class="p">,</span><span class="w"> </span><span class="n">adjust</span><span class="o">=</span><span class="s">&quot;holm&quot;</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">emm</span><span class="o">$</span><span class="n">contrasts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>treatment = X:
+ contrast                 estimate   SE df t.ratio p.value
+ male high - female high     13.87 2.54 60   5.463  &lt;.0001
+ male high - male low        16.69 2.54 60   6.571  &lt;.0001
+ male high - female low      18.58 2.54 60   7.317  &lt;.0001
+ female high - male low       2.81 2.54 60   1.108  0.5448
+ female high - female low     4.71 2.54 60   1.854  0.2059
+ male low - female low        1.90 2.54 60   0.746  0.5448
+
+treatment = Y:
+ contrast                 estimate   SE df t.ratio p.value
+ male high - female high      1.17 2.54 60   0.459  0.6477
+ male high - male low         9.20 2.54 60   3.624  0.0024
+ male high - female low      13.98 2.54 60   5.505  &lt;.0001
+ female high - male low       8.04 2.54 60   3.165  0.0073
+ female high - female low    12.81 2.54 60   5.045  &lt;.0001
+ male low - female low        4.78 2.54 60   1.881  0.1297
+
+treatment = Z:
+ contrast                 estimate   SE df t.ratio p.value
+ male high - female high     -1.35 2.54 60  -0.533  0.5958
+ male high - male low         5.22 2.54 60   2.057  0.1320
+ male high - female low       9.90 2.54 60   3.899  0.0012
+ female high - male low       6.58 2.54 60   2.591  0.0480
+ female high - female low    11.26 2.54 60   4.432  0.0002
+ male low - female low        4.68 2.54 60   1.841  0.1410
+
+P value adjustment: holm method for 6 tests 
+</pre></div>
+</div>
+</div>
+</div>
+<p>However, the problem here is that the <code class="docutils literal notranslate"><span class="pre">gender</span></code> and <code class="docutils literal notranslate"><span class="pre">risk</span></code> factors have been collapsed, leading to some comparisons that keep one factor constant (e.g. <code class="docutils literal notranslate"><span class="pre">male</span> <span class="pre">high</span> <span class="pre">-</span> <span class="pre">female</span> <span class="pre">high</span></code>) whereas others that change both factors (e.g. <code class="docutils literal notranslate"><span class="pre">male</span> <span class="pre">high</span> <span class="pre">-</span> <span class="pre">female</span> <span class="pre">low</span></code>).</p>
+<p>A better approach is to get <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> to more sensibly combine the levels of the various factors. One approach is to use the <code class="docutils literal notranslate"><span class="pre">contrast()</span></code> function with the <code class="docutils literal notranslate"><span class="pre">interaction</span></code> and <code class="docutils literal notranslate"><span class="pre">by</span></code> options. For instance, setting one factor to <code class="docutils literal notranslate"><span class="pre">&quot;pairwise&quot;</span></code> and the other to <code class="docutils literal notranslate"><span class="pre">&quot;identity&quot;</span></code> results in the following</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">gender</span><span class="o">*</span><span class="n">risk</span><span class="o">*</span><span class="n">treatment</span><span class="p">)</span><span class="w"> </span><span class="c1"># generate all cell means</span>
+<span class="nf">contrast</span><span class="p">(</span><span class="n">emm</span><span class="p">,</span><span class="w"> </span><span class="n">interaction</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="n">gender</span><span class="o">=</span><span class="s">&quot;pairwise&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">risk</span><span class="o">=</span><span class="s">&quot;identity&quot;</span><span class="p">),</span><span class="w"> </span>
+<span class="w">         </span><span class="n">by</span><span class="o">=</span><span class="s">&quot;treatment&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">adjust</span><span class="o">=</span><span class="s">&quot;holm&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>treatment = X:
+ gender_pairwise risk_identity estimate   SE df t.ratio p.value
+ male - female   high             13.87 2.54 60   5.463  &lt;.0001
+ male - female   low               1.90 2.54 60   0.746  0.4583
+
+treatment = Y:
+ gender_pairwise risk_identity estimate   SE df t.ratio p.value
+ male - female   high              1.17 2.54 60   0.459  0.6477
+ male - female   low               4.78 2.54 60   1.881  0.1297
+
+treatment = Z:
+ gender_pairwise risk_identity estimate   SE df t.ratio p.value
+ male - female   high             -1.35 2.54 60  -0.533  0.5958
+ male - female   low               4.68 2.54 60   1.841  0.1410
+
+P value adjustment: holm method for 2 tests 
+</pre></div>
+</div>
+</div>
+</div>
+<p>So we can see that there is a significant <code class="docutils literal notranslate"><span class="pre">gender</span></code> effect for treatment <code class="docutils literal notranslate"><span class="pre">X</span></code>, but only within the <code class="docutils literal notranslate"><span class="pre">high</span></code> risk group and not the <code class="docutils literal notranslate"><span class="pre">low</span></code> risk group. In addition, if you simply cannot get <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> to generate your comparison of interest using its various specification options, you can pass it the <em>weights</em> corresponding to the contrast you want to use. These weights refer specifically to the marginal means generated by the <code class="docutils literal notranslate"><span class="pre">emmeans()</span></code> function, so best to look and see what means the <code class="docutils literal notranslate"><span class="pre">emm</span></code> object contains, and in what order, so you know how to build the weights. This option is beyond our current scope, but could be a powerful choice for you in future.</p>
+</section>
+<section id="custom-contrast-weights">
+<h2>Custom Contrast Weights<a class="headerlink" href="#custom-contrast-weights" title="Link to this heading">#</a></h2>
+<p>As a final topic for this lesson, we will see how we can create custom hypotheses within <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>. This is useful to know because sometimes it can be difficult to get <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> to perform exactly the comparison you want using its various syntax options. Other times, you may be able to generate the tests you want, but only combined with other tests you do <em>not</em> want. In these instances, it becomes fiddly to then apply any multiple comparison correction. In both cases, we can have maximum control over the follow-up tests by providing <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> with custom contrast weights.</p>
+<section id="example-for-a-2-way-interaction">
+<h3>Example for a 2-way Interaction<a class="headerlink" href="#example-for-a-2-way-interaction" title="Link to this heading">#</a></h3>
+<p>For the final time, let us go back to our fake 2-way interaction from <code class="docutils literal notranslate"><span class="pre">mtcars</span></code>. As an example, say that we have a significant 2-way interaction where we are interested in looking at <code class="docutils literal notranslate"><span class="pre">V-shaped</span></code> and <code class="docutils literal notranslate"><span class="pre">Straight</span></code> cars separately, but then comparing <code class="docutils literal notranslate"><span class="pre">Japan</span></code> to the <em>average</em> of <code class="docutils literal notranslate"><span class="pre">Europe</span></code> and <code class="docutils literal notranslate"><span class="pre">USA</span></code>. We can do this in <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> using some custom contrast weights.</p>
+<p>To begin, we will specify the model and then extract the means we are intersted in using <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>. This is important because the contrast weights are <em>relative to the means we have extracted</em>, not relative to the model parameters (as we saw earlier). As such, we need to know (a) what means the <code class="docutils literal notranslate"><span class="pre">emm</span></code> object contains, and (b) what <em>order</em> they are in</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg.fake</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="o">*</span><span class="n">vs</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
+<span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">origin</span><span class="o">*</span><span class="n">vs</span><span class="p">)</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="n">emm</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> origin vs       emmean   SE df lower.CL upper.CL
+ Europe Straight   24.5 1.47 26     21.4     27.5
+ Japan  Straight   28.6 2.40 26     23.7     33.5
+ USA    Straight   20.8 2.40 26     15.8     25.7
+ Europe V-shaped   18.3 1.69 26     14.8     21.7
+ Japan  V-shaped   36.0 2.93 26     30.0     42.0
+ USA    V-shaped   14.8 1.31 26     12.1     17.4
+
+Confidence level used: 0.95 
+</pre></div>
+</div>
+</div>
+</div>
+<p>So, now we know the means we have available and can specify the weights. The first 3 means correspond to <code class="docutils literal notranslate"><span class="pre">Straight</span></code> and so we can construct the weights for comparing <code class="docutils literal notranslate"><span class="pre">Japan</span></code> to the average of <code class="docutils literal notranslate"><span class="pre">Europe</span></code> and <code class="docutils literal notranslate"><span class="pre">USA</span></code> like so</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">EUR.Str.c</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">)</span>
+<span class="n">JAP.Str.c</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">)</span>
+<span class="n">USA.Str.c</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">)</span>
+<span class="n">EUR.V.c</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">)</span>
+<span class="n">JAP.V.c</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">)</span>
+<span class="n">USA.V.c</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">)</span>
+
+<span class="n">c.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">JAP.Str.c</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">((</span><span class="n">EUR.Str.c</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">USA.Str.c</span><span class="p">)</span><span class="o">/</span><span class="m">2</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">c.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] -0.5  1.0 -0.5  0.0  0.0  0.0
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can then do the same thing with <code class="docutils literal notranslate"><span class="pre">V-shaped</span></code> engines</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">c.2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">JAP.V.c</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">((</span><span class="n">EUR.V.c</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">USA.V.c</span><span class="p">)</span><span class="o">/</span><span class="m">2</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">c.2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1]  0.0  0.0  0.0 -0.5  1.0 -0.5
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can then pass both these sets of weights to the <code class="docutils literal notranslate"><span class="pre">contrast()</span></code> function<a class="footnote-reference brackets" href="#confunc-foot" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> to generate the tests. We use the list argument to give each contrast a name, so we know what it is testing. Notice we can also pass an <code class="docutils literal notranslate"><span class="pre">adjust=</span></code> method for multiple comparisons correction.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">cons</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">contrast</span><span class="p">(</span><span class="n">emm</span><span class="p">,</span><span class="w"> </span><span class="n">adjust</span><span class="o">=</span><span class="s">&#39;holm&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="o">=</span><span class="nf">list</span><span class="p">(</span><span class="s">&#39;Straight: JAP - mean(EUR,USA)&#39;</span><span class="o">=</span><span class="n">c.1</span><span class="p">,</span>
+<span class="w">                                                 </span><span class="s">&#39;V-shaped: JAP - mean(EUR,USA)&#39;</span><span class="o">=</span><span class="n">c.2</span><span class="p">))</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="n">cons</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> contrast                      estimate   SE df t.ratio p.value
+ Straight: JAP - mean(EUR,USA)     5.99 2.78 26   2.155  0.0406
+ V-shaped: JAP - mean(EUR,USA)    19.49 3.12 26   6.240  &lt;.0001
+
+P value adjustment: holm method for 2 tests 
+</pre></div>
+</div>
+</div>
+</div>
+<p>So now we have a specific customised family of follow-up tests that we have controlled to produce exactly the comparisons that we want.</p>
+<aside class="topic">
+<p class="topic-title">What do you now know?</p>
+<p>In this section, we have explored some advanced topics around the use of the <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> package to follow-up ANOVA models. After reading this section, you should have a good sense of:</p>
+<ul class="simple">
+<li><p>How to make sure any main effect follow-up tests are conducted using Type II means in <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>.</p></li>
+<li><p>How these effects can be generated by specifying the correct additive models, but knowing that the tests will differ subtly.</p></li>
+<li><p>How to break-down a higher-order interaction using <code class="docutils literal notranslate"><span class="pre">emmeans</span></code>.</p></li>
+<li><p>How to use custom contrast weights to generate any comparisons we like, rather than relying on the <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> syntax.</p></li>
+</ul>
+</aside>
+<hr class="footnotes docutils" />
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="confunc-foot" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>Notice that this is called <code class="docutils literal notranslate"><span class="pre">contrast()</span></code> rather than <code class="docutils literal notranslate"><span class="pre">contrasts()</span></code> (with an <code class="docutils literal notranslate"><span class="pre">s</span></code> on the end). The latter is a different function in base <code class="docutils literal notranslate"><span class="pre">R</span></code>. If you are getting errors, make sure you have called the correct function. If in doubt, you can clarify your intention using <code class="docutils literal notranslate"><span class="pre">emmeans::contrast()</span></code>. If you get this wrong, the error message will say that <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> does not contain a function called <code class="docutils literal notranslate"><span class="pre">contrasts()</span></code>.</p>
+</aside>
+</aside>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "r"
+        },
+        kernelOptions: {
+            name: "ir",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'ir'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="3.multiple-tests-effect-sizes.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Multiple Comparisons and Effect Sizes</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="summary.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Summary</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-ii-follow-up-tests">Type II Follow-up Tests</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#higher-order-interactions">Higher-order Interactions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-contrast-weights">Custom Contrast Weights</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-for-a-2-way-interaction">Example for a 2-way Interaction</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dr Martyn McFarquhar & Dr George Farmer
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025-26.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
